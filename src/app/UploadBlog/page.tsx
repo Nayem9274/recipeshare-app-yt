@@ -59,7 +59,7 @@ const UploadBlog = () => {
     updateBlogData('jwt', cookie);
 
     try {
-        const response = await fetch('https://blogshare-tjm7.onrender.com/api/blog/upload/', {
+        const response = await fetch('https://recipeshare-tjm7.onrender.com/api/blog/upload/', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',

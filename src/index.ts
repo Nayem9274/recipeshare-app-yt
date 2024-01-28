@@ -5,6 +5,7 @@ import TestForm from "./components/TestForm"
 import TestForm_Blog from "./components/TestForm_Blog"
 import Ingredients from "./components/Ingredients"
 import Steps from "./components/Steps"
+import Steps_Blog from "./components/Steps_Blog"
 import Dropdown from "./components/Dropdown";
 
 
@@ -15,5 +16,6 @@ export {
     TestForm_Blog, 
     Ingredients,
     Steps,
+    Steps_Blog,
     Dropdown
 }

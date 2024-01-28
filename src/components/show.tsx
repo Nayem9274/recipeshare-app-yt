@@ -16,6 +16,18 @@ interface Blog {
     name: string;
   };
 }
+interface Recipe {
+  id: number;
+  title: string;
+  publication_date: string;
+  image: string;
+  last_modification_date: string;
+  tags: string[];
+  ratings: number;
+  user: {
+    name: string;
+  };
+}
 
 const BlogList: React.FC = () => {
   const [blogs, setBlogs] = useState<Blog[]>([]);
@@ -35,7 +47,7 @@ const BlogList: React.FC = () => {
   }, []);
 
     // Assuming a similar structure for recipes
-    /*const [recipes, setRecipes] = useState<Recipe[]>([]);
+    const [recipes, setRecipes] = useState<Recipe[]>([]);
 
     useEffect(() => {
       const fetchRecipes = async () => {
@@ -49,7 +61,7 @@ const BlogList: React.FC = () => {
       };
   
       fetchRecipes();
-    }, []);*/
+    }, []);
 
   return (
     <div className="flex flex-col items-center p-8 overflow-x-scroll">
@@ -74,7 +86,31 @@ const BlogList: React.FC = () => {
           </div>
         ))}
       </div>
+       {/* Latest Recipes */}
+       <h2 className="text-2xl font-bold my-4">Latest Recipes</h2>
+      <div className="flex space-x-4">
+        {recipes.map((recipe) => (
+          <div key={recipe.id} className="flex flex-col items-center cursor-pointer">
+            <Link href={`/recipe/${recipe.id}`}>
+              <div>
+                <Image
+                  src={recipe.image}
+                  alt={recipe.title}
+                  className="object-cover"
+                  layout="fixed"
+                  height="50"
+                  width="50"
+                />
+                <h3 className="text-lg font-semibold">{recipe.title}</h3>
+              </div>
+            </Link>
+          </div>
+        ))}
+      </div>
+    
     </div>
+
+    
   );
 };
 

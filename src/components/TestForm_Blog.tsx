@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useRef } from "react";
 import firebase from "../firebase";
-import { CustomButton, Dropdown, Steps } from "..";
+import { CustomButton, Dropdown, Steps_Blog } from "..";
 import { UpdateBlogDataType } from "@/Types";
 import { UploadTask, getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 
@@ -179,7 +179,7 @@ const TestForm_Blog: React.FC<{ updateBlogData: UpdateBlogDataType }> = ({update
             {/* Add the Steps section */}
             <div className="py-3 text-2xl font-bold text-opacity-100 text-black">Steps</div>
 
-            {<Steps updateRecipeData={updateBlogData}/>}
+            {<Steps_Blog updateBlogData={updateBlogData}/>}
 
             <div className="py-4"></div>
             {/* Add a gray colored break space in the form*/}
