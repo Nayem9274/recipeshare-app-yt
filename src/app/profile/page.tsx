@@ -17,16 +17,30 @@ interface UserDetail {
 // Create the ProfilePage component
 const ProfilePage = () => {
 
-
+  const [cookie, setCookie] = React.useState<string|undefined>('');
   const [userDetails, setUserDetails] = useState<UserDetail | null>(null);
 
   useEffect(() => {
+    const fetchCookie = () => { 
+      const cookieValue = document.cookie
+        .split('; ')
+        .find((row) => row.startsWith('jwt='))?.split('=')[1];
+      
+      setCookie(cookieValue);
+    }
+    
     const fetchUserDetails = async () => {
+      const dataBody = {
+        'jwt': {cookie}
+      }
+      console.log(dataBody);
       try {
         const response = await fetch('https://recipeshare-tjm7.onrender.com/api/user/details/',{
-        headers: {
-            Authorization: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJhcjEzNzM3NUBnbWFpbC5jb20iLCJleHAiOjE3MDYyODA1OTAsImlhdCI6MTcwNjI3Njk5MH0.2UmIqqPwXQ8FJIobUDysYF2nS-R_YB1oGKfffv_9Vvs',
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
           },
+          body: JSON.stringify(dataBody)
         });
         const data = await response.json();
         setUserDetails(data.user_details);
@@ -34,7 +48,7 @@ const ProfilePage = () => {
         console.error('Error fetching user details:', error);
       }
     };
-
+    fetchCookie();
     fetchUserDetails();
   }, []);
   
