@@ -3,6 +3,7 @@ import React, {useEffect, useState } from 'react';
 
 import { TestForm } from '@/index';
 import CustomButton  from '@/components/CustomButton';
+import { UpdateRecipeDataType } from '@/Types';
 
 
 const UploadRecipe = () => {
@@ -20,7 +21,6 @@ const UploadRecipe = () => {
     tags: [],
     jwt:""
   });
-  type UpdateRecipeDataType = (key: string, value: any) => void;
 
   // for storing the cookie
   const [cookie, setCookie] = React.useState<string|undefined>('');
@@ -28,7 +28,7 @@ const UploadRecipe = () => {
   
   const updateRecipeData:UpdateRecipeDataType = (key: string, value: any) => {
     setRecipeData({ ...recipeData, [key]: value });
-    // console.log(recipeData);
+    console.log(recipeData);
   };
 
   /************Cookie Part***********/
