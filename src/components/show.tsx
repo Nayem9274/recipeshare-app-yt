@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import React, { useState, useEffect } from 'react';
+import Slider from 'react-slick';
 
 interface Blog {
   id: number;
@@ -63,6 +64,14 @@ const BlogList: React.FC = () => {
       fetchRecipes();
     }, []);
 
+    const sliderSettings = {
+      dots: true,
+      infinite: true,
+      speed: 500,
+      slidesToShow: 3, // Adjust the number of slides to show
+      slidesToScroll: 1,
+    };
+
   return (
     <div className="flex flex-col items-center p-8 overflow-x-scroll">
       <h2 className="text-2xl font-bold mb-4">Latest Blogs</h2>
@@ -99,7 +108,7 @@ const BlogList: React.FC = () => {
                   className="object-cover"
                   layout="fixed"
                   height="50"
-                  width="50"
+                  width="0"
                 />
                 <h3 className="text-lg font-semibold">{recipe.title}</h3>
               </div>

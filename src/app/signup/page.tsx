@@ -2,18 +2,78 @@
 
 import Image from "next/image";
 import logo from "../../../public/logo.png";
-import { FormEvent, useState } from "react";
+import { FormEvent, useState,useRef } from "react";
+import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
+import { getStorage } from "firebase/storage";
+import app from "../../firebase";
+import firebase from "../../firebase";
+import  CustomButton  from '../../components/CustomButton';
+import { SignupDataType } from "@/Types";
+import React from "react";
 
-export default function Signup() {
+const Signup: React.FC<{ signUpData: SignupDataType }> = ({signUpData}) => {
+  const [userData, setUserData] = React.useState<Record<string, any>>({
+   username:"",
+   password:"",
+   email:"",
+   image:""
+  });
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
+  const [image, setImage] = useState<File | null>(null); // Add state for the image
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
+  const [isUploadingImage, setIsUploadingImage] = useState<boolean>(false);
+  const SignupData:SignupDataType = (key: string, value: any) => {
+    setUserData({ ...userData, [key]: value });
+    // console.log(recipeData);
+  };
+ 
+
+  
+  const storage = firebase.storage;
+  const fileInputRef = useRef(null);
+
+  const handleImageUpload = async () => {
+    const file = image;
+
+    if (!file) {
+      alert('No file selected');
+      return;
+    }
+    setIsUploadingImage(true);
+
+    const storageRef = ref(storage, `userImages/${file.name}`);
+    const uploadTask = uploadBytesResumable(storageRef, file);
+
+    uploadTask.on(
+      'state_changed',
+      (snapshot) => {
+        console.log(snapshot);
+      },
+      (error) => {
+        console.log(error);
+      },
+      async () => {
+        alert('Image Upload is complete');
+        const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+        setImageUrl(downloadURL);
+        console.log(downloadURL);
+        SignupData('image', downloadURL);
+        setIsUploadingImage(false);
+      }
+    );
+
+  };
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log(username);
     console.log(password);
+    SignupData('username', username);
+    SignupData('password', password);
+    SignupData('email', email);
 
     try {
       const response = await fetch(
@@ -23,9 +83,12 @@ export default function Signup() {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ username, password, email }),
+          body: JSON.stringify(userData),
         }
       );
+      console.log(userData);
+      const data =  await response.json();
+      console.log(data)
 
       console.log(response);
 
@@ -37,6 +100,7 @@ export default function Signup() {
           setPassword("");
           setEmail("");
           setError("");
+     
         } else {
           setError("Invalid response from server");
         }
@@ -105,6 +169,34 @@ export default function Signup() {
               className="rounded-md px-3 py-2 border border-gray-300 focus:border-blue-500 focus:ring-blue-500 focus:ring-opacity-50 w-full"
             />
           </div>
+          {/* Add image upload field */}
+          <div className="mb-4">
+            <label htmlFor="image" className="sr-only">
+              Profile Image
+            </label>
+            <input
+              type="file"
+              name="image"
+              id="image"
+              accept="image/*"
+              ref={fileInputRef}
+              placeholder='select image'
+              onChange={(event) => {
+                const file = event.target.files && event.target.files[0];
+                if (file) {
+                  setImage(file);
+                }
+              }}
+              className="rounded-md px-3 py-2 border border-gray-300 focus:border-blue-500 focus:ring-blue-500 focus:ring-opacity-50 w-full"
+            />
+            <CustomButton
+                  type="button"
+                  title={isUploadingImage ? "Uploading...": "Upload Image"}
+                  varient="btn_light_green"
+                  otherStyles="bg-green-500 text-white px-4 py-1"
+                  onClick={() => handleImageUpload()}
+              />
+          </div>
           {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
           <button
             type="submit"
@@ -112,6 +204,7 @@ export default function Signup() {
           >
             Sign Up
           </button>
+          
         </form>
         <div className="mt-4 text-center">
           <p className="text-sm text-gray-500">
@@ -125,3 +218,4 @@ export default function Signup() {
     </div>
   );
 }
+export default Signup;

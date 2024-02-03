@@ -21,7 +21,7 @@ const BlogSteps:React.FC<{ updateBlogData: UpdateBlogDataType }> = ({updateBlogD
 
   
   const [steps, setSteps] = useState<Step[]>([
-    { order: 1, step: '', image: "" }, // Default step
+    { order: 1, step: '', image: '' }, // Default step
   ]);
 
 
@@ -32,7 +32,7 @@ const BlogSteps:React.FC<{ updateBlogData: UpdateBlogDataType }> = ({updateBlogD
 
 
   const addStep = () => {
-    setSteps([...steps, { order: steps.length + 1, step: '', image: null }]);
+    setSteps([...steps, { order: steps.length + 1, step: '', image: '' }]);
   };
 
   const handleChange = (index:number, field:string, value:string) => {
