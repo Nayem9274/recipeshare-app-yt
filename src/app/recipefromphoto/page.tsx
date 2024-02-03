@@ -1,8 +1,9 @@
+import RecipeFromPhoto from '@/components/RecipeFromPhoto'
 import React from 'react'
 
 const page = () => {
   return (
-    <div>page</div>
+    <RecipeFromPhoto/>
   )
 }
 

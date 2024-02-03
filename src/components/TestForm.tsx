@@ -21,13 +21,7 @@ const TestForm: React.FC<{ updateRecipeData: UpdateRecipeDataType }> = ({updateR
   const [msg, setMsg] = useState<string>('Uploading...');
   const [percentage, setPercentage] = useState<number>(0);
 
-  const updatePercentage:updatePercentage =(value:number)=>{ 
-    setPercentage(value); 
-  }
-
-  const updateMsg:updateMsg = (value:string)=>{
-    setMsg(value);
-  }
+  
 
   // video
   const [selectedVideo, setSelectedVideo] = useState<File|null>(null);
@@ -38,6 +32,8 @@ const TestForm: React.FC<{ updateRecipeData: UpdateRecipeDataType }> = ({updateR
   const [selectedImage, setSelectedImage] = useState<File|null>(null);
   const [isUploadingImage, setIsUploadingImage] = useState<boolean>(false);
   const [imageSelected, setImageSelection] = useState<boolean>(false);
+
+  const [link, setLink] = useState<string>('');
   
   // functions to handle the form
   const handleDifficulty = (value:string) => {
@@ -67,13 +63,33 @@ const TestForm: React.FC<{ updateRecipeData: UpdateRecipeDataType }> = ({updateR
       setIsUploadingVideo(value);
   }
 
+  const updatePercentage:updatePercentage =(value:number)=>{ 
+    setPercentage(value); 
+  }
+
+  const updateMsg:updateMsg = (value:string)=>{
+    setMsg(value);
+  }
+
+  const updateLink:updateMsg = (value:string)=>{
+    setLink(value);
+  }
+
   const handleImageUpload = async() => {
 
     if(!selectedImage){
       alert('No file selected');
       return;
     }
-    await Uploadfiles(selectedImage, true, updateRecipeData, updateState, updatePercentage, updateMsg);
+    try {
+      await Uploadfiles(selectedImage, updateState, updatePercentage, updateMsg,updateLink);
+    } catch (error) {
+      alert('Error uploading file');
+    } finally {
+      setPercentage(0); // Reset progress after upload completion or failure
+    }
+
+    updateRecipeData('image', link);
 
   }
 
@@ -81,9 +97,16 @@ const TestForm: React.FC<{ updateRecipeData: UpdateRecipeDataType }> = ({updateR
     if (!selectedVideo){
       alert('No file selected');
       return;
+    } 
+    try {
+      await Uploadfiles(selectedVideo, updateState, updatePercentage, updateMsg,updateLink);
+    } catch (error) {
+      alert('Error uploading file');
+    } finally {
+      setPercentage(0); // Reset progress after upload completion or failure
     }
 
-    await Uploadfiles(selectedVideo, false, updateRecipeData,updateState,updatePercentage, updateMsg);
+    updateRecipeData('video', link);
     
   };
 

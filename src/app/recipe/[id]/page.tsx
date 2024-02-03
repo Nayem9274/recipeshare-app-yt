@@ -3,8 +3,6 @@
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { useParams } from 'next/navigation';
-import { useRouter } from 'next/navigation';
-import { recipeData } from '@/data';
 
 interface ApiRecipeResponse {
   id: number;

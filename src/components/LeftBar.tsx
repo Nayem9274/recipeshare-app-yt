@@ -7,6 +7,7 @@ import notificationlogo from "./../../public/notifications.svg";
 import searchlogo from "./../../public/search.svg";
 import Link from "next/link"
 import profilelogo from "./../../public/person.svg";
+import { WiDayCloudy } from "react-icons/wi";
 
 const  LeftBar=() => {
   const [cookie, setCookie] = React.useState<string|undefined>('');
@@ -39,8 +40,14 @@ const  LeftBar=() => {
   }
 
   return (
-    <div className="ml-[50px] flex flex-row items-center">
-      <Image className="mb-4" src={logo} alt="Logo" width={160} height={160} />
+    <div className="flex flex-row items-center bg-white w-screen">
+      <Image className="mb-4 py-2" 
+        src="https://firebasestorage.googleapis.com/v0/b/recipeshare-410617.appspot.com/o/logo.png?alt=media&token=61d4d2f9-dfc7-47e2-bdc4-be13d0b75917" 
+        alt="Logo" 
+        width={200}
+        height={200}
+        priority
+      />
       <div className="flex items-center ml-4">
         <Image height={40} src={home} alt="Home" />
         <Link href="/">

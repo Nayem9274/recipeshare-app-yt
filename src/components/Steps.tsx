@@ -1,7 +1,7 @@
 import { useState, useRef, use } from 'react';
 import { CustomButton } from '..';
 import { Uploadfiles } from '@/Uploadfiles';
-import { UpdateRecipeDataType,updateState,updatePercentage,updateMsg } from '@/Types';
+import { UpdateRecipeDataType,updateState,updatePercentage,updateMsg,updateLink } from '@/Types';
 import Overlay from './Overlay';
 
 
@@ -29,8 +29,11 @@ const RecipeSteps:React.FC<{ updateRecipeData: UpdateRecipeDataType }> = ({updat
 
   const [percentage, setPercentage] = useState<number>(0);
   const [msg, setMsg] = useState<string>('Uploading...');
+  const [downloadURL, setDownloadURL] = useState<string>('');
 
-
+  const updateLink:updateLink = (value:string)=>{
+    setDownloadURL(value);
+  }
 
   const addStep = () => {
     setSteps([...steps, { order: steps.length + 1, step: '', image: null }]);
@@ -68,16 +71,18 @@ const RecipeSteps:React.FC<{ updateRecipeData: UpdateRecipeDataType }> = ({updat
       return;
     } 
     try {
-      await Uploadfiles(selectedImage, true, updateRecipeData, updateState, updatePercentage, updateMsg, index, steps);
+      await Uploadfiles(selectedImage, updateState, updatePercentage, updateMsg, updateLink);
     } catch (error) {
       console.error('Error uploading file:', error);
     } finally {
       setPercentage(0); // Reset progress after upload completion or failure
     }
+
+    const updatedSteps = [...steps];
+    updatedSteps[index].image = downloadURL;
+    updateRecipeData('steps', updatedSteps);
     
   };
-
-
 
   return (
     <div>
@@ -126,7 +131,7 @@ const RecipeSteps:React.FC<{ updateRecipeData: UpdateRecipeDataType }> = ({updat
                       if (file) {
                         setSelectedImage(file);
                       }else{
-                        console.log('error in file selection');
+                        alert('error in file selection');
                       }
                     }}
                 />
