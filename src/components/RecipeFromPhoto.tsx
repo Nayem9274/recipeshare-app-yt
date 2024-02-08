@@ -79,7 +79,7 @@ const RecipeFromPhoto = () => {
 
             // Encode the recipes as a JSON string in the URL parameter
             const encodedRecipes = encodeURIComponent(JSON.stringify(data));
-            const redirectUrl = `/view/recipeFromPhoto?recipes=${encodedRecipes}`;
+            const redirectUrl = `/view/recipe/fromPhoto?recipes=${encodedRecipes}`;
             window.location.href = redirectUrl;
 
         } catch (error) {
@@ -97,7 +97,7 @@ const RecipeFromPhoto = () => {
         >
             <img
                 className="object-cover w-full h-full"
-                src="background.jpg"
+                src="https://images.unsplash.com/photo-1557683316-973673baf926?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80"
                 alt="Background"
             />
         </div>
