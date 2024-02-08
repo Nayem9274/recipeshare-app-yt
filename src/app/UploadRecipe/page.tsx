@@ -21,7 +21,7 @@ const UploadRecipe = () => {
     steps: [],
     tags: [],
     jwt:"",
-    username:""
+    user:""
   });
   type UpdateRecipeDataType = (key: string, value: any) => void;
   
@@ -39,7 +39,7 @@ const UploadRecipe = () => {
   /************Cookie Part***********/
   useEffect(() => {
   
-    if (typeof window !== 'undefined') {
+    /*if (typeof window !== 'undefined') {
       // Get the username from the query parameter
       const searchParams = new URLSearchParams(window.location.search);
       const username = searchParams.get('username');
@@ -55,7 +55,7 @@ const UploadRecipe = () => {
  
       // Do something with the username
      
-    }
+    }*/
     
    // updateRecipeData('username', usernameRef.current);
     //console.log('Outside useEffect - recipeData.username:', recipeData.username);

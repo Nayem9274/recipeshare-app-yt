@@ -13,15 +13,16 @@ const BlogSteps:React.FC<{ updateBlogData: UpdateBlogDataType }> = ({updateBlogD
   const fileInputRef = useRef(null);
   
 
-  type Step = {
+  type Section = {
     order: number;
-    step: string;
+    title: string;
+    content: string;
     image: string | null; // Change from string | null to string
   };
 
   
-  const [steps, setSteps] = useState<Step[]>([
-    { order: 1, step: '', image: '' }, // Default step
+  const [sections, setSections] = useState<Section[]>([
+    { order: 1, title: '', content: '', image: '' }, // Default section
   ]);
 
 
@@ -31,21 +32,21 @@ const BlogSteps:React.FC<{ updateBlogData: UpdateBlogDataType }> = ({updateBlogD
   const [isUploadingImage, setIsUploadingImage] = useState<boolean>(false);
 
 
-  const addStep = () => {
-    setSteps([...steps, { order: steps.length + 1, step: '', image: '' }]);
+  const addSection = () => {
+    setSections([...sections, { order: sections.length + 1, title: '', content: '', image: '' }]);
   };
 
   const handleChange = (index:number, field:string, value:string) => {
-    setSteps((prevSteps) =>
-      prevSteps.map((step, i) => (i === index ? { ...step, [field]: value } : step)));
-    updateBlogData('steps', steps);
+    setSections((prevSections) =>
+      prevSections.map((section, i) => (i === index ? { ...section, [field]: value } : section)));
+    updateBlogData('sections', sections);
   };
 
-  const deleteStep = (index: number)=> {
-      const updatedSteps = [...steps];
-      updatedSteps.splice(index, 1);
-      setSteps(updatedSteps);
-      updateBlogData('steps', updatedSteps);
+  const deleteSection = (index: number)=> {
+      const updatedSections = [...sections];
+      updatedSections.splice(index, 1);
+      setSections(updatedSections);
+      updateBlogData('sections', updatedSections);
   };
 
   const handleImageUpload = async (index: number) => {
@@ -59,7 +60,7 @@ const BlogSteps:React.FC<{ updateBlogData: UpdateBlogDataType }> = ({updateBlogD
 
     setIsUploadingImage(true);
 
-    const storageRef = ref(storage, `stepImages/${file.name}`);
+    const storageRef = ref(storage, `sectionImages/${file.name}`);
     const uploadTask = uploadBytesResumable(storageRef, file);
 
     setUploadTask(uploadTask);
@@ -82,13 +83,13 @@ const BlogSteps:React.FC<{ updateBlogData: UpdateBlogDataType }> = ({updateBlogD
 
         console.log(downloadURL);
         
-        // update the steps array with the image url
-        const updatedSteps = [...steps];
-        updatedSteps[index].image = downloadURL;
-        console.log(updatedSteps[index]);
-        setSteps(updatedSteps);
-        updateBlogData('steps', steps);
-        console.log(steps);
+        // update the sections array with the image url
+        const updatedSections = [...sections];
+        updatedSections[index].image = downloadURL;
+        console.log(updatedSections[index]);
+        setSections(updatedSections);
+        updateBlogData('sections', sections);
+        console.log(sections);
         setIsUploadingImage(false);
       }
     );   
@@ -99,23 +100,30 @@ const BlogSteps:React.FC<{ updateBlogData: UpdateBlogDataType }> = ({updateBlogD
   return (
     <div className="container mx-auto">
       <ol className="list-disc space-y-4">
-        {steps.map((step, index) => (
+        {sections.map((section, index) => (
           <li key={index} className="flex flex-col gap-4">
             <div className="flex items-center gap-4">
               <input
                 type="number"
-                value={step.order}
+                value={section.order}
                 onChange={(e) => handleChange(index, 'order', e.target.value)}
                 className="w-20 h-10 border p-2 bg-gray-200 text-lg font-medium rounded"
-                placeholder="Step #"
+                placeholder="Section #"
                 min={index + 1}
                 required
               />
               <textarea
-                value={step.step}
-                onChange={(e) => handleChange(index, 'step', e.target.value)}
+                value={section.title}
+                onChange={(e) => handleChange(index, 'title', e.target.value)}
                 className="w-full h-30 border p-2 bg-gray-200 rounded resize text-center"
-                placeholder="Step description"
+                placeholder="Section title"
+                required
+              />
+              <textarea
+                value={section.content}
+                onChange={(e) => handleChange(index, 'content', e.target.value)}
+                className="w-full h-30 border p-2 bg-gray-200 rounded resize text-center"
+                placeholder="Section content"
                 required
               />
               <CustomButton
@@ -123,7 +131,7 @@ const BlogSteps:React.FC<{ updateBlogData: UpdateBlogDataType }> = ({updateBlogD
                 title="Delete"
                 varient="btn_dark_red"
                 otherStyles="bg-red-500 text-white px-2 py-1 rounded h-10"
-                onClick={() => deleteStep(index)}
+                onClick={() => deleteSection(index)}
               />
             </div>
 
@@ -155,11 +163,11 @@ const BlogSteps:React.FC<{ updateBlogData: UpdateBlogDataType }> = ({updateBlogD
             </div>
               
               {/* Add the image preview */}
-              {step.image && (
+              {section.image && (
                 <div className="flex justify-center">
                   <img
-                    src={step.image}
-                    alt="Step Image"
+                    src={section.image}
+                    alt="Section Image"
                     className="w-24 h-24 object-cover"
                   />
                 </div>
@@ -171,10 +179,10 @@ const BlogSteps:React.FC<{ updateBlogData: UpdateBlogDataType }> = ({updateBlogD
       <div className="flex justify-center mt-4">
         <CustomButton
           type="button"
-          title="Add Step"
+          title="Add Section"
           varient="btn_light_green"
           otherStyles="bg-blue-500 text-white px-4 py-2 rounded-full"
-          onClick={() => addStep()}
+          onClick={() => addSection()}
         />
       </div>
     </div>

@@ -29,7 +29,7 @@ const RecipeList: React.FC<{ onClose: () => void ; userName: string}> = ({ onClo
         console.log(userName);
         //setRecipes(data);
      
-        setRecipes(userRecipes);
+        setRecipes(data);
       } catch (error) {
         console.error('Error fetching recipes:', error);
       }

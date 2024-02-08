@@ -2,21 +2,21 @@
 
 import Image from "next/image";
 import logo from "../../../public/logo.png";
-import { FormEvent, useState,useRef } from "react";
+import { FormEvent, useState, useRef } from "react";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { getStorage } from "firebase/storage";
 import app from "../../firebase";
 import firebase from "../../firebase";
-import  CustomButton  from '../../components/CustomButton';
+import CustomButton from '../../components/CustomButton';
 import { SignupDataType } from "@/Types";
 import React from "react";
 
-const Signup: React.FC<{ signUpData: SignupDataType }> = ({signUpData}) => {
+const Signup: React.FC<{ signUpData: SignupDataType }> = ({ signUpData }) => {
   const [userData, setUserData] = React.useState<Record<string, any>>({
-   username:"",
-   password:"",
-   email:"",
-   image:""
+    username: "",
+    password: "",
+    email: "",
+    image: ""
   });
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -25,13 +25,13 @@ const Signup: React.FC<{ signUpData: SignupDataType }> = ({signUpData}) => {
   const [image, setImage] = useState<File | null>(null); // Add state for the image
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [isUploadingImage, setIsUploadingImage] = useState<boolean>(false);
-  const SignupData:SignupDataType = (key: string, value: any) => {
+  const SignupData: SignupDataType = (key: string, value: any) => {
     setUserData({ ...userData, [key]: value });
     // console.log(recipeData);
   };
- 
 
-  
+
+
   const storage = firebase.storage;
   const fileInputRef = useRef(null);
 
@@ -61,6 +61,7 @@ const Signup: React.FC<{ signUpData: SignupDataType }> = ({signUpData}) => {
         setImageUrl(downloadURL);
         console.log(downloadURL);
         SignupData('image', downloadURL);
+       
         setIsUploadingImage(false);
       }
     );
@@ -87,7 +88,7 @@ const Signup: React.FC<{ signUpData: SignupDataType }> = ({signUpData}) => {
         }
       );
       console.log(userData);
-      const data =  await response.json();
+      const data = await response.json();
       console.log(data)
 
       console.log(response);
@@ -100,7 +101,7 @@ const Signup: React.FC<{ signUpData: SignupDataType }> = ({signUpData}) => {
           setPassword("");
           setEmail("");
           setError("");
-     
+
         } else {
           setError("Invalid response from server");
         }
@@ -137,7 +138,11 @@ const Signup: React.FC<{ signUpData: SignupDataType }> = ({signUpData}) => {
               id="username"
               placeholder="Username"
               value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              onChange={(e) => {
+                setUsername(e.target.value);
+                SignupData('username', e.target.value);
+              }
+              }
               className="rounded-md px-3 py-2 border border-gray-300 focus:border-blue-500 focus:ring-blue-500 focus:ring-opacity-50 w-full"
             />
           </div>
@@ -151,7 +156,11 @@ const Signup: React.FC<{ signUpData: SignupDataType }> = ({signUpData}) => {
               id="password"
               placeholder="Password"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={(e) => {
+                setPassword(e.target.value);
+                SignupData('password', e.target.value);
+              }
+              }
               className="rounded-md px-3 py-2 border border-gray-300 focus:border-blue-500 focus:ring-blue-500 focus:ring-opacity-50 w-full"
             />
           </div>
@@ -165,7 +174,11 @@ const Signup: React.FC<{ signUpData: SignupDataType }> = ({signUpData}) => {
               id="email"
               placeholder="Email"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e) => {
+                setEmail(e.target.value);
+                SignupData('email', e.target.value);
+              }
+              }
               className="rounded-md px-3 py-2 border border-gray-300 focus:border-blue-500 focus:ring-blue-500 focus:ring-opacity-50 w-full"
             />
           </div>
@@ -190,12 +203,12 @@ const Signup: React.FC<{ signUpData: SignupDataType }> = ({signUpData}) => {
               className="rounded-md px-3 py-2 border border-gray-300 focus:border-blue-500 focus:ring-blue-500 focus:ring-opacity-50 w-full"
             />
             <CustomButton
-                  type="button"
-                  title={isUploadingImage ? "Uploading...": "Upload Image"}
-                  varient="btn_light_green"
-                  otherStyles="bg-green-500 text-white px-4 py-1"
-                  onClick={() => handleImageUpload()}
-              />
+              type="button"
+              title={isUploadingImage ? "Uploading..." : "Upload Image"}
+              varient="btn_light_green"
+              otherStyles="bg-green-500 text-white px-4 py-1"
+              onClick={() => handleImageUpload()}
+            />
           </div>
           {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
           <button
@@ -204,7 +217,7 @@ const Signup: React.FC<{ signUpData: SignupDataType }> = ({signUpData}) => {
           >
             Sign Up
           </button>
-          
+
         </form>
         <div className="mt-4 text-center">
           <p className="text-sm text-gray-500">

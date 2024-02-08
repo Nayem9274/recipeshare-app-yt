@@ -36,9 +36,11 @@ const RecipeSteps:React.FC<{ updateRecipeData: UpdateRecipeDataType }> = ({updat
   };
 
   const handleChange = (index:number, field:string, value:string) => {
-    setSteps((prevSteps) =>
-      prevSteps.map((step, i) => (i === index ? { ...step, [field]: value } : step)));
-    updateRecipeData('steps', steps);
+    setSteps((prevSteps) => {
+    const updatedSteps = prevSteps.map((step, i) => (i === index ? { ...step, [field]: value } : step));
+    updateRecipeData('steps', updatedSteps);
+    return updatedSteps;
+  });
   };
 
   const deleteStep = (index: number)=> {
