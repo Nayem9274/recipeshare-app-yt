@@ -1,9 +1,9 @@
 // Import necessary modules from Next.js and React
 'use client'
 import Link from 'next/link'; // Import Link from Next.js for navigation
-import BlogList from './bloglist';
 import React, { useState, useEffect } from 'react';
-import CustomButton from '@/components/CustomButton';
+import { useParams } from 'next/navigation';
+
 
 interface UserDetail {
   id: number;
@@ -12,36 +12,21 @@ interface UserDetail {
   image: string | null;
   date_joined: string;
   last_login: string;
-  is_admin: boolean;
 }
 
 // Create the ProfilePage component
 const ProfilePage = () => {
 
-  const [cookie, setCookie] = React.useState<string|undefined>('');
   const [userDetails, setUserDetails] = useState<UserDetail | null>(null);
-
-  const fetchCookie = () => {
-    const cookieValue = document.cookie.split('; ')
-                        .find((row) => row.startsWith('jwt='))?.split('=')[1];
-  
-    // Use the setCookie callback to ensure that the state is updated before using it
-    setCookie((prevCookie) => {
-      if (prevCookie !== cookieValue) {
-        return cookieValue;
-      }
-      return prevCookie;
-    });
-  };
-  
+  const {id: userId } = useParams(); // Destructure the id property
 
   const fetchUserDetails = async () => {
     const dataBody = {
-      'jwt': cookie
+      'user_id': userId
     }
-    console.log(dataBody)
+    console.log(dataBody);
     try {
-      const response = await fetch('http://127.0.0.1:8000/api/user/details/',{
+      const response = await fetch('http://127.0.0.1:8000/api/user/detailsFromId/',{
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -49,23 +34,20 @@ const ProfilePage = () => {
         body: JSON.stringify(dataBody)
       });
       const data = await response.json();
-      setUserDetails(data.user_details);
+      console.log(data);
+      setUserDetails(data);  
+      
     } catch (error) {
       console.error('Error fetching user details:', error);
     }
   };
-
+  
+  
   useEffect(() => {
-    const fetchData = async () => {
-      await fetchCookie();
-      console.log(cookie);
-      fetchUserDetails();
-    };
+    fetchUserDetails(); 
+  }, []);
   
-    fetchData();
-  }, [fetchUserDetails, fetchCookie, cookie]);
-  
-  
+  console.log('userDetails:' + userDetails);
 
   const [showBlogs, setShowBlogs] = useState(false);
 
@@ -105,20 +87,20 @@ const ProfilePage = () => {
               <span className="font-semibold">Last Login:</span> {new Date(userDetails.last_login).toLocaleString()}
             </p>
           </div>
+          
           {/* Notification bar */}
           <div className="bg-green-500 p-4 text-white rounded-md">
             <Link href="/">
               <span>View Notifications</span>
             </Link>
           </div>
+         
           {/* View Blogs button */}
           <button onClick={handleOpenBlogs} className="bg-blue-500 text-white px-4 py-2 rounded-md mt-4">
             View Blogs
           </button>
         </div>
       )}
-      {showBlogs && <BlogList onClose={handleCloseBlogs} />}
-      
       {/* Second box with tabs */}
       <div className="bg-white p-4 rounded-lg shadow-md max-w-2xl w-full mb-8">
         <h2 className="text-xl font-bold mb-4">Tabs</h2>
@@ -140,17 +122,6 @@ const ProfilePage = () => {
           </Link>
         </div>
       </div>
-
-      {userDetails && userDetails.is_admin &&
-        <CustomButton
-          title="Go to Admin Page"
-          type= "button"
-          otherStyles="bg-blue-500 text-white px-4 py-2 rounded-md mt-4"  
-          onClick={() => {
-            window.location.href = '/admin';
-          }}
-          />
-      }
     </div>
   );
 };

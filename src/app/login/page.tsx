@@ -1,24 +1,25 @@
 "use client";   
 import React from 'react'
 import CustomButton  from '@/components/CustomButton';
-// import Image from "next/image";
-// // import logo from "../../../public/logo.png";
-
 
 
 const DemoLogin =() => {
   
     const [username,setUsername] = React.useState<string>('');
     const [password,setPassword] = React.useState<string>('');
+    const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
 
     // handle login
     const handleLogin =async() => {
+      console.log('username: ', username);
+      console.log('password', password);
         const credentials = {
-            username: username,
-            password: password
+            "username": username,
+            "password": password
         }
         try {
+            setIsLoading(true);
             const response = await fetch('https://recipeshare-tjm7.onrender.com/api/user/login/', {
               method: 'POST',
               headers: {
@@ -29,6 +30,7 @@ const DemoLogin =() => {
         
             const data =  await response.json();
             console.log(data)
+            setIsLoading(false);
             
             if(data.jwt){
                 const cookie = data.jwt; // Extract the cookie from the response
@@ -49,15 +51,8 @@ const DemoLogin =() => {
     }
 
   return (
-    <div className="flex items-center justify-center bg-gray-50 min-h-screen">
-      <div className="bg-white shadow rounded-lg px-8 pt-6 pb-8 mb-4 flex flex-col w-full max-w-md">
-        {/* <Image
-          src={logo}
-          alt="Recipe Share Logo"
-          width={80}
-          height={80}
-          className="mx-auto mb-6"
-        /> */}
+    <div className="flex justify-center bg-gray-400 h-screen py-48">
+      <div className="bg-teal-400 shadow rounded-lg flex px-4 flex-col w-2/5 h-64">
         <h2 className="text-center text-2xl font-semibold mb-4">
           Log in to RecipeShare
         </h2>
@@ -97,14 +92,22 @@ const DemoLogin =() => {
           />
 
         <div className="mt-4 text-center">
-          <p className="text-sm text-gray-500">
-            Dont have an account?{" "}
-            <a href="/signup" className="text-blue-500 hover:underline">
+          <p className="text-sm text-black">
+            Don't have an account?{" "}
+            <a href="/signup" className="text-blue-800 hover:underline">
               Sign up
             </a>
           </p>
         </div>
+        {isLoading && (
+            <div className="loading-overlay mt-3">
+                <div className="spinner-border text-primary" role="status">
+                    <span className="visually-hidden">Loading...</span>
+                </div>
+            </div>
+        )}
       </div>
+
     </div>
   );
 }

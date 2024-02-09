@@ -1,10 +1,8 @@
-
 'use client'
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { useParams } from 'next/navigation';
-import { useRouter } from 'next/navigation';
-import { blogData } from '@/data';
+
 
 interface ApiBlogResponse {
     id: number;
