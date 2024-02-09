@@ -61,7 +61,7 @@ const ProfilePage = () => {
     }
     console.log(dataBody)
     try {
-      const response = await fetch('http://127.0.0.1:8000/api/user/details/',{
+      const response = await fetch('https://recipeshare-tjm7.onrender.com/api/user/details/',{
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

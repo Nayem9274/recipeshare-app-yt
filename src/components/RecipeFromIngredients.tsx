@@ -50,7 +50,7 @@ const RecipeFromIngredients = () => {
           console.log(dataBody);
 
         try {
-            const response = await fetch('http://127.0.0.1:8000/api/findrecipe/ingredients/',{ 
+            const response = await fetch('https://recipeshare-tjm7.onrender.com/api/findrecipe/ingredients/',{ 
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',

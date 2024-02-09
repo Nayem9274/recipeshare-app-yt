@@ -44,7 +44,7 @@ const AdminPage = () => {
 
     const handleDeleteRecipe = async (recipeId: number) => {
         try {
-          const response = await fetch('http://127.0.0.1:8000/api/recipe/delete/', {
+          const response = await fetch('https://recipeshare-tjm7.onrender.com/api/recipe/delete/', {
             method: 'DELETE',
             headers: {
               'Content-Type': 'application/json',
@@ -66,7 +66,7 @@ const AdminPage = () => {
 
     const handleDeleteBlog = async (blogId: number) => {
         try {
-            const response = await fetch('http://127.0.0.1:8000/api/blog/delete/', {
+            const response = await fetch('https://recipeshare-tjm7.onrender.com/api/blog/delete/', {
               method: 'DELETE',
               headers: {
                 'Content-Type': 'application/json',
@@ -88,7 +88,7 @@ const AdminPage = () => {
     
     const handleDeleteUser = async (userId: number) => {
         try {
-            const response = await fetch('http://127.0.0.1:8000/api/user/delete/', {
+            const response = await fetch('https://recipeshare-tjm7.onrender.com/api/user/delete/', {
               method: 'DELETE',
               headers: {
                 'Content-Type': 'application/json',
