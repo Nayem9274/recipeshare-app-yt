@@ -12,3 +12,5 @@ export interface RecipeType {
     ingredients: { name: string; image: string }[];
     link: string;
   }
+export type SignupDataType =(key: string, value: any) => void;
+

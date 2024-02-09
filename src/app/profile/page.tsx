@@ -1,9 +1,24 @@
 // Import necessary modules from Next.js and React
 'use client'
 import Link from 'next/link'; // Import Link from Next.js for navigation
+import { userDetails } from "@/data";
+import { useRouter } from 'next/navigation';
 import BlogList from './bloglist';
+import RecipeList from './recipelist';
 import React, { useState, useEffect } from 'react';
 import CustomButton from '@/components/CustomButton';
+
+interface ButtonLinkProps {
+  href: string;
+  children: React.ReactNode;
+  username?:string
+}
+
+const ButtonLink: React.FC<ButtonLinkProps> = ({ href, children, username }) => (
+  <Link href={{ pathname: href, query: { username } }}>
+    <h3 className="text-white bg-green-500 hover:bg-red-600 py-2 px-4 rounded-md transition duration-300">{children} </h3>
+  </Link>
+);
 
 interface UserDetail {
   id: number;
@@ -16,10 +31,15 @@ interface UserDetail {
 }
 
 // Create the ProfilePage component
+// Create the ProfilePage component
 const ProfilePage = () => {
 
-  const [cookie, setCookie] = React.useState<string|undefined>('');
+  const [cookie, setCookie] = React.useState<string | undefined>('');
   const [userDetails, setUserDetails] = useState<UserDetail | null>(null);
+  const router = useRouter();
+  const [showRecipes, setShowRecipes] = useState(false);
+  const [showBlogs, setShowBlogs] = useState(false);
+
 
   const fetchCookie = () => {
     const cookieValue = document.cookie.split('; ')
@@ -65,9 +85,8 @@ const ProfilePage = () => {
     fetchData();
   }, [fetchUserDetails, fetchCookie, cookie]);
   
-  
 
-  const [showBlogs, setShowBlogs] = useState(false);
+
 
   const handleOpenBlogs = () => {
     setShowBlogs(true);
@@ -76,7 +95,16 @@ const ProfilePage = () => {
   const handleCloseBlogs = () => {
     setShowBlogs(false);
   };
-  
+
+  const handleOpenRecipes = () => {
+    setShowRecipes(true);
+  };
+
+  const handleCloseRecipes = () => {
+    setShowRecipes(false);
+  };
+
+
   return (
     <div className="p-4 lg:px-20 xl:px-40 h-screen flex flex-col items-center bg-blue-100">
       {userDetails && (
@@ -105,39 +133,34 @@ const ProfilePage = () => {
               <span className="font-semibold">Last Login:</span> {new Date(userDetails.last_login).toLocaleString()}
             </p>
           </div>
-          {/* Notification bar */}
-          <div className="bg-green-500 p-4 text-white rounded-md">
-            <Link href="/">
-              <span>View Notifications</span>
-            </Link>
-          </div>
+          {/* Your Recipe's*/}
+          <button onClick={handleOpenRecipes} className="bg-blue-500 text-white px-10 py-2 rounded-md mt-4 mr-4">
+            Your Recipes
+          </button>
           {/* View Blogs button */}
-          <button onClick={handleOpenBlogs} className="bg-blue-500 text-white px-4 py-2 rounded-md mt-4">
-            View Blogs
+          <button onClick={handleOpenBlogs} className="bg-blue-500 text-white px-10 py-2 rounded-md mt-4">
+            Your Blogs
           </button>
         </div>
       )}
-      {showBlogs && <BlogList onClose={handleCloseBlogs} />}
-      
+
+      {showRecipes && <RecipeList onClose={handleCloseRecipes} userName={userDetails?.name || ''} />}
+      {showBlogs && <BlogList onClose={handleCloseBlogs} userName={userDetails?.name || ''} />}
+
       {/* Second box with tabs */}
       <div className="bg-white p-4 rounded-lg shadow-md max-w-2xl w-full mb-8">
         <h2 className="text-xl font-bold mb-4">Tabs</h2>
         <div className="flex space-x-4">
-          <Link href="/">
-            <span className="text-red-500 hover:underline">Your Recipes</span>
-          </Link>
-          <Link href="/">
-            <span className="text-red-500 hover:underline">Your Blogs</span>
-          </Link>
-          <Link href="/">
-            <span className="text-red-500 hover:underline">Edit Profile</span>
-          </Link>
-          <Link href="/">
-            <span className="text-red-500 hover:underline">Upload Recipes</span>
-          </Link>
-          <Link href="/UploadBlog">
-            <span className="text-red-500 hover:underline">Upload Blog</span>
-          </Link>
+          <ButtonLink href="/">Notifications</ButtonLink>
+          <ButtonLink href="/">Edit Profile</ButtonLink>
+          {userDetails ? (
+            <ButtonLink href="/UploadRecipe" username={userDetails.name || ''}>
+                Upload Recipes
+            </ButtonLink>
+                      ) : (
+              <p>Loading...</p>
+              )}
+          <ButtonLink href="/UploadBlog">Upload Blog</ButtonLink>
         </div>
       </div>
 

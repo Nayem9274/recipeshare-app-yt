@@ -1,12 +1,14 @@
 "use client";
-import React, {useEffect, useState } from 'react';
+import React, {useEffect, useRef, useState,  } from 'react';
 
 import { TestForm } from '@/index';
 import CustomButton  from '@/components/CustomButton';
 import { UpdateRecipeDataType } from '@/Types';
-
+import { useRouter } from 'next/navigation';
+import { useParams } from 'next/navigation';
 
 const UploadRecipe = () => {
+   const router = useRouter();
   // for sending the data to the backend
   const [recipeData, setRecipeData] = React.useState<Record<string, any>>({
     title: "",
@@ -19,8 +21,12 @@ const UploadRecipe = () => {
     ingredients: [],
     steps: [],
     tags: [],
-    jwt:""
+    jwt:"",
+    user:""
   });
+  type UpdateRecipeDataType = (key: string, value: any) => void;
+  
+  const usernameRef = useRef<string | undefined>('');
 
   // for storing the cookie
   const [cookie, setCookie] = React.useState<string|undefined>('');
@@ -33,6 +39,28 @@ const UploadRecipe = () => {
 
   /************Cookie Part***********/
   useEffect(() => {
+  
+    /*if (typeof window !== 'undefined') {
+      // Get the username from the query parameter
+      const searchParams = new URLSearchParams(window.location.search);
+      const username = searchParams.get('username');
+      if (username) {
+       // console.log('Username:', username);
+        usernameRef.current = username;
+       
+      } else {
+        console.log('Username not found in query parameter.');
+        // You can decide what to do if the username is not present.
+        // For example, you may want to set a default username or show an error message.
+      }
+ 
+      // Do something with the username
+     
+    }*/
+    
+   // updateRecipeData('username', usernameRef.current);
+    //console.log('Outside useEffect - recipeData.username:', recipeData.username);
+    //console.log('Outside useEffect - recipeData.jwt:', recipeData.username);
     getCookie();
   }, []); // Optional dependency array
   
@@ -42,6 +70,7 @@ const UploadRecipe = () => {
       .find((row) => row.startsWith('jwt='))?.split('=')[1];
     
     updateRecipeData('jwt', cookieValue);
+   // updateRecipeData('username', usernameRef.current);
     setCookie(cookieValue);
   };
   
@@ -57,6 +86,18 @@ const UploadRecipe = () => {
     
     /************Add the cookie to the body ************** */
     updateRecipeData('jwt', cookie);
+
+    
+    // Get the username from the query parameter
+    //const username = router.query.username as string;
+   
+
+    // Add the username to the recipeData
+    // Additional logging
+  //console.log('Outside useEffect - usernameRef.current:', usernameRef.current);
+  //console.log('Outside useEffect - recipeData.username:', recipeData.username);
+
+    //updateRecipeData('username', usernameRef.current);
 
     try {
         const response = await fetch('https://recipeshare-tjm7.onrender.com/api/user/recipe/add/', {

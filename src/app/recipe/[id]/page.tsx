@@ -13,6 +13,7 @@ interface ApiRecipeResponse {
     amount: number;
     unit: string;
     ingredient: string;
+    name:string;
 
   }[];
   image: string;      // Optional image field
@@ -150,23 +151,39 @@ const Recipe = () => {
         <ul className="list-disc pl-4">
           {recipeData.ingredients.map((ingredientGroup, index) => (
             <li key={index}>
-              {`${ingredientGroup.amount} ${ingredientGroup.unit} of ${ingredientGroup.ingredient}`}
+              {`${ingredientGroup.amount} ${ingredientGroup.unit} of ${ingredientGroup.name}`}
             </li>
           ))}
         </ul>
       </div>
 
+
       {/* INSTRUCTIONS */}
-      <div className="mt-8">
-        <h2 className="text-2xl font-bold mb-2">Instructions</h2>
-        <ol className="list-decimal pl-4">
-          {recipeData.steps.map((step, index) => (
-            <li key={index}>
-              {`${step.order}. ${step.step}`}
-            </li>
-          ))}
-        </ol>
-      </div>
+<div className="mt-8">
+  <h2 className="text-2xl font-bold mb-2">Instructions</h2>
+  <ol className="list-decimal pl-4">
+    {recipeData.steps.map((step, index) => (
+      <li key={index} className="mb-4">
+        {/* Display the step text */}
+        <span className="block">{`${step.step}`}</span>
+        {/* Display the step image below the step text if present */}
+        {step.image && (
+          <div className="w-16 h-16 mx-6 mt-2">
+            <Image
+              src={step.image}
+              alt={`Step ${index + 1}`}
+              className="object-cover"
+              layout="responsive"
+              width={100}
+              height={100}
+            />
+          </div>
+        )}
+      </li>
+    ))}
+  </ol>
+</div>
+
 
       {/* ADD COMMENT FORM */}
       <div className="mt-8">
