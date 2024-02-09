@@ -21,7 +21,7 @@ const RecipeSteps:React.FC<{ updateRecipeData: UpdateRecipeDataType }> = ({updat
 
   
   const [steps, setSteps] = useState<Step[]>([
-    { order: 1, step: '', image: "" }, // Default step
+    { order: 1, step: '', image: '' }, // Default step
   ]);
 
 
@@ -32,13 +32,15 @@ const RecipeSteps:React.FC<{ updateRecipeData: UpdateRecipeDataType }> = ({updat
 
 
   const addStep = () => {
-    setSteps([...steps, { order: steps.length + 1, step: '', image: null }]);
+    setSteps([...steps, { order: steps.length + 1, step: '', image: '' }]);
   };
 
   const handleChange = (index:number, field:string, value:string) => {
-    setSteps((prevSteps) =>
-      prevSteps.map((step, i) => (i === index ? { ...step, [field]: value } : step)));
-    updateRecipeData('steps', steps);
+    setSteps((prevSteps) => {
+    const updatedSteps = prevSteps.map((step, i) => (i === index ? { ...step, [field]: value } : step));
+    updateRecipeData('steps', updatedSteps);
+    return updatedSteps;
+  });
   };
 
   const deleteStep = (index: number)=> {

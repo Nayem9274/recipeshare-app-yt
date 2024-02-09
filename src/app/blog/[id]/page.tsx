@@ -20,6 +20,12 @@ interface ApiBlogResponse {
         name: string;
         // Add other user-related fields based on your User model
     };
+    steps: {
+        // Assuming image is an array of strings based on your JSON structure
+        order: number;
+        step: string;
+        image: string;
+    }[];
     sections: {
         id: number;
         title: string;
@@ -40,22 +46,22 @@ const Blog = () => {
     const [blogData, setBlogData] = useState<ApiBlogResponse | null>(null);
     const { id: blogId } = useParams(); // Destructure the id property
     console.log(blogId); // Output: '12'
-   //const router = useRouter();
-   //const { blogId } = router.query;
-    
-  
+    //const router = useRouter();
+    //const { blogId } = router.query;
+
+
     useEffect(() => {
-        
+
         const fetchData = async () => {
-            
+
             console.log(blogId);
             try {
                 const response = await fetch('https://recipeshare-tjm7.onrender.com/api/blog/get/', {
-                    method:'POST',
+                    method: 'POST',
                     headers: {
                         //Authorization: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJhcjEzNzM3NUBnbWFpbC5jb20iLCJleHAiOjE3MDYzMjY4MTMsImlhdCI6MTcwNjMyMzIxM30.xLX9HeailgdxCvDqcRsUGvctctH6rDnWpPpiDmTLbUs',
                     },
-                    body: JSON.stringify({'blog_id': blogId?.toString()||'' }),
+                    body: JSON.stringify({ 'blog_id': blogId?.toString() || '' }),
                 });
                 const data: ApiBlogResponse = await response.json();
                 console.log(data);
@@ -166,6 +172,7 @@ const Blog = () => {
                     </div>
                 ))}
             </div>
+      
 
             {/* COMMENTS */}
             <div className="mt-8">

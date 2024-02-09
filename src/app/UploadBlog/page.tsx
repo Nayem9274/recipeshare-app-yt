@@ -17,7 +17,7 @@ const UploadBlog = () => {
     ratings:"",
     instructions: [[""]],
     tags: [""],
-    steps: [],
+    sections: [],
     jwt:""
   });
   type UpdateBlogDataType = (key: string, value: any) => void;
