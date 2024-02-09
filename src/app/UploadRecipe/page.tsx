@@ -3,6 +3,7 @@ import React, {useEffect, useRef, useState,  } from 'react';
 
 import { TestForm } from '@/index';
 import CustomButton  from '@/components/CustomButton';
+import { UpdateRecipeDataType } from '@/Types';
 import { useRouter } from 'next/navigation';
 import { useParams } from 'next/navigation';
 
@@ -26,14 +27,14 @@ const UploadRecipe = () => {
   type UpdateRecipeDataType = (key: string, value: any) => void;
   
   const usernameRef = useRef<string | undefined>('');
-  
+
   // for storing the cookie
   const [cookie, setCookie] = React.useState<string|undefined>('');
   const [imageSrc, setImageSrc] = React.useState<string>("https://firebasestorage.googleapis.com/v0/b/recipeshare-410617.appspot.com/o/image.jpeg?alt=media&token=d7dd590a-5cab-44ec-ba37-9cfd37820074");
   
   const updateRecipeData:UpdateRecipeDataType = (key: string, value: any) => {
     setRecipeData({ ...recipeData, [key]: value });
-    // console.log(recipeData);
+    console.log(recipeData);
   };
 
   /************Cookie Part***********/

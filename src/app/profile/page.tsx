@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import BlogList from './bloglist';
 import RecipeList from './recipelist';
 import React, { useState, useEffect } from 'react';
+import CustomButton from '@/components/CustomButton';
 
 interface ButtonLinkProps {
   href: string;
@@ -26,6 +27,7 @@ interface UserDetail {
   image: string | null;
   date_joined: string;
   last_login: string;
+  is_admin: boolean;
 }
 
 // Create the ProfilePage component
@@ -39,48 +41,50 @@ const ProfilePage = () => {
   const [showBlogs, setShowBlogs] = useState(false);
 
 
-  useEffect(() => {
-    const fetchCookie = () => {
-      const cookieValue = document.cookie
-        .split('; ')
-        .find((row) => row.startsWith('jwt='))?.split('=')[1];
-
-      setCookie(cookieValue);
-      console.log('Cookie Value:', cookieValue);
-      console.log('Cookie:', cookie);
-    };
-
-    const fetchUserDetails = async () => {
-      if (cookie !== undefined) {
-        const dataBody = {
-          jwt: cookie,
-        };
-
-        try {
-          const response = await fetch('https://recipeshare-tjm7.onrender.com/api/user/details/', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(dataBody),
-          });
-
-          if (response.ok) {
-            const data = await response.json();
-            setUserDetails(data.user_details);
-          } else {
-            console.error('Error fetching user details:', response.status);
-          }
-        } catch (error) {
-          console.error('Error fetching user details:', error);
-        }
+  const fetchCookie = () => {
+    const cookieValue = document.cookie.split('; ')
+                        .find((row) => row.startsWith('jwt='))?.split('=')[1];
+  
+    // Use the setCookie callback to ensure that the state is updated before using it
+    setCookie((prevCookie) => {
+      if (prevCookie !== cookieValue) {
+        return cookieValue;
       }
+      return prevCookie;
+    });
+  };
+  
+
+  const fetchUserDetails = async () => {
+    const dataBody = {
+      'jwt': cookie
+    }
+    console.log(dataBody)
+    try {
+      const response = await fetch('http://127.0.0.1:8000/api/user/details/',{
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(dataBody)
+      });
+      const data = await response.json();
+      setUserDetails(data.user_details);
+    } catch (error) {
+      console.error('Error fetching user details:', error);
+    }
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      await fetchCookie();
+      console.log(cookie);
+      fetchUserDetails();
     };
-
-
-    fetchCookie();
-    fetchUserDetails();
-  }, [cookie]); // Added cookie as a dependency to the useEffect
+  
+    fetchData();
+  }, [fetchUserDetails, fetchCookie, cookie]);
+  
 
 
 
@@ -139,8 +143,10 @@ const ProfilePage = () => {
           </button>
         </div>
       )}
+
       {showRecipes && <RecipeList onClose={handleCloseRecipes} userName={userDetails?.name || ''} />}
       {showBlogs && <BlogList onClose={handleCloseBlogs} userName={userDetails?.name || ''} />}
+
       {/* Second box with tabs */}
       <div className="bg-white p-4 rounded-lg shadow-md max-w-2xl w-full mb-8">
         <h2 className="text-xl font-bold mb-4">Tabs</h2>
@@ -157,6 +163,17 @@ const ProfilePage = () => {
           <ButtonLink href="/UploadBlog">Upload Blog</ButtonLink>
         </div>
       </div>
+
+      {userDetails && userDetails.is_admin &&
+        <CustomButton
+          title="Go to Admin Page"
+          type= "button"
+          otherStyles="bg-blue-500 text-white px-4 py-2 rounded-md mt-4"  
+          onClick={() => {
+            window.location.href = '/admin';
+          }}
+          />
+      }
     </div>
   );
 };

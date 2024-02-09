@@ -39,32 +39,50 @@ const  LeftBar=() => {
   }
 
   return (
-    <div className="ml-[50px] flex flex-row items-center">
-      <Image className="mb-4" src={logo} alt="Logo" width={160} height={160} />
-      <div className="flex items-center ml-4">
-        <Image height={40} src={home} alt="Home" />
-        <Link href="/">
-          <span className="text-3xl pl-[15px]">Home</span>
-        </Link>
-      </div>
-      <div className="flex items-center ml-4">
-        <Image height={40} src={notificationlogo} alt="Notifications" />
-        <button className="text-3xl pl-[15px]">Notifications</button>
-      </div>
-      <div className="flex items-center ml-4">
-        <Image height={40} src={searchlogo} alt="Search" />
-        <button className="text-3xl pl-[15px]">Explore</button>
-      </div>
-      <div className="flex items-center ml-4">
-        <Image height={40} src={profilelogo} alt="Profile" />
-        <button className="text-3xl pl-[15px]" onClick={goToProfile}>Profile</button>
-      </div>
-      <Link href="/login">
-        <span className="mt-4 text-sm w-20 p-1 rounded-full text-white text-center bg-[#1d9bf0]">
-          Login
-        </span>
+    <header className="flex flex-row items-center bg-white w-full px-4">
+      <Link href="/">
+        <Image
+          className="mb-4 py-2"
+          src={logo}
+          alt="Logo"
+          width={200}
+          height={200}
+          priority
+        />
       </Link>
-    </div>
+
+      <nav className="flex items-center">
+        <Link href="/">
+          <button className="flex items-center mr-4 hover:text-gray-700 focus:outline-none">
+            <Image src={home} alt="Home" height={40} />
+            <span className="pl-2 text-lg font-medium">Home</span>
+          </button>
+        </Link>
+
+        <button className="flex items-center mr-4 hover:text-gray-700 focus:outline-none">
+          <Image src={notificationlogo} alt="Notifications" height={40} />
+          <span className="pl-2 text-lg font-medium">Notifications</span>
+        </button>
+
+        <button className="flex items-center mr-4 hover:text-gray-700 focus:outline-none">
+          <Image src={searchlogo} alt="Search" height={40} />
+          <span className="pl-2 text-lg font-medium">Explore</span>
+        </button>
+
+        <button className="flex items-center hover:text-gray-700 focus:outline-none">
+          <Image src={profilelogo} alt="Profile" height={40} />
+          <span className="pl-2 text-lg font-medium" onClick={goToProfile}>
+            Profile
+          </span>
+        </button>
+      </nav>
+
+      <div className="flex-grow"></div> <Link href="/login">
+        <button className="mt-4 text-sm w-20 h-10 text-center bg-[#1d9bf0] text-white rounded-full hover:bg-[#1a89d6] focus:outline-none mr-4">
+          Login
+        </button>
+      </Link>
+    </header>
   );
 }
 export default LeftBar;
