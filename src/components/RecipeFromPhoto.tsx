@@ -43,7 +43,11 @@ const RecipeFromPhoto = () => {
         }
 
         try {
-            await Uploadfiles(selectedImage,updateState, updatePercentage, updateMsg, updateLink);
+            await Uploadfiles(selectedImage,updateState, updatePercentage, updateMsg, updateLink,
+                ()=>{
+                    console.log('callback executed');
+                    console.log("image Link: " + link);
+                });
         } catch (error) {
             console.error('Error uploading file:', error);
         } finally {

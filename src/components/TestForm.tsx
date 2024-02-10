@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useRef } from "react";
 import { CustomButton, Dropdown, Ingredients, Steps } from "..";
-import { UpdateRecipeDataType, updateState,updateMsg,updatePercentage } from "@/Types";
+import { UpdateRecipeDataType, updateState,updateMsg,updatePercentage, updateLink } from "@/Types";
 import {Uploadfiles} from "../Uploadfiles";
 import Overlay from "./Overlay";
 
@@ -21,7 +21,6 @@ const TestForm: React.FC<{ updateRecipeData: UpdateRecipeDataType }> = ({updateR
   const [msg, setMsg] = useState<string>('Uploading...');
   const [percentage, setPercentage] = useState<number>(0);
 
-  
 
   // video
   const [selectedVideo, setSelectedVideo] = useState<File|null>(null);
@@ -71,25 +70,40 @@ const TestForm: React.FC<{ updateRecipeData: UpdateRecipeDataType }> = ({updateR
     setMsg(value);
   }
 
-  const updateLink:updateMsg = (value:string)=>{
-    setLink(value);
+  const updateImageLink:updateLink = (value:string)=>{
+    console.log('link: ' + value);
+    updateRecipeData('image', value);
   }
 
-  const handleImageUpload = async() => {
+  const updateVideoLink:updateLink = (value:string)=>{
+    console.log('link: ' + value);
+    updateRecipeData('video', value);
+  }
 
+  const handleImageUpload = async () => {
+    
+    console.log('inside Image upload')
     if(!selectedImage){
       alert('No file selected');
       return;
     }
     try {
-      await Uploadfiles(selectedImage, updateState, updatePercentage, updateMsg,updateLink);
+      await Uploadfiles(selectedImage, 
+                        updateState, 
+                        updatePercentage, 
+                        updateMsg,
+                        updateImageLink,
+                        () => {
+                          setPercentage(0); // Reset progress after upload completion 
+                      });
+      
     } catch (error) {
       alert('Error uploading file');
     } finally {
       setPercentage(0); // Reset progress after upload completion or failure
     }
-
-    updateRecipeData('image', link);
+    
+    
 
   }
 
@@ -99,18 +113,19 @@ const TestForm: React.FC<{ updateRecipeData: UpdateRecipeDataType }> = ({updateR
       return;
     } 
     try {
-      await Uploadfiles(selectedVideo, updateState, updatePercentage, updateMsg,updateLink);
+      await Uploadfiles(selectedVideo, updateState, updatePercentage, updateMsg,updateVideoLink,
+        ()=>{
+          setPercentage(0); // Reset progress after upload completion
+        });
     } catch (error) {
       alert('Error uploading file');
     } finally {
       setPercentage(0); // Reset progress after upload completion or failure
     }
-
-    updateRecipeData('video', link);
-    
+        
   };
 
-  const updateTime=()=>{
+  const updateTime =()=>{
     const total_time = cooking_hours * 60 + cooking_minutes;
     updateRecipeData('cooking_time', total_time);
   }

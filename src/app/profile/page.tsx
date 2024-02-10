@@ -78,7 +78,6 @@ const ProfilePage = () => {
   useEffect(() => {
     const fetchData = async () => {
       await fetchCookie();
-      console.log(cookie);
       fetchUserDetails();
     };
 

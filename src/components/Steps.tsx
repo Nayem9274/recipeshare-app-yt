@@ -73,16 +73,19 @@ const RecipeSteps:React.FC<{ updateRecipeData: UpdateRecipeDataType }> = ({updat
       return;
     } 
     try {
-      await Uploadfiles(selectedImage, updateState, updatePercentage, updateMsg, updateLink);
+      await Uploadfiles(selectedImage, updateState, updatePercentage, updateMsg, updateLink,
+        ()=>{
+          const updatedSteps = [...steps];
+          updatedSteps[index].image = downloadURL;
+          updateRecipeData('steps', updatedSteps);
+        });
     } catch (error) {
       console.error('Error uploading file:', error);
     } finally {
       setPercentage(0); // Reset progress after upload completion or failure
     }
 
-    const updatedSteps = [...steps];
-    updatedSteps[index].image = downloadURL;
-    updateRecipeData('steps', updatedSteps);
+    
     
   };
 
