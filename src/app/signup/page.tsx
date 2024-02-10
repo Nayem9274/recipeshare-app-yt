@@ -88,13 +88,14 @@ const Signup: React.FC<{ signUpData: SignupDataType }> = ({ signUpData }) => {
         }
       );
       console.log(userData);
-      const data = await response.json();
-      console.log(data)
+    
 
       console.log(response);
 
       if (response.ok) {
+        //const data = await response.json();
         const data = await response.json();
+        console.log(data)
         if (data.jwt) {
           console.log("User signed up!");
           setUsername("");
@@ -103,7 +104,8 @@ const Signup: React.FC<{ signUpData: SignupDataType }> = ({ signUpData }) => {
           setError("");
 
         } else {
-          setError("Invalid response from server");
+          window.location.href = '/login'
+          //setError("Invalid response from server");
         }
       } else {
         setError("Invalid credentials");

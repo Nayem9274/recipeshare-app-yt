@@ -60,7 +60,7 @@ const BlogList: React.FC = () => {
     fetchRecipes();
   }, []);
 
-  return (
+  /*return (
     <div className="flex flex-col items-center p-8">
       <div className="flex space-x-4 mb-4">
         <button
@@ -124,6 +124,70 @@ const BlogList: React.FC = () => {
           ))}
         </div>
       )}
+    </div>
+  );*/
+  return (
+    <div className="flex flex-col items-center p-8">
+      <div className="flex space-x-4 mb-4">
+        <button
+          className={`text-lg font-semibold cursor-pointer focus:outline-none ${
+            activeTab === 'blogs' ? 'text-blue-500 border-b-2 border-blue-500' : 'text-gray-500'
+          }`}
+          onClick={() => setActiveTab('blogs')}
+        >
+          Blogs
+        </button>
+        <button
+          className={`text-lg font-semibold cursor-pointer focus:outline-none ${
+            activeTab === 'recipes' ? 'text-blue-500 border-b-2 border-blue-500' : 'text-gray-500'
+          }`}
+          onClick={() => setActiveTab('recipes')}
+        >
+          Recipes
+        </button>
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {activeTab === 'blogs' && blogs.map((blog) => (
+          <div key={blog.id} className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg">
+            <Link href={`/blog/${blog.id}`}>
+              
+                <div className="relative h-48 overflow-hidden">
+                  <Image
+                    src={blog.image}
+                    alt={blog.title}
+                    layout="fill"
+                    objectFit="cover"
+                  />
+                </div>
+                <div className="p-4">
+                  <h3 className="text-lg font-semibold">{blog.title}</h3>
+                </div>
+              
+            </Link>
+          </div>
+        ))}
+
+        {activeTab === 'recipes' && recipes.map((recipe) => (
+          <div key={recipe.id} className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg">
+            <Link href={`/recipe/${recipe.id}`}>
+              
+                <div className="relative h-48 overflow-hidden">
+                  <Image
+                    src={recipe.image}
+                    alt={recipe.title}
+                    layout="fill"
+                    objectFit="cover"
+                  />
+                </div>
+                <div className="p-4">
+                  <h3 className="text-lg font-semibold">{recipe.title}</h3>
+                </div>
+              
+            </Link>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };

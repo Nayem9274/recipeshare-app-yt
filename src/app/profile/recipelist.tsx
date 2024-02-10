@@ -18,25 +18,59 @@ interface Recipe {
 
 const RecipeList: React.FC<{ onClose: () => void ; userName: string}> = ({ onClose, userName }) => {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
+  const [cookie, setCookie] = useState<string | undefined>('');
 
   useEffect(() => {
-    const fetchRecipes = async () => {
-      try {
-        const response = await fetch('https://recipeshare-tjm7.onrender.com/api/recipe/get/all');
-        const data = await response.json();
-        // Filter recipes based on user name
-        const userRecipes = data.filter((recipe: Recipe) => recipe.user.name === userName);
-        console.log(userName);
-        //setRecipes(data);
-     
-        setRecipes(data);
-      } catch (error) {
-        console.error('Error fetching recipes:', error);
-      }
+    const fetchCookie = () => {
+      const cookieValue = document.cookie.split('; ')
+        .find((row) => row.startsWith('jwt='))?.split('=')[1];
+
+      // Use the setCookie callback to ensure that the state is updated before using it
+      setCookie((prevCookie) => {
+        if (prevCookie !== cookieValue) {
+          return cookieValue;
+        }
+        return prevCookie;
+      });
     };
 
-    fetchRecipes();
-  }, [userName]);
+    fetchCookie();
+  }, []);
+
+  useEffect(() => {
+    const dataBody = {
+      'jwt': cookie
+    }
+    console.log(dataBody)
+    if (cookie) { // Check if JWT token is not empty
+      const fetchRecipes = async () => {
+        try {
+          const response = await fetch('https://recipeshare-tjm7.onrender.com/api/user/recipe/get/all', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              //'Authorization': `Bearer ${cookie}` // Include JWT token in the headers
+            },
+            body: JSON.stringify(dataBody)
+          });
+          if (response.ok) {
+            const data = await response.json();
+            setRecipes(data); // Set the blogs received from the backend
+          } else {
+            console.error('Error fetching recipes:', response.status);
+          }
+        } catch (error) {
+          console.error('Error fetching recipes:', error);
+        }
+      };
+  
+      fetchRecipes();
+    }
+  }, [cookie]); // Fetch blogs only when the JWT token changes and is not empty
+  
+  
+
+  
 
   return (
     <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center overflow-y-auto">

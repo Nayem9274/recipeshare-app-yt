@@ -93,7 +93,7 @@ const DemoLogin =() => {
 
         <div className="mt-4 text-center">
           <p className="text-sm text-black">
-            Don't have an account?{" "}
+            Dont have an account?{" "}
             <a href="/signup" className="text-blue-800 hover:underline">
               Sign up
             </a>

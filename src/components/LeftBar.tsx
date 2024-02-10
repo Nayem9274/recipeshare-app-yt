@@ -8,19 +8,19 @@ import searchlogo from "./../../public/search.svg";
 import Link from "next/link"
 import profilelogo from "./../../public/person.svg";
 
-const  LeftBar=() => {
-  const [cookie, setCookie] = React.useState<string|undefined>('');
+const LeftBar = () => {
+  const [cookie, setCookie] = React.useState<string | undefined>('');
 
   /************Cookie Part***********/
   useEffect(() => {
     getCookie();
   }, []); // Optional dependency array
-  
+
   const getCookie = () => {
     const cookieValue = document.cookie
       .split('; ')
       .find((row) => row.startsWith('jwt='))?.split('=')[1];
-    
+
     setCookie(cookieValue);
   };
 
@@ -30,10 +30,10 @@ const  LeftBar=() => {
     // if the user is logged in, then redirect to the profile page
     // else redirect to the login page
 
-    if(!cookie) {
+    if (!cookie) {
       window.location.href = '/login'
     }
-    else{
+    else {
       window.location.href = '/profile'
     }
   }
@@ -64,10 +64,12 @@ const  LeftBar=() => {
           <span className="pl-2 text-lg font-medium">Notifications</span>
         </button>
 
-        <button className="flex items-center mr-4 hover:text-gray-700 focus:outline-none">
-          <Image src={searchlogo} alt="Search" height={40} />
-          <span className="pl-2 text-lg font-medium">Explore</span>
-        </button>
+        <Link href="/explore">
+          <button className="flex items-center mr-4 hover:text-gray-700 focus:outline-none">
+            <Image src={searchlogo} alt="Search" height={40} />
+            <span className="pl-2 text-lg font-medium">Explore</span>
+          </button>
+        </Link>
 
         <button className="flex items-center hover:text-gray-700 focus:outline-none">
           <Image src={profilelogo} alt="Profile" height={40} />

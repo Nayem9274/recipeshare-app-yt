@@ -11,7 +11,7 @@ import CustomButton from '@/components/CustomButton';
 interface ButtonLinkProps {
   href: string;
   children: React.ReactNode;
-  username?:string
+  username?: string
 }
 
 const ButtonLink: React.FC<ButtonLinkProps> = ({ href, children, username }) => (
@@ -43,8 +43,8 @@ const ProfilePage = () => {
 
   const fetchCookie = () => {
     const cookieValue = document.cookie.split('; ')
-                        .find((row) => row.startsWith('jwt='))?.split('=')[1];
-  
+      .find((row) => row.startsWith('jwt='))?.split('=')[1];
+
     // Use the setCookie callback to ensure that the state is updated before using it
     setCookie((prevCookie) => {
       if (prevCookie !== cookieValue) {
@@ -53,7 +53,7 @@ const ProfilePage = () => {
       return prevCookie;
     });
   };
-  
+
 
   const fetchUserDetails = async () => {
     const dataBody = {
@@ -61,7 +61,7 @@ const ProfilePage = () => {
     }
     console.log(dataBody)
     try {
-      const response = await fetch('https://recipeshare-tjm7.onrender.com/api/user/details/',{
+      const response = await fetch('https://recipeshare-tjm7.onrender.com/api/user/details/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -81,10 +81,10 @@ const ProfilePage = () => {
       console.log(cookie);
       fetchUserDetails();
     };
-  
+
     fetchData();
   }, [fetchUserDetails, fetchCookie, cookie]);
-  
+
 
 
 
@@ -102,6 +102,28 @@ const ProfilePage = () => {
 
   const handleCloseRecipes = () => {
     setShowRecipes(false);
+  };
+
+  // Handle logout action
+  const handleLogout = async () => {
+    try {
+      const response = await fetch('https://recipeshare-tjm7.onrender.com/api/user/logout/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ jwt: cookie })
+      });
+      if (response.ok) {
+        const data = await response.json();
+        console.log(data.message); // Log the logout message
+        document.cookie = 'jwt=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;'; // Remove jwt cookie
+        //router.push('/login'); // Redirect to login page
+        window.location.href = '/login'
+      } else {
+        console.error('Error logging out:', response.statusText);
+      }
+    } catch (error) {
+      console.error('Error logging out:', error);
+    }
   };
 
 
@@ -138,14 +160,19 @@ const ProfilePage = () => {
             Your Recipes
           </button>
           {/* View Blogs button */}
-          <button onClick={handleOpenBlogs} className="bg-blue-500 text-white px-10 py-2 rounded-md mt-4">
+          <button onClick={handleOpenBlogs} className="bg-blue-500 text-white px-10 py-2 rounded-md mt-4 mr-4">
             Your Blogs
           </button>
+          {/* Logout button */}
+          <button onClick={handleLogout} className="bg-red-500 text-white px-10 py-2 rounded-md mt-4">
+            Logout
+          </button>
+
         </div>
       )}
 
       {showRecipes && <RecipeList onClose={handleCloseRecipes} userName={userDetails?.name || ''} />}
-      {showBlogs && <BlogList onClose={handleCloseBlogs} userName={userDetails?.name || ''} />}
+      {showBlogs && <BlogList onClose={handleCloseBlogs} />}
 
       {/* Second box with tabs */}
       <div className="bg-white p-4 rounded-lg shadow-md max-w-2xl w-full mb-8">
@@ -155,11 +182,11 @@ const ProfilePage = () => {
           <ButtonLink href="/">Edit Profile</ButtonLink>
           {userDetails ? (
             <ButtonLink href="/UploadRecipe" username={userDetails.name || ''}>
-                Upload Recipes
+              Upload Recipes
             </ButtonLink>
-                      ) : (
-              <p>Loading...</p>
-              )}
+          ) : (
+            <p>Loading...</p>
+          )}
           <ButtonLink href="/UploadBlog">Upload Blog</ButtonLink>
         </div>
       </div>
@@ -167,12 +194,12 @@ const ProfilePage = () => {
       {userDetails && userDetails.is_admin &&
         <CustomButton
           title="Go to Admin Page"
-          type= "button"
-          otherStyles="bg-blue-500 text-white px-4 py-2 rounded-md mt-4"  
+          type="button"
+          otherStyles="bg-blue-500 text-white px-4 py-2 rounded-md mt-4"
           onClick={() => {
             window.location.href = '/admin';
           }}
-          />
+        />
       }
     </div>
   );
