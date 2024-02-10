@@ -22,6 +22,7 @@ const UploadRecipe = () => {
     jwt:"",
     user:""
   });
+  
   type UpdateRecipeDataType = (key: string, value: any) => void;
   
   const usernameRef = useRef<string | undefined>('');
@@ -47,7 +48,6 @@ const UploadRecipe = () => {
       .find((row) => row.startsWith('jwt='))?.split('=')[1];
     
     updateRecipeData('jwt', cookieValue);
-   // updateRecipeData('username', usernameRef.current);
     setCookie(cookieValue);
   };
   

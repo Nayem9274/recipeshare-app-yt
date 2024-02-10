@@ -66,7 +66,7 @@ const RecipeFromPhoto = () => {
         const dataBody = {
             'url': link
           }
-          console.log(dataBody);
+        console.log(dataBody);
 
         try {
             const response = await fetch('https://recipeshare-tjm7.onrender.com/api/photoinfo/',{

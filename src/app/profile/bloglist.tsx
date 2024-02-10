@@ -19,54 +19,69 @@ interface Blog {
 const BlogList: React.FC<{ onClose: () => void }> = ({ onClose }) => {
   const [blogs, setBlogs] = useState<Blog[]>([]);
   const [cookie, setCookie] = useState<string | undefined>('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [isEmpty, setIsEmpty] = useState(false);
+
+  const fetchCookie = () => {
+    const cookieValue = document.cookie.split('; ')
+      .find((row) => row.startsWith('jwt='))?.split('=')[1];
+
+    // Use the setCookie callback to ensure that the state is updated before using it
+    setCookie((prevCookie) => {
+      if (prevCookie !== cookieValue) {
+        return cookieValue;
+      }
+      return prevCookie;
+    });
+  };
+
+  const fetchBlogs = async () => {
+    if (cookie != '') {
+      const dataBody = {
+        'jwt': cookie
+      }
+      setIsLoading(true);
+      try {
+        const response = await fetch('https://recipeshare-tjm7.onrender.com/api/user/blog/get/all/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(dataBody)
+        });
+
+        const data = await response.json();
+
+        if (!Array.isArray(data)) {
+          console.error('Invalid response format: not an array');
+          // Handle error appropriately
+          return;
+        }
+        if (data.length === 0) {
+          setIsEmpty(true);
+        } else {
+          setBlogs(data);
+        }
+        
+        if(data.length === 0){
+          setIsEmpty(true);
+        }
+        setIsLoading(false);
+      } catch (error) {
+        console.error('Error fetching user details:', error);
+      }
+    }
+  };
 
   useEffect(() => {
-    const fetchCookie = () => {
-      const cookieValue = document.cookie.split('; ')
-        .find((row) => row.startsWith('jwt='))?.split('=')[1];
-
-      // Use the setCookie callback to ensure that the state is updated before using it
-      setCookie((prevCookie) => {
-        if (prevCookie !== cookieValue) {
-          return cookieValue;
-        }
-        return prevCookie;
-      });
+    const fetchData = async () => {
+      fetchCookie();
+      console.log('cookie: '+ cookie);  
+      await fetchBlogs();
     };
+    fetchData();
+  }, [cookie]);
 
-    fetchCookie();
-  }, []);
-
-  useEffect(() => {
-    const dataBody = {
-      'jwt': cookie
-    }
-    console.log(dataBody)
-    if (cookie) { // Check if JWT token is not empty
-      const fetchBlogs = async () => {
-        try {
-          const response = await fetch('https://recipeshare-tjm7.onrender.com/api/blog/get/all', {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${cookie}` // Include JWT token in the headers
-            },
-            
-          });
-          if (response.ok) {
-            const data = await response.json();
-            setBlogs(data); // Set the blogs received from the backend
-          } else {
-            console.error('Error fetching blogs:', response.status);
-          }
-        } catch (error) {
-          console.error('Error fetching blogs:', error);
-        }
-      };
-  
-      fetchBlogs();
-    }
-  }, [cookie]); // Fetch blogs only when the JWT token changes and is not empty
   
   return (
     <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center overflow-y-auto">
@@ -75,7 +90,9 @@ const BlogList: React.FC<{ onClose: () => void }> = ({ onClose }) => {
           Close
         </button>
         <h2 className="text-2xl font-bold mb-4">Blogs</h2>
-        {blogs.map((blog) => (
+        {isLoading && <h3 className="text-lg font-semibold cursor-pointer">Loading...</h3>}
+        { blogs.length === 0 ? (<h3 className="text-lg font-semibold cursor-pointer">No blogs found</h3>):( 
+          blogs.map((blog:Blog) => (
           <div key={blog.id} className="mb-4">
             <Link href={`/blog/${blog.id}`}>
               <h3 className="text-lg font-semibold cursor-pointer">{blog.title}</h3>
@@ -96,7 +113,8 @@ const BlogList: React.FC<{ onClose: () => void }> = ({ onClose }) => {
               </div>
             </Link>
           </div>
-        ))}
+          ))
+        )}
       </div>
     </div>
   );

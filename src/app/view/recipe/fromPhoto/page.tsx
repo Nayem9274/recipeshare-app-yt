@@ -1,11 +1,14 @@
 "use client";
+import { CustomButton } from '@/index';
 import React, { useState,useEffect } from 'react'
 
 interface RecipeFromPhotoProps {
-    title: string,
-    image:string,
-    ingredients: string[],
-    link:string
+  id:number,  
+  title: string,
+  image:string,
+  ingredients: string[],
+  link:string,
+  online:boolean
 }
 
 const Disclaimer = () => {
@@ -92,12 +95,27 @@ const page = () => {
                     </ul>
                   </div>
                 </div>
-                <a
-                  href={recipe.link}
-                  className="recipe-link inline-flex items-center px-4 py-2 text-base font-medium text-indigo-600 hover:bg-indigo-100 rounded-md focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                >
-                  See recipe details
-                </a>
+                {recipe.online ? (
+                  <a
+                    href={recipe.link}
+                    className="recipe-link inline-flex items-center px-4 py-2 text-base font-medium text-indigo-600 hover:bg-indigo-100 rounded-md focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                  >
+                    See recipe details
+                  </a>
+                ) : (
+                    <CustomButton
+                      type="button"
+                      title="View Recipe"
+                      otherStyles="px-4 py-2 text-base font-medium rounded-md"
+                      onClick={()=> {
+                        const redirectUrl = `/recipe/${recipe.id}`;
+                        // Redirect to the recipe details page
+                        window.location.href=redirectUrl;
+                      }
+                    }
+                    />
+                  )
+              } 
               </li>
             ))}
           </ul>

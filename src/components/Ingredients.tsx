@@ -63,6 +63,7 @@ const IngredientInput: React.FC<{ updateRecipeData: UpdateRecipeDataType }> = ({
                   <option value="cup">cup</option>
                   <option value="tea-spoon">tea-spoon</option>
                   <option value="table-spoon">table-spoon</option>
+                  <option value="pieces">pieces</option>
                 </select>
                 
                 {/* Replace the standard button with CustomButton */}

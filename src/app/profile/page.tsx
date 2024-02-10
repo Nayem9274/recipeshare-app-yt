@@ -1,10 +1,8 @@
 // Import necessary modules from Next.js and React
 'use client'
 import Link from 'next/link'; // Import Link from Next.js for navigation
-import { userDetails } from "@/data";
-import { useRouter } from 'next/navigation';
 import BlogList from './bloglist';
-import RecipeList from './recipelist';
+import RecipeList from './myRecipe/page';
 import React, { useState, useEffect } from 'react';
 import CustomButton from '@/components/CustomButton';
 
@@ -30,16 +28,13 @@ interface UserDetail {
   is_admin: boolean;
 }
 
-// Create the ProfilePage component
-// Create the ProfilePage component
 const ProfilePage = () => {
 
   const [cookie, setCookie] = React.useState<string | undefined>('');
   const [userDetails, setUserDetails] = useState<UserDetail | null>(null);
-  const router = useRouter();
   const [showRecipes, setShowRecipes] = useState(false);
   const [showBlogs, setShowBlogs] = useState(false);
-
+  const [isLoading, setIsLoading] = useState(false);
 
   const fetchCookie = () => {
     const cookieValue = document.cookie.split('; ')
@@ -54,24 +49,26 @@ const ProfilePage = () => {
     });
   };
 
-
   const fetchUserDetails = async () => {
-    const dataBody = {
-      'jwt': cookie
-    }
-    console.log(dataBody)
-    try {
-      const response = await fetch('https://recipeshare-tjm7.onrender.com/api/user/details/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(dataBody)
-      });
-      const data = await response.json();
-      setUserDetails(data.user_details);
-    } catch (error) {
-      console.error('Error fetching user details:', error);
+    if(cookie != ''){
+      const dataBody = {
+        'jwt': cookie
+      }
+      console.log(dataBody)
+      try {
+        //https://recipeshare-tjm7.onrender.com/api/user/details/
+        const response = await fetch('https://recipeshare-tjm7.onrender.com/api/user/details/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(dataBody)
+        });
+        const data = await response.json();
+        setUserDetails(data.user_details);
+      } catch (error) {
+        console.error('Error fetching user details:', error);
+      }
     }
   };
 
@@ -82,9 +79,7 @@ const ProfilePage = () => {
     };
 
     fetchData();
-  }, [fetchUserDetails, fetchCookie, cookie]);
-
-
+  }, [cookie]);
 
 
   const handleOpenBlogs = () => {
@@ -95,8 +90,9 @@ const ProfilePage = () => {
     setShowBlogs(false);
   };
 
-  const handleOpenRecipes = () => {
-    setShowRecipes(true);
+  const handleOpenRecipes = async() => {
+    
+    window.location.href = '/profile/myRecipe';
   };
 
   const handleCloseRecipes = () => {
