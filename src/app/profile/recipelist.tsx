@@ -2,13 +2,14 @@
 import Image from 'next/image';
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { DateTime } from 'next-auth/providers/kakao';
 
 interface Recipe {
   id: number;
   title: string;
-  publication_date: string;
+  description:string;
+  last_edited: DateTime;
   image: string;
-  last_modification_date: string;
   tags: string[];
   ratings: number;
   user: {
@@ -18,16 +19,40 @@ interface Recipe {
 
 const RecipeList: React.FC<{ onClose: () => void ; userName: string}> = ({ onClose, userName }) => {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
+  const [isEmpty, setIsEmpty] = useState(false);  // Add this line
+  const [cookie, setCookie] = React.useState<string | undefined>('');
 
   useEffect(() => {
+    const fetchCookie = () => {
+      if(cookie === '') {
+        const cookieValue = document.cookie.split('; ')
+                        .find((row) => row.startsWith('jwt='))?.split('=')[1];
+
+        console.log(cookieValue);
+        setCookie(cookieValue);
+      }
+    }
+    
     const fetchRecipes = async () => {
       try {
-        const response = await fetch('https://recipeshare-tjm7.onrender.com/api/recipe/get/all');
+        const dataBody = {
+          'jwt': cookie
+        }
+        const response = await fetch('https://recipeshare-tjm7.onrender.com/api/user/recipe/get/all/',{
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(dataBody)
+        });
         const data = await response.json();
+        
+        console.log(data);
         // Filter recipes based on user name
-        const userRecipes = data.filter((recipe: Recipe) => recipe.user.name === userName);
-        console.log(userName);
-        //setRecipes(data);
+        if(data.length === 0) { 
+          setIsEmpty(true);
+          console.log('Empty')
+        }
      
         setRecipes(data);
       } catch (error) {
@@ -35,11 +60,21 @@ const RecipeList: React.FC<{ onClose: () => void ; userName: string}> = ({ onClo
       }
     };
 
+    fetchCookie();
     fetchRecipes();
   }, [userName]);
 
   return (
     <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center overflow-y-auto">
+      
+      {isEmpty && <div className="bg-white p-8 rounded-md max-w-screen-md w-full h-full overflow-y-auto">
+        <button className="absolute top-2 right-2" onClick={onClose}>
+          Close
+        </button>
+        <h2 className="text-2xl font-bold mb-4">Recipes</h2>
+        <p className="text-lg font-semibold cursor-pointer">No recipes found</p>
+      </div>}
+      
       <div className="bg-white p-8 rounded-md max-w-screen-md w-full h-full overflow-y-auto">
         <button className="absolute top-2 right-2" onClick={onClose}>
           Close
@@ -65,7 +100,7 @@ const RecipeList: React.FC<{ onClose: () => void ; userName: string}> = ({ onClo
               
             </Link>
             <p className="text-sm text-gray-500">{`Published on ${new Date(
-              recipe.publication_date
+              recipe.last_edited
             ).toLocaleDateString()}`}</p>
           </div>
         ))}

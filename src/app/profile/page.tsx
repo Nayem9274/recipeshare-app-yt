@@ -5,7 +5,7 @@ import { userDetails } from "@/data";
 import { useRouter } from 'next/navigation';
 import BlogList from './bloglist';
 import RecipeList from './recipelist';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,useMemo } from 'react';
 import CustomButton from '@/components/CustomButton';
 
 interface ButtonLinkProps {
@@ -36,53 +36,75 @@ const ProfilePage = () => {
 
   const [cookie, setCookie] = React.useState<string | undefined>('');
   const [userDetails, setUserDetails] = useState<UserDetail | null>(null);
-  const router = useRouter();
   const [showRecipes, setShowRecipes] = useState(false);
   const [showBlogs, setShowBlogs] = useState(false);
 
-
-  const fetchCookie = () => {
+  useEffect(() => {
     const cookieValue = document.cookie.split('; ')
-                        .find((row) => row.startsWith('jwt='))?.split('=')[1];
+      .find((row) => row.startsWith('jwt='))?.split('=')[1];
+
+    setCookie(cookieValue);
+  }, []); // Empty dependency array to run only once
+
+  // const fetchCookie = () => {
+  //   const cookieValue = document.cookie.split('; ')
+  //                       .find((row) => row.startsWith('jwt='))?.split('=')[1];
   
-    // Use the setCookie callback to ensure that the state is updated before using it
-    setCookie((prevCookie) => {
-      if (prevCookie !== cookieValue) {
-        return cookieValue;
-      }
-      return prevCookie;
-    });
-  };
+  //   // Use the setCookie callback to ensure that the state is updated before using it
+  //   setCookie((prevCookie) => {
+  //     if (prevCookie !== cookieValue) {
+  //       return cookieValue;
+  //     }
+  //     return prevCookie;
+  //   });
+  // };
   
 
   const fetchUserDetails = async () => {
-    const dataBody = {
-      'jwt': cookie
-    }
-    console.log(dataBody)
-    try {
-      const response = await fetch('https://recipeshare-tjm7.onrender.com/api/user/details/',{
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(dataBody)
-      });
-      const data = await response.json();
-      setUserDetails(data.user_details);
-    } catch (error) {
-      console.error('Error fetching user details:', error);
-    }
+      const dataBody = {
+        'jwt': cookie
+      }
+      console.log(dataBody)
+      try {
+        const response = await fetch('https://recipeshare-tjm7.onrender.com/api/user/details/',{
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(dataBody)
+        });
+        const data = await response.json();
+        setUserDetails(data.user_details);
+      } catch (error) {
+        console.error('Error fetching user details:', error);
+      }
   };
 
   useEffect(() => {
-    const fetchData = async () => {
-      await fetchCookie();
-      fetchUserDetails();
-    };
-  
-    fetchData();
-  }, [fetchUserDetails, fetchCookie, cookie]);
+    // const fetchUserDetails = async () => {
+    //   if(cookieValue){
+    //     const dataBody = {
+    //       'jwt': cookie
+    //     }
+    //     console.log(dataBody)
+    //     try {
+    //       const response = await fetch('https://recipeshare-tjm7.onrender.com/api/user/details/',{
+    //         method: 'POST',
+    //         headers: {
+    //           'Content-Type': 'application/json',
+    //         },
+    //         body: JSON.stringify(dataBody)
+    //       });
+    //       const data = await response.json();
+    //       setUserDetails(data.user_details);
+    //     } catch (error) {
+    //       console.error('Error fetching user details:', error);
+    //     }
+    //   }
+    // };
+
+    fetchUserDetails();
+  }, [cookie]);
   
 
 
