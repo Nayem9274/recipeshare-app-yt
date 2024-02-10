@@ -3,9 +3,7 @@ import React, {useEffect, useRef, useState,  } from 'react';
 
 import { TestForm } from '@/index';
 import CustomButton  from '@/components/CustomButton';
-import { UpdateRecipeDataType } from '@/Types';
 import { useRouter } from 'next/navigation';
-import { useParams } from 'next/navigation';
 
 const UploadRecipe = () => {
    const router = useRouter();
@@ -39,29 +37,8 @@ const UploadRecipe = () => {
 
   /************Cookie Part***********/
   useEffect(() => {
-  
-    /*if (typeof window !== 'undefined') {
-      // Get the username from the query parameter
-      const searchParams = new URLSearchParams(window.location.search);
-      const username = searchParams.get('username');
-      if (username) {
-       // console.log('Username:', username);
-        usernameRef.current = username;
-       
-      } else {
-        console.log('Username not found in query parameter.');
-        // You can decide what to do if the username is not present.
-        // For example, you may want to set a default username or show an error message.
-      }
- 
-      // Do something with the username
-     
-    }*/
-    
-   // updateRecipeData('username', usernameRef.current);
-    //console.log('Outside useEffect - recipeData.username:', recipeData.username);
-    //console.log('Outside useEffect - recipeData.jwt:', recipeData.username);
-    getCookie();
+    if(cookie === '')
+      getCookie();
   }, []); // Optional dependency array
   
   const getCookie = () => {
@@ -87,18 +64,6 @@ const UploadRecipe = () => {
     /************Add the cookie to the body ************** */
     updateRecipeData('jwt', cookie);
 
-    
-    // Get the username from the query parameter
-    //const username = router.query.username as string;
-   
-
-    // Add the username to the recipeData
-    // Additional logging
-  //console.log('Outside useEffect - usernameRef.current:', usernameRef.current);
-  //console.log('Outside useEffect - recipeData.username:', recipeData.username);
-
-    //updateRecipeData('username', usernameRef.current);
-
     try {
         const response = await fetch('https://recipeshare-tjm7.onrender.com/api/user/recipe/add/', {
             method: 'POST',
@@ -120,6 +85,7 @@ const UploadRecipe = () => {
       }
       else{
         alert('Upload Successful');
+        window.location.href = '/profile';
         console.log(data)
       }
     }catch (error) {
@@ -130,22 +96,8 @@ const UploadRecipe = () => {
 
   return (
     <div className=" bg-gray-200 overflow-hidden">
-      <div className="h-16 bg-stone-50 flex justify-between items-center border-b border-black px-4">
-        <div className="text-left px-15 ">Your Logo</div>
-        
-        <div className="button ">
-          <CustomButton 
-              type="button"
-              title="Publish" 
-              varient='btn_light_orange' 
-              otherStyles='bg-orange-400 border-orange-500 px-4 py-2 rounded-full'
-              onClick={handlePublish}
-              />
-        </div>
-      </div>
-
       {/* New div for the photo */}
-      <div className="flex flex-col items-center py-10 ">
+      <div className="flex flex-col items-center py-1">
         <img
           id="recipe_photo"
           src={imageSrc}
@@ -153,19 +105,33 @@ const UploadRecipe = () => {
           className="w-24 h-24 object-cover"
           style={{maxHeight: '500px', maxWidth: '500px'}}
         />
-
-        <div className='text-stone-700 font-bold py-2'>
-            Show others your finished dish
-        </div>
-        {/* <input type="file" accept="image/*" ref={inputRef} style={{ display: 'none' }} /> */}
       </div>
+      <div className="flex justify-center py-2">
+        <h1 className="text-3xl font-bold">Upload Recipe</h1>
+      </div>
+      <div className='text-stone-700 font-bold flex justify-center'>
+          Show others your finished dish
+      </div>
+
+      
 
       {/* New div for the form */}
       <div className="">
         <TestForm updateRecipeData={updateRecipeData}/>
       </div>
 
-      <div className="py-10"></div>
+      
+      <div className="button py-10 flex justify-center">
+          <CustomButton 
+              type="button"
+              title="Publish Your Recipe" 
+              varient='btn_light_orange' 
+              otherStyles='bg-orange-400 border-orange-500 px-4 py-2 rounded-full'
+              onClick={handlePublish}
+              />
+        </div>
+
+      
 
     </div>
   );

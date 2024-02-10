@@ -8,7 +8,8 @@ export const Uploadfiles = async(
     updateState:updateState,
     updatePercentage:updatePercentage,
     updateMsg:updateMsg,
-    updateLink:updateLink
+    updateLink:updateLink,
+    callback: () => void // Callback function to be executed after upload
 ) => {
     updateState(true);
     const storage = firebase.storage;
@@ -29,11 +30,12 @@ export const Uploadfiles = async(
             alert('Error uploading file');
             updateState(false);
         },
-        async()=>{            
+        async ()=>{            
             const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
             console.log('File available at', downloadURL);            
             updateState(false);
             updateLink(downloadURL);
+            callback();
         }
         
     )

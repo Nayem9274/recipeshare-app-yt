@@ -13,7 +13,6 @@ interface ApiRecipeResponse {
     amount: number;
     unit: string;
     ingredient: string;
-    name:string;
 
   }[];
   image: string;      // Optional image field
@@ -151,7 +150,7 @@ const Recipe = () => {
         <ul className="list-disc pl-4">
           {recipeData.ingredients.map((ingredientGroup, index) => (
             <li key={index}>
-              {`${ingredientGroup.amount} ${ingredientGroup.unit} of ${ingredientGroup.name}`}
+              {`${ingredientGroup.amount} ${ingredientGroup.unit} of ${ingredientGroup.ingredient}`}
             </li>
           ))}
         </ul>

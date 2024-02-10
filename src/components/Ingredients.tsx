@@ -7,14 +7,14 @@ const IngredientInput: React.FC<{ updateRecipeData: UpdateRecipeDataType }> = ({
     
     // state initialization with default values
     const [ingredients, setIngredients] = useState([
-        { name: '', amount: '', unit: 'gm' },
-        { name: '', amount: '', unit: 'gm' },
+        { ingredient: '', amount: '', unit: 'gm' },
+        { ingredient: '', amount: '', unit: 'gm' },
     ]);
 
     // adding a new ingredient to the ingredients array
     //create a new array with the existing ingredients and adds a new ingredient object
     const addIngredient = () => {
-        setIngredients([...ingredients, { name: '', amount: '', unit: 'gm' }]);
+        setIngredients([...ingredients, { ingredient: '', amount: '', unit: 'gm' }]);
     };
 
     const handleChange = (index:number, field:string, value:string) => {
@@ -39,8 +39,8 @@ const IngredientInput: React.FC<{ updateRecipeData: UpdateRecipeDataType }> = ({
               <li className="flex items-center gap-4"> {/* Added list item and flex for alignment */}
                 <input
                   type="text"
-                  value={ingredient.name}
-                  onChange={(e) => handleChange(index, 'name', e.target.value)}
+                  value={ingredient.ingredient}
+                  onChange={(e) => handleChange(index, 'ingredient', e.target.value)}
                   className="border p-2 bg-gray-200 text-lg font-medium rounded"
                   placeholder='Ingredient Name'
                 />
