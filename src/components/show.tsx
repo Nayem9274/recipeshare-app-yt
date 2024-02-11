@@ -10,6 +10,7 @@ interface Blog {
   publication_date: string;
   image: string;
   last_modification_date: string;
+  summary: string
   tags: string[];
   ratings: number;
   user: {
@@ -20,6 +21,7 @@ interface Blog {
 interface Recipe {
   id: number;
   title: string;
+  description: string;
   publication_date: string;
   image: string;
   last_modification_date: string;
@@ -130,17 +132,15 @@ const BlogList: React.FC = () => {
     <div className="flex flex-col items-center p-8">
       <div className="flex space-x-4 mb-4">
         <button
-          className={`text-lg font-semibold cursor-pointer focus:outline-none ${
-            activeTab === 'blogs' ? 'text-blue-500 border-b-2 border-blue-500' : 'text-gray-500'
-          }`}
+          className={`text-lg font-semibold cursor-pointer focus:outline-none ${activeTab === 'blogs' ? 'text-blue-500 border-b-2 border-blue-500' : 'text-gray-500'
+            }`}
           onClick={() => setActiveTab('blogs')}
         >
           Blogs
         </button>
         <button
-          className={`text-lg font-semibold cursor-pointer focus:outline-none ${
-            activeTab === 'recipes' ? 'text-blue-500 border-b-2 border-blue-500' : 'text-gray-500'
-          }`}
+          className={`text-lg font-semibold cursor-pointer focus:outline-none ${activeTab === 'recipes' ? 'text-blue-500 border-b-2 border-blue-500' : 'text-gray-500'
+            }`}
           onClick={() => setActiveTab('recipes')}
         >
           Recipes
@@ -149,41 +149,61 @@ const BlogList: React.FC = () => {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {activeTab === 'blogs' && blogs.map((blog) => (
-          <div key={blog.id} className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg">
+          <div key={blog.id} className="bg-orange-100 rounded-lg overflow-hidden shadow-md hover:shadow-lg">
             <Link href={`/blog/${blog.id}`}>
-              
-                <div className="relative h-48 overflow-hidden">
-                  <Image
-                    src={blog.image}
-                    alt={blog.title}
-                    layout="fill"
-                    objectFit="cover"
-                  />
-                </div>
-                <div className="p-4">
-                  <h3 className="text-lg font-semibold">{blog.title}</h3>
-                </div>
-              
+
+              <div className="relative h-48 overflow-hidden">
+                <Image
+                  src={blog.image}
+                  alt={blog.title}
+                  layout="fill"
+                  objectFit="cover"
+                />
+              </div>
+              <div className="p-4">
+                <h3 className="text-lg font-bold italic underline">{blog.title}</h3>
+              </div>
+              <div className="p-4">
+                <p className="text-lg ">
+                  {blog.summary.length > 150 ? blog.summary.substring(0, 150) + '......' : blog.summary}
+                  {blog.summary.length > 150 && (
+                    <Link href={`/blog/${blog.id}`}>
+                      <span className="text-blue-500 hover:underline"> Read More</span>
+                    </Link>
+                  )}
+                </p>
+              </div>
+
             </Link>
           </div>
         ))}
 
         {activeTab === 'recipes' && recipes.map((recipe) => (
-          <div key={recipe.id} className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg">
+          <div key={recipe.id}  className="bg-blue-50 rounded-lg overflow-hidden shadow-md hover:shadow-xl">
             <Link href={`/recipe/${recipe.id}`}>
-              
-                <div className="relative h-48 overflow-hidden">
-                  <Image
-                    src={recipe.image}
-                    alt={recipe.title}
-                    layout="fill"
-                    objectFit="cover"
-                  />
-                </div>
-                <div className="p-4">
-                  <h3 className="text-lg font-semibold">{recipe.title}</h3>
-                </div>
-              
+
+              <div className="relative h-48 overflow-hidden">
+                <Image
+                  src={recipe.image}
+                  alt={recipe.title}
+                  layout="fill"
+                  objectFit="cover"
+                />
+              </div>
+              <div className="p-4">
+                <h3 className="text-lg font-bold italic underline">{recipe.title}</h3>
+              </div>
+              <div className="p-4">
+                <p className="text-lg ">
+                  {recipe.description.length > 150 ? recipe.description.substring(0, 150) + '......' : recipe.description}
+                  {recipe.description.length > 150 && (
+                    <Link href={`/blog/${recipe.id}`}>
+                      <span className="text-red-500 hover:underline"> Read More</span>
+                    </Link>
+                  )}
+                </p>
+              </div>
+
             </Link>
           </div>
         ))}
