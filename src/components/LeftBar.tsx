@@ -8,13 +8,63 @@ import searchlogo from "./../../public/search.svg";
 import Link from "next/link"
 import profilelogo from "./../../public/person.svg";
 
+import { useState } from "react";
+
+interface UserDetailsProps {
+  username: string;
+  email: string;
+  image: string;
+  jwt: string;
+}
+
 const LeftBar = () => {
   const [cookie, setCookie] = React.useState<string | undefined>('');
+  const [userDetails, setUserDetails] = useState<UserDetailsProps>({
+    username: "",
+    email: "",
+    image: "",
+    jwt: "",
+  });
+
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   /************Cookie Part***********/
   useEffect(() => {
-    getCookie();
-  }, []); // Optional dependency array
+    (async () => {
+      const cookie = document.cookie
+        .split(";")
+        .find((c) => c.trim().startsWith("jwt="));
+      if (cookie) {
+        const jwt = cookie.split("=")[1];
+        const jwtData = {
+          jwt: jwt,
+        };
+        console.log(jwtData);
+        const userData = await fetch(
+          "https://recipeshare-tjm7.onrender.com/api/user/details/",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(jwtData),
+          }
+        );
+        const data = await userData.json();
+        if (!data.error) {
+          setIsLoggedIn(true);
+          const tempData = {
+            username: data.user_details.name,
+            email: data.user_details.email,
+            image: data.user_details.image,
+            jwt: jwt,
+          };
+          setUserDetails(tempData);
+        }
+
+      }
+    })();
+  }, []);
 
   const getCookie = () => {
     const cookieValue = document.cookie
@@ -30,7 +80,7 @@ const LeftBar = () => {
     // if the user is logged in, then redirect to the profile page
     // else redirect to the login page
 
-    if (!cookie) {
+    if (!isLoggedIn) {
       window.location.href = '/login'
     }
     else {
@@ -79,11 +129,16 @@ const LeftBar = () => {
         </button>
       </nav>
 
-      <div className="flex-grow"></div> <Link href="/login">
+      <div className="flex-grow"></div> {!isLoggedIn && <Link href="/login">
         <button className="mt-4 text-sm w-20 h-10 text-center bg-[#1d9bf0] text-white rounded-full hover:bg-[#1a89d6] focus:outline-none mr-4">
           Login
         </button>
-      </Link>
+      </Link>}
+      {
+        isLoggedIn && <Link className="bg-blue-500 rounded-full p-2 text-white"  href="/profile">
+          Account
+        </Link>
+      }
     </header>
   );
 }
