@@ -7,7 +7,7 @@ import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { getStorage } from "firebase/storage";
 import app from "../../firebase";
 import firebase from "../../firebase";
-import CustomButton from '../../components/CustomButton';
+import CustomButton from "../../components/CustomButton";
 import { SignupDataType } from "@/Types";
 import React from "react";
 import LoadingOverlay from "@/components/LoadingOverlay";
@@ -17,7 +17,7 @@ const Signup: React.FC<{ signUpData: SignupDataType }> = ({ signUpData }) => {
     username: "",
     password: "",
     email: "",
-    image: ""
+    image: "",
   });
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -31,11 +31,9 @@ const Signup: React.FC<{ signUpData: SignupDataType }> = ({ signUpData }) => {
     // console.log(recipeData);
   };
 
-  const [loading,setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [isUploaded, setIsUploaded] = useState(false);
-
-
 
   const storage = firebase.storage;
   const fileInputRef = useRef(null);
@@ -44,7 +42,7 @@ const Signup: React.FC<{ signUpData: SignupDataType }> = ({ signUpData }) => {
     const file = image;
 
     if (!file) {
-      alert('No file selected');
+      alert("No file selected");
       return;
     }
     setIsUploadingImage(true);
@@ -53,7 +51,7 @@ const Signup: React.FC<{ signUpData: SignupDataType }> = ({ signUpData }) => {
     const uploadTask = uploadBytesResumable(storageRef, file);
 
     uploadTask.on(
-      'state_changed',
+      "state_changed",
       (snapshot) => {
         console.log(snapshot);
       },
@@ -61,17 +59,16 @@ const Signup: React.FC<{ signUpData: SignupDataType }> = ({ signUpData }) => {
         console.log(error);
       },
       async () => {
-        alert('Image Upload is complete');
+        alert("Image Upload is complete");
         setIsUploaded(true);
         const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
         setImageUrl(downloadURL);
         console.log(downloadURL);
-        SignupData('image', downloadURL);
-       
+        SignupData("image", downloadURL);
+
         setIsUploadingImage(false);
       }
     );
-
   };
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -79,9 +76,9 @@ const Signup: React.FC<{ signUpData: SignupDataType }> = ({ signUpData }) => {
     e.preventDefault();
     console.log(username);
     console.log(password);
-    SignupData('username', username);
-    SignupData('password', password);
-    SignupData('email', email);
+    SignupData("username", username);
+    SignupData("password", password);
+    SignupData("email", email);
 
     try {
       const response = await fetch(
@@ -95,23 +92,21 @@ const Signup: React.FC<{ signUpData: SignupDataType }> = ({ signUpData }) => {
         }
       );
       console.log(userData);
-    
 
       console.log(response);
 
       if (response.ok) {
         //const data = await response.json();
         const data = await response.json();
-        console.log(data)
+        console.log(data);
         if (data.jwt) {
           console.log("User signed up!");
           setUsername("");
           setPassword("");
           setEmail("");
           setError("");
-
         } else {
-          window.location.href = '/login'
+          window.location.href = "/login";
           //setError("Invalid response from server");
         }
       } else {
@@ -120,14 +115,13 @@ const Signup: React.FC<{ signUpData: SignupDataType }> = ({ signUpData }) => {
     } catch (error) {
       console.error("Error:", error);
       setError("Error signing up");
-    }
-    finally{
+    } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="flex items-center justify-center bg-gray-50 min-h-screen">
+    <div className="flex items-center justify-center bg-gradient-to-r from-blue-300 to-purple-500 min-h-screen">
       <LoadingOverlay loading={loading} />
       <div className="bg-white shadow rounded-lg px-8 pt-6 pb-8 mb-4 flex flex-col w-full max-w-md">
         <Image
@@ -153,9 +147,8 @@ const Signup: React.FC<{ signUpData: SignupDataType }> = ({ signUpData }) => {
               value={username}
               onChange={(e) => {
                 setUsername(e.target.value);
-                SignupData('username', e.target.value);
-              }
-              }
+                SignupData("username", e.target.value);
+              }}
               className="rounded-md px-3 py-2 border border-gray-300 focus:border-blue-500 focus:ring-blue-500 focus:ring-opacity-50 w-full"
             />
           </div>
@@ -171,9 +164,8 @@ const Signup: React.FC<{ signUpData: SignupDataType }> = ({ signUpData }) => {
               value={password}
               onChange={(e) => {
                 setPassword(e.target.value);
-                SignupData('password', e.target.value);
-              }
-              }
+                SignupData("password", e.target.value);
+              }}
               className="rounded-md px-3 py-2 border border-gray-300 focus:border-blue-500 focus:ring-blue-500 focus:ring-opacity-50 w-full"
             />
           </div>
@@ -189,9 +181,8 @@ const Signup: React.FC<{ signUpData: SignupDataType }> = ({ signUpData }) => {
               value={email}
               onChange={(e) => {
                 setEmail(e.target.value);
-                SignupData('email', e.target.value);
-              }
-              }
+                SignupData("email", e.target.value);
+              }}
               className="rounded-md px-3 py-2 border border-gray-300 focus:border-blue-500 focus:ring-blue-500 focus:ring-opacity-50 w-full"
             />
           </div>
@@ -206,7 +197,7 @@ const Signup: React.FC<{ signUpData: SignupDataType }> = ({ signUpData }) => {
               id="image"
               accept="image/*"
               ref={fileInputRef}
-              placeholder='select image'
+              placeholder="select image"
               onChange={(event) => {
                 const file = event.target.files && event.target.files[0];
                 if (file) {
@@ -217,24 +208,26 @@ const Signup: React.FC<{ signUpData: SignupDataType }> = ({ signUpData }) => {
               className="rounded-md px-3 py-2 border border-gray-300 focus:border-blue-500 focus:ring-blue-500 focus:ring-opacity-50 w-full"
             />
             {previewUrl && (
-                <img
-                  src={previewUrl}
-                  alt="Preview"
-                  className="mt-2 max-w-full h-auto mb-6"
-                />
-              )}
-              {
-                isUploaded && <div className="p-4 rounded-full text-white bg-yellow-700 text-center">
-                  Image Uploaded
-                </div>
-              }
-            {!isUploaded && <CustomButton
-              type="button"
-              title={isUploadingImage ? "Uploading..." : "Upload Image"}
-              varient="btn_light_green"
-              otherStyles="bg-green-500 text-white px-4 py-1"
-              onClick={() => handleImageUpload()}
-            />}
+              <img
+                src={previewUrl}
+                alt="Preview"
+                className="mt-2 max-w-full h-auto mb-6"
+              />
+            )}
+            {isUploaded && (
+              <div className="p-4 rounded-full text-white bg-yellow-700 text-center">
+                Image Uploaded
+              </div>
+            )}
+            {!isUploaded && (
+              <CustomButton
+                type="button"
+                title={isUploadingImage ? "Uploading..." : "Upload Image"}
+                varient="btn_light_green"
+                otherStyles="bg-green-500 text-white px-4 py-1"
+                onClick={() => handleImageUpload()}
+              />
+            )}
           </div>
           {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
           <button
@@ -243,7 +236,6 @@ const Signup: React.FC<{ signUpData: SignupDataType }> = ({ signUpData }) => {
           >
             Sign Up
           </button>
-
         </form>
         <div className="mt-4 text-center">
           <p className="text-sm text-gray-500">
@@ -256,5 +248,5 @@ const Signup: React.FC<{ signUpData: SignupDataType }> = ({ signUpData }) => {
       </div>
     </div>
   );
-}
+};
 export default Signup;

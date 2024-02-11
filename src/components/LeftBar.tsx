@@ -5,8 +5,9 @@ import logo from "./../../public/logo.png";
 import home from "./../../public/home.svg";
 import notificationlogo from "./../../public/notifications.svg";
 import searchlogo from "./../../public/search.svg";
-import Link from "next/link"
+import Link from "next/link";
 import profilelogo from "./../../public/person.svg";
+import accountlogo from "./../../public/account.svg";
 
 import { useState } from "react";
 
@@ -18,7 +19,7 @@ interface UserDetailsProps {
 }
 
 const LeftBar = () => {
-  const [cookie, setCookie] = React.useState<string | undefined>('');
+  const [cookie, setCookie] = React.useState<string | undefined>("");
   const [userDetails, setUserDetails] = useState<UserDetailsProps>({
     username: "",
     email: "",
@@ -61,19 +62,18 @@ const LeftBar = () => {
           };
           setUserDetails(tempData);
         }
-
       }
     })();
   }, []);
 
   const getCookie = () => {
     const cookieValue = document.cookie
-      .split('; ')
-      .find((row) => row.startsWith('jwt='))?.split('=')[1];
+      .split("; ")
+      .find((row) => row.startsWith("jwt="))
+      ?.split("=")[1];
 
     setCookie(cookieValue);
   };
-
 
   const goToProfile = () => {
     // request to the server to get the user profile
@@ -81,12 +81,11 @@ const LeftBar = () => {
     // else redirect to the login page
 
     if (!isLoggedIn) {
-      window.location.href = '/login'
+      window.location.href = "/login";
+    } else {
+      window.location.href = "/profile";
     }
-    else {
-      window.location.href = '/profile'
-    }
-  }
+  };
 
   return (
     <header className="flex flex-row items-center bg-white w-full px-4">
@@ -100,46 +99,45 @@ const LeftBar = () => {
           priority
         />
       </Link>
-
       <nav className="flex items-center">
         <Link href="/">
-          <button className="flex items-center mr-4 hover:text-gray-700 focus:outline-none">
+          <button className="rounded-full p-1 w-[150px] hover:bg-[#ece7e7] hover:text-gray-700 flex items-center mr-4    focus:outline-none">
             <Image src={home} alt="Home" height={40} />
             <span className="pl-2 text-lg font-medium">Home</span>
           </button>
         </Link>
 
-        <button className="flex items-center mr-4 hover:text-gray-700 focus:outline-none">
+        <button className="rounded-full p-1 w-[150px] hover:bg-[#ece7e7] flex items-center mr-4 hover:text-gray-700 focus:outline-none">
           <Image src={notificationlogo} alt="Notifications" height={40} />
           <span className="pl-2 text-lg font-medium">Notifications</span>
         </button>
 
         <Link href="/explore">
-          <button className="flex items-center mr-4 hover:text-gray-700 focus:outline-none">
+          <button className="rounded-full p-1 w-[150px] hover:bg-[#ece7e7] flex items-center mr-4 hover:text-gray-700 focus:outline-none">
             <Image src={searchlogo} alt="Search" height={40} />
             <span className="pl-2 text-lg font-medium">Explore</span>
           </button>
         </Link>
-
-        <button className="flex items-center hover:text-gray-700 focus:outline-none">
-          <Image src={profilelogo} alt="Profile" height={40} />
-          <span className="pl-2 text-lg font-medium" onClick={goToProfile}>
-            Profile
-          </span>
-        </button>
       </nav>
-
-      <div className="flex-grow"></div> {!isLoggedIn && <Link href="/login">
-        <button className="mt-4 text-sm w-20 h-10 text-center bg-[#1d9bf0] text-white rounded-full hover:bg-[#1a89d6] focus:outline-none mr-4">
-          Login
-        </button>
-      </Link>}
-      {
-        isLoggedIn && <Link className="bg-blue-500 rounded-full p-2 text-white"  href="/profile">
-          Account
+      <div className="flex-grow"></div>{" "}
+      {!isLoggedIn && (
+        <Link href="/login">
+          <button className="mt-4 text-sm w-20 h-10 text-center bg-[#1d9bf0] text-white rounded-full hover:bg-[#1a89d6] focus:outline-none mr-4">
+            Login
+          </button>
         </Link>
-      }
+      )}
+      {isLoggedIn && (
+        <Link href="/profile">
+          <button className="rounded-full p-1 w-[150px] hover:bg-[#ece7e7] flex items-center hover:text-gray-700 focus:outline-none">
+            <Image src={accountlogo} alt="Profile" height={40} />
+            <span className="pl-2 text-lg font-medium" onClick={goToProfile}>
+              Account
+            </span>
+          </button>
+        </Link>
+      )}
     </header>
   );
-}
+};
 export default LeftBar;
