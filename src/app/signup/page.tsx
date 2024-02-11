@@ -10,6 +10,7 @@ import firebase from "../../firebase";
 import CustomButton from '../../components/CustomButton';
 import { SignupDataType } from "@/Types";
 import React from "react";
+import LoadingOverlay from "@/components/LoadingOverlay";
 
 const Signup: React.FC<{ signUpData: SignupDataType }> = ({ signUpData }) => {
   const [userData, setUserData] = React.useState<Record<string, any>>({
@@ -29,6 +30,10 @@ const Signup: React.FC<{ signUpData: SignupDataType }> = ({ signUpData }) => {
     setUserData({ ...userData, [key]: value });
     // console.log(recipeData);
   };
+
+  const [loading,setLoading] = useState(false);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [isUploaded, setIsUploaded] = useState(false);
 
 
 
@@ -57,6 +62,7 @@ const Signup: React.FC<{ signUpData: SignupDataType }> = ({ signUpData }) => {
       },
       async () => {
         alert('Image Upload is complete');
+        setIsUploaded(true);
         const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
         setImageUrl(downloadURL);
         console.log(downloadURL);
@@ -69,6 +75,7 @@ const Signup: React.FC<{ signUpData: SignupDataType }> = ({ signUpData }) => {
   };
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    setLoading(true);
     e.preventDefault();
     console.log(username);
     console.log(password);
@@ -114,10 +121,14 @@ const Signup: React.FC<{ signUpData: SignupDataType }> = ({ signUpData }) => {
       console.error("Error:", error);
       setError("Error signing up");
     }
+    finally{
+      setLoading(false);
+    }
   };
 
   return (
     <div className="flex items-center justify-center bg-gray-50 min-h-screen">
+      <LoadingOverlay loading={loading} />
       <div className="bg-white shadow rounded-lg px-8 pt-6 pb-8 mb-4 flex flex-col w-full max-w-md">
         <Image
           src={logo}
@@ -200,17 +211,30 @@ const Signup: React.FC<{ signUpData: SignupDataType }> = ({ signUpData }) => {
                 const file = event.target.files && event.target.files[0];
                 if (file) {
                   setImage(file);
+                  setPreviewUrl(URL.createObjectURL(file));
                 }
               }}
               className="rounded-md px-3 py-2 border border-gray-300 focus:border-blue-500 focus:ring-blue-500 focus:ring-opacity-50 w-full"
             />
-            <CustomButton
+            {previewUrl && (
+                <img
+                  src={previewUrl}
+                  alt="Preview"
+                  className="mt-2 max-w-full h-auto mb-6"
+                />
+              )}
+              {
+                isUploaded && <div className="p-4 rounded-full text-white bg-yellow-700 text-center">
+                  Image Uploaded
+                </div>
+              }
+            {!isUploaded && <CustomButton
               type="button"
               title={isUploadingImage ? "Uploading..." : "Upload Image"}
               varient="btn_light_green"
               otherStyles="bg-green-500 text-white px-4 py-1"
               onClick={() => handleImageUpload()}
-            />
+            />}
           </div>
           {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
           <button

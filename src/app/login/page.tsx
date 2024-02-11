@@ -1,17 +1,20 @@
 "use client";   
 import React from 'react'
 import CustomButton  from '@/components/CustomButton';
+import { useState } from "react";
 
+import LoadingOverlay from '@/components/LoadingOverlay';
 
 const DemoLogin =() => {
   
     const [username,setUsername] = React.useState<string>('');
     const [password,setPassword] = React.useState<string>('');
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
-
+    const [loading, setLoading] = useState(false);
 
     // handle login
     const handleLogin =async() => {
+      setLoading(true);
       console.log('username: ', username);
       console.log('password', password);
         const credentials = {
@@ -47,11 +50,15 @@ const DemoLogin =() => {
           } catch (error) {
             console.log('error: ', error);
           }
+          finally{
+            setLoading(false);
+          }
 
     }
 
   return (
     <div className="flex justify-center bg-gray-400 h-screen py-48">
+      <LoadingOverlay loading={loading} />
       <div className="bg-teal-400 shadow rounded-lg flex px-4 flex-col w-2/5 h-64">
         <h2 className="text-center text-2xl font-semibold mb-4">
           Log in to RecipeShare

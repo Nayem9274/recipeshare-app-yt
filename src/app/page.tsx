@@ -14,13 +14,9 @@ export default async function Home() {
   // console.log(user)
   return (
     <div>
-     
       <Search/>
       <RightBar/>
       <BlogList/>
-
-   
-
     </div>
   );
 }
