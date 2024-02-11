@@ -1,8 +1,10 @@
 "use client";   
 import React from 'react'
 import CustomButton  from '@/components/CustomButton';
+import { useState } from 'react';
 // import Image from "next/image";
 // // import logo from "../../../public/logo.png";
+import LoadingOverlay from '@/components/LoadingOverlay';
 
 
 
@@ -10,10 +12,12 @@ const DemoLogin =() => {
   
     const [username,setUsername] = React.useState<string>('');
     const [password,setPassword] = React.useState<string>('');
+    const [loading, setLoading] = useState(false);
 
 
     // handle login
     const handleLogin =async() => {
+      setLoading(true);
         const credentials = {
             username: username,
             password: password
@@ -45,11 +49,15 @@ const DemoLogin =() => {
           } catch (error) {
             console.log('error: ', error);
           }
+          finally{
+            setLoading(false);
+          }
 
     }
 
   return (
     <div className="flex items-center justify-center bg-gray-50 min-h-screen">
+      <LoadingOverlay loading={loading} />
       <div className="bg-white shadow rounded-lg px-8 pt-6 pb-8 mb-4 flex flex-col w-full max-w-md">
         {/* <Image
           src={logo}
