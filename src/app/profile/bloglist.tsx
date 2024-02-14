@@ -115,7 +115,7 @@ const BlogList: React.FC<{ onClose: () => void }> = ({ onClose }) => {
           </div>
           ))
         )}
-      </div>
+ls      </div>
     </div>
   );
 };
