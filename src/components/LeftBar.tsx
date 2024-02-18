@@ -88,14 +88,14 @@ const LeftBar = () => {
   };
 
   return (
-    <header className="flex flex-row items-center bg-white w-full px-4">
+    <header className="flex flex-row items-center bg-white w-full">
       <Link href="/">
         <Image
           className="mb-4 py-2"
           src={logo}
           alt="Logo"
-          width={200}
-          height={200}
+          width={150}
+          height={100}
           priority
         />
       </Link>
@@ -103,12 +103,17 @@ const LeftBar = () => {
         <Link href="/">
           <button className="rounded-full p-1 w-[150px] hover:bg-[#ece7e7] hover:text-gray-700 flex items-center mr-4  focus:outline-none">
             <Image src={home} alt="Home" height={40} width={40} />
-            <span className="pl-2 text-lg font-medium">Home</span>  
+            <span className="pl-2 text-lg font-medium">Home</span>
           </button>
         </Link>
 
         <button className="rounded-full p-1 w-[150px] hover:bg-[#ece7e7] flex items-center mr-4 hover:text-gray-700 focus:outline-none">
-          <Image src={notificationlogo} alt="Notifications" height={40} width={40} />
+          <Image
+            src={notificationlogo}
+            alt="Notifications"
+            height={40}
+            width={40}
+          />
           <span className="pl-2 text-lg font-medium">Notifications</span>
         </button>
 
