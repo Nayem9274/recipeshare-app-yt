@@ -2,5 +2,54 @@
 @tailwind components;
 @tailwind utilities;
 
+/* styles.css or App.css */
+.slick-container {
+  width: 80%; /* Set the width of the slider container */
+  margin: 0 auto 30px; /* Center the slider horizontally and add bottom margin */
+}
 
+.slick-slide {
+  text-align: center; /* Center the slide content */
+  padding: 0 10px; /* Add horizontal padding to create space between slides */
+}
 
+.slick-image {
+  width: 100%; /* Ensure images fill their container */
+  height: 200px; /* Set a fixed height for the images */
+  border-radius: 10px; /* Add rounded corners to the images */
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1); /* Add a subtle shadow effect */
+}
+
+/* Customize the dots (pagination) */
+.slick-dots li button:before {
+  font-size: 12px; /* Adjust the size of the dot */
+  color: #ffffff; /* Change the color of the dot */
+}
+
+/* Optional: Add additional styling for arrows if needed */
+.slick-prev,
+.slick-next {
+  font-size: 24px; /* Adjust the size of the arrows */
+  color: #ffffff; /* Change the color of the arrows */
+  background-color: rgba(
+    0,
+    0,
+    0,
+    0.5
+  ); /* Semi-transparent background for the arrows */
+  border-radius: 50%; /* Make the arrows circular */
+  width: 40px; /* Set the width of the arrows */
+  height: 40px; /* Set the height of the arrows */
+  line-height: 40px; /* Center the arrow icon vertically */
+}
+
+/* Optional: Hide the arrows on hover */
+.slick-prev:hover,
+.slick-next:hover {
+  background-color: rgba(
+    0,
+    0,
+    0,
+    0.8
+  ); /* Darken the background color on hover */
+}
