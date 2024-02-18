@@ -47,7 +47,7 @@ const ExplorePage = () => {
             </div>
           
         </Link>
-        <Link href="/">
+        <Link href="/MealPlanner">
           <span className="text-xl font-semibold text-blue-600 hover:underline mb-4">Meal Planner</span>
         </Link>
         <p className="text-lg text-center text-gray-700">
