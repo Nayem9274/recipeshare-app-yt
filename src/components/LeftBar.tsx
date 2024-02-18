@@ -132,7 +132,7 @@ const LeftBar = () => {
           <button className="rounded-full p-1 w-[150px] hover:bg-[#ece7e7] flex items-center hover:text-gray-700 focus:outline-none">
             <Image src={accountlogo} alt="Profile" height={40} />
             <span className="pl-2 text-lg font-medium" onClick={goToProfile}>
-              Account
+              {userDetails.username}
             </span>
           </button>
         </Link>

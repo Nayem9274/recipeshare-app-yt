@@ -130,7 +130,7 @@ const Blog = () => {
             {/* USER INFO */}
             <div className="text-gray-500">
                 <p>By {blogData.user.name}</p>
-                <p>Published on {blogData.publication_date}</p>
+                <p>Last modified on {new Date(blogData.last_modification_date).toLocaleDateString()}</p>
             </div>
             <div className="mt-4 flex space-x-4">
                 {/* Tags Box */}
@@ -170,7 +170,7 @@ const Blog = () => {
                     </div>
                 ))}
             </div>
-      
+
 
             {/* COMMENTS */}
             <div className="mt-8">
