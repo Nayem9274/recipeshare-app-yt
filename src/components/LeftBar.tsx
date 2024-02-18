@@ -103,7 +103,7 @@ const LeftBar = () => {
         <Link href="/">
           <button className="rounded-full p-1 w-[150px] hover:bg-[#ece7e7] hover:text-gray-700 flex items-center mr-4  focus:outline-none">
             <Image src={home} alt="Home" height={40} width={40} />
-            <span className="pl-2 text-lg font-medium">Home</span>
+            <span className="pl-2 text-lg font-medium">Home</span>  
           </button>
         </Link>
 
