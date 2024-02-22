@@ -59,7 +59,8 @@
 }
 
 .bg-image {
-  @apply fixed top-0 left-0 w-full h-full object-center bg-center bg-no-repeat z-0;
-  z-index: -1; /* Send the background image behind other content */
-  filter: blur(var(--bg-image-blur, 5px));
+  @apply fixed top-0 left-0 w-full h-full object-center  bg-no-repeat z-0;
+  z-index: -2; /* Send the background image behind other content */
+  filter: blur(var(--bg-image-blur, 2px));
+  background-size: 100%;
 }
