@@ -89,7 +89,9 @@ const UploadBlog = () => {
 
 
   return (
-    <div className=" bg-gray-200 overflow-hidden">
+    <div className="bg-container"> 
+    <div className="bg-image" style={{ backgroundImage: `url("/mealPlanBg.jpg")`}}></div>
+    
       {/* New div for the photo */}
       <div className="flex flex-col items-center py-10 ">
         <img
@@ -121,7 +123,6 @@ const UploadBlog = () => {
           onClick={handlePublish}
         />
       </div>
-
 
     </div>
   );

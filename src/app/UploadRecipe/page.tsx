@@ -1,12 +1,10 @@
 "use client";
-import React, {useEffect, useRef, useState,  } from 'react';
+import React, {useEffect} from 'react';
 
 import { TestForm } from '@/index';
 import CustomButton  from '@/components/CustomButton';
-import { useRouter } from 'next/navigation';
 
 const UploadRecipe = () => {
-   const router = useRouter();
   // for sending the data to the backend
   const [recipeData, setRecipeData] = React.useState<Record<string, any>>({
     title: "",
@@ -20,12 +18,12 @@ const UploadRecipe = () => {
     steps: [],
     tags: [],
     jwt:"",
+    servings: Number,
     user:""
   });
   
   type UpdateRecipeDataType = (key: string, value: any) => void;
   
-  const usernameRef = useRef<string | undefined>('');
 
   // for storing the cookie
   const [cookie, setCookie] = React.useState<string|undefined>('');
@@ -95,7 +93,9 @@ const UploadRecipe = () => {
 
 
   return (
-    <div className=" bg-gray-200 overflow-hidden">
+    <div className="bg-container">
+      <div className="bg-image" style={{ backgroundImage: `url("/mealPlanBg.jpg")`}}></div>
+      
       {/* New div for the photo */}
       <div className="flex flex-col items-center py-1">
         <img
@@ -133,6 +133,7 @@ const UploadRecipe = () => {
 
       
 
+    
     </div>
   );
 }
