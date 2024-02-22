@@ -14,10 +14,10 @@
 }
 
 .slick-image {
-  width: 100%; /* Ensure images fill their container */
-  height: 200px; /* Set a fixed height for the images */
-  border-radius: 10px; /* Add rounded corners to the images */
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1); /* Add a subtle shadow effect */
+  width: 700px;
+  max-height: 400px; /* Set a maximum height if needed */
+  border-radius: 10px;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 /* Customize the dots (pagination) */
@@ -61,6 +61,13 @@
 .bg-image {
   @apply fixed top-0 left-0 w-full h-full object-center  bg-no-repeat z-0;
   z-index: -2; /* Send the background image behind other content */
-  filter: blur(var(--bg-image-blur, 2px));
+  /* filter: blur(var(--bg-image-blur, 2px)); */
   background-size: 100%;
+}
+
+.bg-image2 {
+  @apply fixed top-3 bottom-3 w-full h-full object-cover  bg-no-repeat z-0;
+  z-index: -1; /* Send the background image behind other content */
+  filter: blur(var(--bg-image-blur, 2px));
+  background-size: cover;
 }

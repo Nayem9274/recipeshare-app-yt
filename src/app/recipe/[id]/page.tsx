@@ -111,7 +111,7 @@ const Recipe = () => {
   return (
     
     <div className="bg-container">
-      <div className="bg-image" style={{ backgroundImage: `url(${recipeData.image})`}}></div>
+      <div className="bg-image" style={{ backgroundImage: `url("/recipe_bg.jpg")`}}></div>
       <div className="p-4 lg:px-20 xl:px-40">
         {/* IMAGE AND TITLE */}
         {recipeData.image && (
@@ -126,30 +126,30 @@ const Recipe = () => {
             />
           </div>
         )}
-        <div className="bg-white flex justify-between items-center mt-4 rounded-md">
+        <div className="bg-lime-200 hover:bg-lime-400 flex justify-between items-center mt-4 rounded-md">
           <h1 className="text-3xl font-bold uppercase xl:text-5xl mt-1 mb-1 ml-4">{recipeData.title}</h1>
         </div>
         {/* USER INFO */}
 
-        <div className="bg-white  mt-4 rounded-md">
+        <div className="bg-lime-200 hover:bg-lime-400  mt-4 rounded-md">
           <p className='ml-4 text-xl'>By {recipeData.user.name}</p>
           <p className='ml-4 text-lg'>Cooking Time {recipeData.cooking_time} minutes</p>
         </div>
 
         {/* TAGS */}
-        <div className="bg-white mt-4 rounded-md">
+        <div className="bg-lime-200 hover:bg-lime-400 mt-4 rounded-md">
           <p className="text-lg text-indigo-500 font-bold mb-2 ml-4">Tags:</p>
           <p className="text-lg text-red-500 ml-4">{recipeData.tags.join(', ')}</p>
         </div>
 
         {/* SUMMARY */}
-        <div className="mt-8 bg-gray-100 p-4 rounded-md">
+        <div className="mt-8 p-4 rounded-md bg-lime-200 hover:bg-lime-400">
           <h2 className="text-2xl font-bold mb-2">Description</h2>
           <p className="font-serif text-lg italic">{recipeData.description}</p>
         </div>
 
         {/* INGREDIENTS */}
-        <div className="bg-white  mt-8 rounded-md">
+        <div className="bg-lime-200 hover:bg-lime-400 mt-8 rounded-md">
           <h2 className="text-2xl font-bold mb-2 mt-2 ml-4">Ingredients</h2>
           <ul className="list-disc pl-4 mb-2 mt-2 ml-4">
             {recipeData.ingredients.map((ingredientGroup, index) => (
@@ -162,7 +162,7 @@ const Recipe = () => {
 
 
         {/* INSTRUCTIONS */}
-  <div className="bg-white  mt-8 rounded-md">
+  <div className="bg-lime-200 hover:bg-lime-400  mt-8 rounded-md">
     <h2 className="text-2xl font-bold mb-2 ml-4 mt-2">Instructions</h2>
     <ol className="list-decimal pl-4 ml-4 mt-2 mb-2">
       {recipeData.steps.map((step, index) => (
@@ -189,7 +189,7 @@ const Recipe = () => {
 
 
         {/* ADD COMMENT FORM */}
-        <div className="bg-white  mt-8 rounded-md">
+        <div className="bg-lime-200 hover:bg-lime-400  mt-8 rounded-md">
           <h2 className="text-2xl font-bold mb-4 ml-4">Add a Comment</h2>
         </div>
         <div className='mt-2'>

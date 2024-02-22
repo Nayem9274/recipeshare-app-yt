@@ -76,17 +76,10 @@ const RecipeFromIngredients = () => {
     }
 
   return (
-    <div>
-        <div className="fixed top-0 left-0 w-full h-screen z-[-1]">
-            <img
-                className="object-cover w-full h-full"
-                src="https://images.unsplash.com/photo-1557683316-973673baf926?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80"
-                alt="background"
-
-            />
-        </div>
+    <div className="bg-container">
+        <div className="bg-image" style={{ backgroundImage: `url("/recipe_ingredients1.jpg")`}}></div>
         
-        <div className="absolute top-1/3 -translate-y-1/2 left-1/2 -translate-x-1/2 flex items-center flex-col bg-slate-300 w-1/2 rounded-xl">
+        <div className="ml-40 mt-28 mb-28 flex items-center flex-col bg-slate-300 w-1/2 rounded-xl">
             
             <div className="font-extrabold text-2xl mt-4">
                 GET RECIPE FROM INGREDIENTS
@@ -97,7 +90,7 @@ const RecipeFromIngredients = () => {
             </div>
 
             {/* // create a form to take the list of ingredients as input  */}
-            <form className="flex flex-col items-center mt-6" onSubmit={handleSubmit}>
+            <form className="flex flex-col items-center mt-6 mb-3 gap-6" onSubmit={handleSubmit}>
                 {inputs.map((input, index) => (
                     <div key={index} className="mb-2 flex items-center">
                     <input

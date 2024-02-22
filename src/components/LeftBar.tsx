@@ -88,7 +88,7 @@ const LeftBar = () => {
   };
 
   return (
-    <header className="flex flex-row items-center bg-white w-full">
+    <header className="flex flex-row items-center bg-slate-700 w-full gap-8">
       <Link href="/">
         <Image
           className="mb-4 py-2"
@@ -101,13 +101,13 @@ const LeftBar = () => {
       </Link>
       <nav className="flex items-center">
         <Link href="/">
-          <button className="rounded-full p-1 w-[150px] hover:bg-[#ece7e7] hover:text-gray-700 flex items-center mr-4  focus:outline-none">
+          <button className="rounded-full p-1 w-[150px] hover:bg-[#ece7e7] hover:text-gray-700 flex items-center focus:outline-none">
             <Image src={home} alt="Home" height={40} width={40} />
             <span className="pl-2 text-lg font-medium">Home</span>
           </button>
         </Link>
 
-        <button className="rounded-full p-1 w-[150px] hover:bg-[#ece7e7] flex items-center mr-4 hover:text-gray-700 focus:outline-none">
+        <button className="rounded-full p-1 w-[150px] hover:bg-[#ece7e7] flex items-center hover:text-gray-700 focus:outline-none">
           <Image
             src={notificationlogo}
             alt="Notifications"
@@ -118,23 +118,24 @@ const LeftBar = () => {
         </button>
 
         <Link href="/explore">
-          <button className="rounded-full p-1 w-[150px] hover:bg-[#ece7e7] flex items-center mr-4 hover:text-gray-700 focus:outline-none">
+          <button className="rounded-full p-1 w-[150px] hover:bg-[#ece7e7] flex items-center ml-10 hover:text-gray-700 focus:outline-none">
             <Image src={searchlogo} alt="Search" height={40} />
             <span className="pl-2 text-lg font-medium">Explore</span>
           </button>
         </Link>
       </nav>
+
       <div className="flex-grow"></div>{" "}
       {!isLoggedIn && (
         <Link href="/login">
-          <button className="mt-4 text-sm w-20 h-10 text-center bg-[#1d9bf0] text-white rounded-full hover:bg-[#1a89d6] focus:outline-none mr-4">
+          <button className="mt-4 text-sm w-20 h-10 mb-3 text-center bg-[#1d9bf0] text-white rounded-full hover:bg-[#1a89d6] focus:outline-none mr-4">
             Login
           </button>
         </Link>
       )}
       {isLoggedIn && (
         <Link href="/profile">
-          <button className="rounded-full p-1 w-[150px] hover:bg-[#ece7e7] flex items-center hover:text-gray-700 focus:outline-none">
+          <button className="rounded-full p-1 mb-2 w-[150px] hover:bg-[#ece7e7] flex items-center hover:text-gray-700 focus:outline-none">
             <Image src={accountlogo} alt="Profile" height={40} />
             <span className="pl-2 text-lg font-medium" onClick={goToProfile}>
               {userDetails.username}
