@@ -11,12 +11,8 @@ const TestForm_Blog: React.FC<{ updateBlogData: UpdateBlogDataType }> = ({update
   const fileInputRef = useRef(null);
   
   // states for the form
-  const [difficulty, setDifficulty] = React.useState('easy');
-  const [meal_type, setMealType] = React.useState('breakfast');
   const [newTag, setNewTag] = React.useState<string>(''); 
   const [tags, setTags] = React.useState<string[]>([]); // TODO - update to the correct type
-  const [cooking_hours, setCookingHours] = React.useState<number>(0);
-  const [cooking_minutes, setCookingMinutes] = React.useState<number>(0);
   const [title, setTitle] = React.useState<string>('');
 
   // video
@@ -30,18 +26,6 @@ const TestForm_Blog: React.FC<{ updateBlogData: UpdateBlogDataType }> = ({update
   const [uploadImageTask, setUploadImageTask] = useState<UploadTask|null>(null);
   const [isUploadingImage, setIsUploadingImage] = useState<boolean>(false);
   
-  // functions to handle the form
-  const handleDifficulty = (value:string) => {
-    setDifficulty(value);
-    updateBlogData('difficulty_level', value);
-    // console.log("difficulty value: " + value);
-  };
-
-  const handleMealType = (value:string) => {
-    setMealType(value);
-    updateBlogData('meal_type', value);
-    // console.log("meal type value: " + value);
-  };
 
   const handleAddTag= () => {
     if (newTag.trim() !== '') {
@@ -126,10 +110,6 @@ const TestForm_Blog: React.FC<{ updateBlogData: UpdateBlogDataType }> = ({update
     );
   };
 
-  const updateTime=()=>{
-    const total_time = cooking_hours * 60 + cooking_minutes;
-    updateBlogData('cooking_time', total_time);
-  }
 
   const deleteTag= (index:number) =>  {
     const updatedTags = tags.filter((t, i) => i !== index);

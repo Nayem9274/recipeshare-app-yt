@@ -123,9 +123,11 @@ const ProfilePage = () => {
 
 
   return (
-    <div className="p-4 lg:px-20 xl:px-40 h-screen flex flex-col items-center bg-blue-100">
+    <div className="bg-container">
+      <div className="bg-image" style={{ backgroundImage: `url("/profile_bg.jpg")`}} > </div>
+    <div className="p-4 lg:px-20 xl:px-40 h-screen flex flex-col items-center mt-28">
       {userDetails && (
-        <div className="bg-white p-8 rounded-lg shadow-md max-w-2xl w-full mb-8">
+        <div className="bg-purple-400 p-8 rounded-lg shadow-md max-w-2xl w-full mb-8">
           <h1 className="text-3xl font-bold uppercase mb-4">Profile</h1>
           <div className="flex items-center mb-6">
             <div className="rounded-full overflow-hidden h-24 w-24 bg-gray-300">
@@ -170,7 +172,7 @@ const ProfilePage = () => {
       {showBlogs && <BlogList onClose={handleCloseBlogs} />}
 
       {/* Second box with tabs */}
-      <div className="bg-white p-4 rounded-lg shadow-md max-w-2xl w-full mb-8">
+      <div className="bg-purple-400 p-4 rounded-lg shadow-md max-w-2xl w-full mb-8">
         <h2 className="text-xl font-bold mb-4">Tabs</h2>
         <div className="flex space-x-4">
           <ButtonLink href="/">Notifications</ButtonLink>
@@ -196,6 +198,7 @@ const ProfilePage = () => {
           }}
         />
       }
+    </div>
     </div>
   );
 };

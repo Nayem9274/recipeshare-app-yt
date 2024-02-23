@@ -14,10 +14,7 @@ const TestForm: React.FC<{ updateRecipeData: UpdateRecipeDataType }> = ({updateR
   const [meal_type, setMealType] = React.useState('breakfast');
   const [newTag, setNewTag] = React.useState<string>(''); 
   const [tags, setTags] = React.useState<string[]>([]); // TODO - update to the correct type
-  const [cooking_hours, setCookingHours] = React.useState<number>(0);
-  const [cooking_minutes, setCookingMinutes] = React.useState<number>(0);
   const [title, setTitle] = React.useState<string>('');
-
   const [msg, setMsg] = useState<string>('Uploading...');
   const [percentage, setPercentage] = useState<number>(0);
 
@@ -31,8 +28,8 @@ const TestForm: React.FC<{ updateRecipeData: UpdateRecipeDataType }> = ({updateR
   const [selectedImage, setSelectedImage] = useState<File|null>(null);
   const [isUploadingImage, setIsUploadingImage] = useState<boolean>(false);
   const [imageSelected, setImageSelection] = useState<boolean>(false);
+  
 
-  const [link, setLink] = useState<string>('');
   
   // functions to handle the form
   const handleDifficulty = (value:string) => {
@@ -125,10 +122,6 @@ const TestForm: React.FC<{ updateRecipeData: UpdateRecipeDataType }> = ({updateR
         
   };
 
-  const updateTime =()=>{
-    const total_time = cooking_hours * 60 + cooking_minutes;
-    updateRecipeData('cooking_time', total_time);
-  }
 
   const deleteTag= (index:number) =>  {
     const updatedTags = tags.filter((t, i) => i !== index);
@@ -197,26 +190,29 @@ const TestForm: React.FC<{ updateRecipeData: UpdateRecipeDataType }> = ({updateR
             <label className="flex-1 block mb-6">
               <div className="gap-5 text-gray-700 text-xl font-bold flex items-center">Cook Time
                   <input
-                  name="cooktime_hours"
-                  type="number"
-                  className="h-12 text-center w-15 bg-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 block mt-1 border-gray-300 rounded-md shadow-sm"
-                  placeholder="hour"
-                  onChange={(e) => {
-                    setCookingHours(parseInt(e.target.value));
-                    updateTime();
-                  }}
-                  min={0}
-                  />
-                  <input
                   name="cooktime_minutes"
                   type="number"
                   className="h-12 text-center w-15 bg-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 block mt-1 border-gray-300 rounded-md shadow-sm"
                   placeholder="minutes"
                   onChange={(e) => {
-                    setCookingMinutes(parseInt(e.target.value))
-                    updateTime();
+                    updateRecipeData('cooking_time', parseInt(e.target.value));
                   }}
                   min={0}
+                  />
+              </div>
+              </label>
+            {/* servings imput */}
+            <label className="flex-1 block mb-6">
+              <div className="gap-9 text-gray-700 text-xl font-bold flex items-center">Servings
+                  <input
+                  name="Servings"
+                  type="number"
+                  className="h-12 text-center w-15 bg-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 block mt-1 border-gray-300 rounded-md shadow-sm"
+                  placeholder="# of people"
+                  onChange={(e) => {
+                    updateRecipeData('servings', parseInt(e.target.value));
+                  }}
+                  min={1}
                   />
               </div>
               </label>

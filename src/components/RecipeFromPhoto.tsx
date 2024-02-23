@@ -94,19 +94,11 @@ const RecipeFromPhoto = () => {
     }
 
   return (
-    <div>
-      {isUploadingImage && <Overlay uploadProgress={percentage} msg={msg}/>}
-        <div
-            className="fixed top-0 left-0 w-full h-screen z-[-1]"
-        >
-            <img
-                className="object-cover w-full h-full"
-                src="https://images.unsplash.com/photo-1557683316-973673baf926?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80"
-                alt="Background"
-            />
-        </div>
-        
-        <div className="absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 flex items-center flex-col bg-slate-300 h-1/3 w-1/2 rounded-xl">
+    <div className="bg-container">
+        {isUploadingImage && <Overlay uploadProgress={percentage} msg={msg}/>}
+        <div className="bg-image" style={{ backgroundImage: `url("/recipe_from_photo.jpg")`}}></div>
+            
+        <div className="w-1/2 h-72 ml-36 mt-28 mb-28 flex items-center flex-col bg-slate-300  rounded-xl">
             
             <div className="font-extrabold text-2xl mt-4">
                 GET RECIPE FROM PHOTO
@@ -149,8 +141,7 @@ const RecipeFromPhoto = () => {
                     />
                   </div>
             )}
-
-            <div className="absolute bottom-4 right-4">
+            <div className="mt-8">
                 <CustomButton
                     type='button'
                     title='Get Recipe'
@@ -158,6 +149,8 @@ const RecipeFromPhoto = () => {
                     otherStyles="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                 />
             </div>
+
+            
 
             {isLoading && (
                 <div className="loading-overlay mt-3">
@@ -169,7 +162,8 @@ const RecipeFromPhoto = () => {
 
 
         </div>
-
+        
+        
         
 
     </div>
