@@ -1,5 +1,4 @@
 import { CustomButton } from '@/index';
-import { set } from 'firebase/database';
 import React, { useState } from 'react';
 
 const NutritionCalculator: React.FC<{ 
@@ -33,7 +32,7 @@ const NutritionCalculator: React.FC<{
         };
 
         try {
-            setIsLoading(true); // Start loading https://recipeshare-tjm7.onrender.com
+            setIsLoading(true);
             setIsFound(false);
             const response = await fetch('https://recipeshare-tjm7.onrender.com/api/findcalorie/',{
               method: 'POST',
@@ -48,7 +47,6 @@ const NutritionCalculator: React.FC<{
             setIsFound(true);
             setCalculatedCalorie(data.calorie);
 
-        
         } catch (error) {
             console.error('Error fetching user details:', error);
             setIsLoading(false); // Stop loading on error
@@ -56,13 +54,18 @@ const NutritionCalculator: React.FC<{
 
         
     }
+
+    const handleClose = () => {
+        onClose();
+        onSetCalorie(calculatedCalorie);
+    }
   
     return (
         <div className="fixed top-0 left-0 w-full h-full bg-white bg-opacity-75 flex items-center justify-center overflow-y-auto p-4">
             <div className="bg-gradient-to-b from-teal-500 to-cyan-500 p-8 rounded-md max-w-md shadow-md">
                 <div className="flex justify-between items-center mb-4">
                     <h2 className="text-2xl font-bold text-white">Nutrition Calculator</h2>
-                    <button className="text-white hover:text-gray-200" onClick={onClose}>
+                    <button className="text-white hover:text-gray-200" onClick={handleClose}>
                     Close
                     </button>
                 </div>
