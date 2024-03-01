@@ -1,4 +1,3 @@
-
 import RightBar from "@/components/RightBar";
 import BlogList from "@/components/show"
 
