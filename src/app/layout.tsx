@@ -18,7 +18,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <LeftBar/>
+      <LeftBar/>
         {children}
         </body>
     </html>

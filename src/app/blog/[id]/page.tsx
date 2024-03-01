@@ -35,7 +35,9 @@ interface ApiBlogResponse {
         id: number;
         text: string;
         date: string;
-        user: string;
+        user: {
+            name: string;
+          }; 
     }[];
 }
 
@@ -324,7 +326,7 @@ const Blog: React.FC<{ ratingsUpData: RatingsupDataType, commentsUpData: Comment
                     {blogData.comments.map((comment) => (
                         <li key={comment.id} className="mb-2">
                             <p>{comment.text}</p>
-                            <p className="text-gray-500">By User {comment.user} on {new Date(comment.date).toLocaleDateString()}</p>
+                            <p className="text-gray-500">By User {comment.user.name} on {new Date(comment.date).toLocaleDateString()}</p>
                         </li>
                     ))}
                 </ul>

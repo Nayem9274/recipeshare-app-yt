@@ -35,7 +35,9 @@ interface ApiRecipeResponse {
     id: number;
     text: string;
     date: string;
-    user: string;  // Assuming user is a user ID
+    user: {
+      name: string;
+    };  // Assuming user is a user ID
   }[];
 }
 
@@ -352,14 +354,14 @@ const Recipe: React.FC<{ ratingsUpData: RatingsupDataType, commentsUpData: Comme
         </div>
 
 
-        {/* COMMENTS */}
+        COMMENTS
         <div className="bg-blue-200 hover:bg-lime-400 mt-4 rounded-md">
           <h2 className="text-2xl font-bold mb-4">Comments</h2>
           <ul>
             {recipeData.comments.map((comment) => (
               <li key={comment.id} className="mb-2">
                 <p>{comment.text}</p>
-                <p className="text-gray-500">By User {comment.user} on {new Date(comment.date).toLocaleDateString()}</p>
+                <p className="text-gray-500">By User {comment.user.name} on {new Date(comment.date).toLocaleDateString()}</p>
               </li>
             ))}
           </ul>
