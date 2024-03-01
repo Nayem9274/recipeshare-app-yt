@@ -149,7 +149,7 @@ const BlogList: React.FC = () => {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {activeTab === 'blogs' && blogs.map((blog) => (
-          <div key={blog.id} className="bg-orange-100 rounded-lg overflow-hidden shadow-md hover:shadow-lg">
+          <div key={blog.id} className="bg-blue-50 rounded-lg overflow-hidden shadow-md hover:shadow-lg">
             <Link href={`/blog/${blog.id}`}>
 
               <div className="relative h-48 overflow-hidden">

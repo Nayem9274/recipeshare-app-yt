@@ -14,7 +14,7 @@ interface ButtonLinkProps {
 
 const ButtonLink: React.FC<ButtonLinkProps> = ({ href, children, username }) => (
   <Link href={{ pathname: href, query: { username } }}>
-    <h3 className="text-white bg-green-500 hover:bg-red-600 py-2 px-4 rounded-md transition duration-300">{children} </h3>
+    <h3 className="text-white bg-green-500 hover:bg-blue-700 py-2 px-4 rounded-md transition duration-300">{children} </h3>
   </Link>
 );
 
@@ -127,7 +127,7 @@ const ProfilePage = () => {
       <div className="bg-image" style={{ backgroundImage: `url("/profile_bg.jpg")`}} > </div>
     <div className="p-4 lg:px-20 xl:px-40 h-screen flex flex-col items-center mt-28">
       {userDetails && (
-        <div className="bg-purple-400 p-8 rounded-lg shadow-md max-w-2xl w-full mb-8">
+        <div className="bg-blue-200 p-8 rounded-lg shadow-md max-w-2xl w-full mb-8">
           <h1 className="text-3xl font-bold uppercase mb-4">Profile</h1>
           <div className="flex items-center mb-6">
             <div className="rounded-full overflow-hidden h-24 w-24 bg-gray-300">
@@ -153,11 +153,11 @@ const ProfilePage = () => {
             </p>
           </div>
           {/* Your Recipe's*/}
-          <button onClick={handleOpenRecipes} className="bg-blue-500 text-white px-10 py-2 rounded-md mt-4 mr-4">
+          <button onClick={handleOpenRecipes} className="bg-purple-500 text-white px-10 py-2 rounded-md mt-4 mr-4">
             Your Recipes
           </button>
           {/* View Blogs button */}
-          <button onClick={handleOpenBlogs} className="bg-blue-500 text-white px-10 py-2 rounded-md mt-4 mr-4">
+          <button onClick={handleOpenBlogs} className="bg-purple-500 text-white px-10 py-2 rounded-md mt-4 mr-4">
             Your Blogs
           </button>
           {/* Logout button */}
@@ -172,7 +172,7 @@ const ProfilePage = () => {
       {showBlogs && <BlogList onClose={handleCloseBlogs} />}
 
       {/* Second box with tabs */}
-      <div className="bg-purple-400 p-4 rounded-lg shadow-md max-w-2xl w-full mb-8">
+      <div className="bg-blue-200 p-4 rounded-lg shadow-md max-w-2xl w-full mb-8">
         <h2 className="text-xl font-bold mb-4">Tabs</h2>
         <div className="flex space-x-4">
           <ButtonLink href="/">Notifications</ButtonLink>
@@ -192,7 +192,7 @@ const ProfilePage = () => {
         <CustomButton
           title="Go to Admin Page"
           type="button"
-          otherStyles="bg-blue-500 text-white px-4 py-2 rounded-md mt-4"
+          otherStyles="bg-orange-500 text-white px-4 py-2 rounded-md mt-4"
           onClick={() => {
             window.location.href = '/admin';
           }}
