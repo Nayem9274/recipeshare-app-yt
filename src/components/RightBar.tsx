@@ -3,11 +3,15 @@ import searchlogo from "./../../public/search.svg";
 import Search from "./Search";
 import ImageSlider from "./ImageSlider";
 import UploadButton from "./UploadButton";
+import { SearchButton, SearchBlogButton } from "./SearchButton";
 
 const RightBar = () => {
   return (
     <div className="flex flex-col items-center mt-8">
-      <Search />
+      <div className="flex gap-10">
+        <SearchButton />
+        <SearchBlogButton />
+      </div>
       <div className="container mx-auto ">
         <ImageSlider />
       </div>

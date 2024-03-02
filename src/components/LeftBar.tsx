@@ -108,7 +108,7 @@ const LeftBar = () => {
           </button>
         </Link>
 
-        <button className="rounded-full p-1 w-[150px] hover:bg-[#ece7e7] flex items-center hover:text-gray-700 focus:outline-none">
+        {/* <button className="rounded-full p-1 w-[150px] hover:bg-[#ece7e7] flex items-center hover:text-gray-700 focus:outline-none">
           <Image
             src={notificationlogo}
             alt="Notifications"
@@ -116,7 +116,7 @@ const LeftBar = () => {
             width={40}
           />
           <span className="pl-2 text-lg font-medium">Notifications</span>
-        </button>
+        </button> */}
 
         <Link href="/explore">
           <button className="rounded-full p-1 w-[150px] hover:bg-[#ece7e7] flex items-center ml-10 hover:text-gray-700 focus:outline-none">

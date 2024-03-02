@@ -10,6 +10,9 @@ interface ApiRecipeResponse {
   id: number;
   title: string;
   description: string;
+  calories: string;
+  meal_type:string;
+  servings: string;
   cooking_time: string;
   ingredients: {
     amount: number;
@@ -102,7 +105,7 @@ const Recipe: React.FC<{ ratingsUpData: RatingsupDataType, commentsUpData: Comme
 
       const storedRating = localStorage.getItem(`rating_${recipeId}`);
       if (storedRating) {
-          setRating(parseInt(storedRating));
+        setRating(parseInt(storedRating));
       }
 
       RatingsupData('recipe_id', recipeId);
@@ -196,7 +199,7 @@ const Recipe: React.FC<{ ratingsUpData: RatingsupDataType, commentsUpData: Comme
   // Function to transform numerical ratings to stars
   // StarRating component
   // const StarRating = ({ rating }: { rating: number }) => {
-    
+
   //   const fullStars = Math.floor(rating);
   //   const remainder = rating - fullStars;
 
@@ -244,28 +247,28 @@ const Recipe: React.FC<{ ratingsUpData: RatingsupDataType, commentsUpData: Comme
 
     // Add full stars
     for (let i = 0; i < fullStars; i++) {
-        stars.push(<span key={i}>★</span>);
+      stars.push(<span key={i}>★</span>);
     }
 
     // Add half star if applicable
     if (hasHalfStar) {
-        stars.push(<span key="half">½</span>);
+      stars.push(<span key="half">½</span>);
     }
 
     return <div className="flex text-[30px] tracking-widest">{stars}</div>;
-};
+  };
 
- 
+
   const handleAddRating = (rating: number, reviewId: number) => {
     // get the current rating from local storage
     // const currentRating = getRatingFromLocalStorage(reviewId);
     setRating(rating);
     // console.log(`Adding rating ${rating} for review ID ${reviewId}`);
-};
+  };
 
   const toggleComments = () => {
     setShowComments(!showComments);
-};
+  };
   return (
     <div className="bg-container">
       <div
@@ -302,14 +305,22 @@ const Recipe: React.FC<{ ratingsUpData: RatingsupDataType, commentsUpData: Comme
 
         {/* TAGS */}
         <div className="bg-lime-200 hover:bg-lime-400 mt-4 rounded-md">
-          <p className="text-lg text-indigo-500 font-bold mb-2 ml-4">Tags:</p>
+          <p className="text-lg text-indigo-500 font-bold mb-1 ml-4">Tags:</p>
           <p className="text-lg text-red-500 ml-4">
             {recipeData.tags.join(", ")}
           </p>
+          <div className="flex items-center">
+            <p className="text-lg text-indigo-500 font-bold mt-4 mb-1 ml-4 mr-2">Meal Type:</p>
+            <p className="text-lg text-red-500 mt-3 ml-4">{recipeData.meal_type}</p>
+            <p className="text-lg text-indigo-500 font-bold mt-4 mb-1 ml-4 mr-2">Calories:</p>
+            <p className="text-lg text-red-500 mt-3 mr-4">{recipeData.calories}</p>
+            <p className="text-lg text-indigo-500 font-bold mt-4 mb-1 ml-4 mr-2">Servings:</p>
+            <p className="text-lg text-red-500 mt-3 ml-4">{recipeData.servings}</p>
+          </div>
         </div>
 
-         {/* Ratings Box */}
-         <div className="bg-lime-200 hover:bg-lime-400 mt-4 rounded-md">
+        {/* Ratings Box */}
+        <div className="bg-lime-200 hover:bg-lime-400 mt-4 rounded-md">
           <div className="flex items-center">
             <p className="text-lg text-indigo-500 font-bold mb-2 mx-3.5">Rating:</p>
             <p className="text-lg text-yellow-500 mx-3.5">{StarRating(rating)}</p>
@@ -358,40 +369,40 @@ const Recipe: React.FC<{ ratingsUpData: RatingsupDataType, commentsUpData: Comme
           images={recipeData.steps.map((step) => step.image)}
         />
 
-    {/* Add Comment Button */}
-    <div className="mt-4">
-                <button
-                    className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"
-                    onClick={toggleComments}
-                >
-                    {showComments ? "Close Comments" : "Show Comments"}
-                </button>
-            </div>
-            {/* COMMENTS */}
-            {showComments && (
-                <div className="mt-8 bg-gray-100 p-4 rounded-md">
-                    <h2 className="text-3xl font-bold text-blue-500 mb-2">Comments</h2>
-                    <ul>
-                        {recipeData.comments.map((comment) => (
-                            <li key={comment.id} className="text-lg mb-2">
-                                <p>{comment.text}</p>
-                                <p className="text-gray-500">
-                                    By User {comment.user.name} on {new Date(comment.date).toLocaleDateString()}
-                                </p>
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-            )}
+        {/* Add Comment Button */}
+        <div className="mt-4">
+          <button
+            className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"
+            onClick={toggleComments}
+          >
+            {showComments ? "Close Comments" : "Show Comments"}
+          </button>
+        </div>
+        {/* COMMENTS */}
+        {showComments && (
+          <div className="mt-8 bg-gray-100 p-4 rounded-md">
+            <h2 className="text-3xl font-bold text-blue-500 mb-2">Comments</h2>
+            <ul>
+              {recipeData.comments.map((comment) => (
+                <li key={comment.id} className="text-lg mb-2">
+                  <p>{comment.text}</p>
+                  <p className="text-gray-500">
+                    By User {comment.user.name} on {new Date(comment.date).toLocaleDateString()}
+                  </p>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
         {/* Add Rating */}
         <div className="flex justify- center mt-10">
-                <Rating
-                    maxStars={5}
-                    reviewId={recipeData.id}
-                    onAddRating={handleAddRating}
-                />
-            </div>
-       
+          <Rating
+            maxStars={5}
+            reviewId={recipeData.id}
+            onAddRating={handleAddRating}
+          />
+        </div>
+
         {/* ADD COMMENT FORM */}
         <div className="bg-lime-200 hover:bg-lime-400  mt-8 rounded-md">
           <h2 className="text-2xl font-bold mb-4 ml-4">Add a Comment</h2>
