@@ -51,6 +51,7 @@ const BlogList: React.FC<{ onClose: () => void }> = ({ onClose }) => {
         });
 
         const data = await response.json();
+        console.log(data);
 
         if (!Array.isArray(data)) {
           console.error('Invalid response format: not an array');

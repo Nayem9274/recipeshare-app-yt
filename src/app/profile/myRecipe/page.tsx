@@ -94,7 +94,7 @@ const RecipeList: React.FC<{ onClose: () => void ; userName: string}> = ({ onClo
           window.location.href ='/profile';
         }}
         >
-          Close
+        Close
         </button>
         <h2 className="text-2xl font-bold mb-4">Recipes</h2>
         {isLoading && <h3 className="text-lg font-semibold cursor-pointer">Loading...</h3>}

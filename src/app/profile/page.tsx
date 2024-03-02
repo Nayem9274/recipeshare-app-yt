@@ -175,7 +175,7 @@ const ProfilePage = () => {
       <div className="bg-blue-200 p-4 rounded-lg shadow-md max-w-2xl w-full mb-8">
         <h2 className="text-xl font-bold mb-4">Tabs</h2>
         <div className="flex space-x-4">
-          <ButtonLink href="/">Notifications</ButtonLink>
+          <ButtonLink href="/profile/notification">Notifications</ButtonLink>
           <ButtonLink href="/">Edit Profile</ButtonLink>
           {userDetails ? (
             <ButtonLink href="/UploadRecipe" username={userDetails.name || ''}>
