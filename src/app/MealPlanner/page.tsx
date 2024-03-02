@@ -2,14 +2,13 @@
 import { CustomButton } from '@/index';
 import React from 'react'
 import Calculator from './calorieCalculator';
+import MealPlan from './mealplan';
+import { set } from 'firebase/database';
 
 const page = () => {
     const [calorie, setCalorie] = React.useState(0);
     const [showCalculator, setCalculator] = React.useState(false);
-
-    const createMealPlan = () => {
-        console.log("Create Meal Plan");
-    }
+    const [showMealPlan, setMealPlan] = React.useState(false);
 
     return (
         <div className="relative">
@@ -68,10 +67,17 @@ const page = () => {
                             title="Create Plan"
                             otherStyles="h-12 w-30 bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded"
                             onClick={() => {
-                                createMealPlan();
+                                setMealPlan(true);
                             }}
                         />
                     </div>
+                )}
+
+                {showMealPlan && (
+                    <MealPlan
+                        onClose={() => setMealPlan(false)}
+                        calorieAmount={calorie}
+                    />
                 )}
             </div>
         </div>
