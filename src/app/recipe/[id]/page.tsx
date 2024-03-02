@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useParams } from "next/navigation";
 import RecipeDisplay from "@/components/RecipeDetails";
 import { RatingsupDataType, CommentsupDataType } from "@/Types";
+import Rating from "@/components/Ratings";
 
 interface ApiRecipeResponse {
   id: number;
@@ -48,6 +49,7 @@ const Recipe: React.FC<{ ratingsUpData: RatingsupDataType, commentsUpData: Comme
   //const router = useRouter();
   //const { recipeId } = router.query;
   const [cookie, setCookie] = React.useState<string | undefined>('');
+  const [rating, setRating] = useState<number>(0);
   const [recipe_id, setId] = useState<string>('');
   const [ratings, setRatings] = useState<string>('');
   const [text, setText] = useState<string>('');
@@ -97,6 +99,11 @@ const Recipe: React.FC<{ ratingsUpData: RatingsupDataType, commentsUpData: Comme
   useEffect(() => {
     getCookie();
     const fetchData = async () => {
+
+      const storedRating = localStorage.getItem(`rating_${recipeId}`);
+      if (storedRating) {
+          setRating(parseInt(storedRating));
+      }
 
       RatingsupData('recipe_id', recipeId);
       CommentsupData('recipe_id', recipeId);
@@ -188,49 +195,73 @@ const Recipe: React.FC<{ ratingsUpData: RatingsupDataType, commentsUpData: Comme
 
   // Function to transform numerical ratings to stars
   // StarRating component
-  const StarRating = ({ rating }: { rating: number }) => {
+  // const StarRating = ({ rating }: { rating: number }) => {
     
-    const fullStars = Math.floor(rating);
-    const remainder = rating - fullStars;
+  //   const fullStars = Math.floor(rating);
+  //   const remainder = rating - fullStars;
 
+  //   const stars = [];
+
+  //   // Add full stars
+  //   for (let i = 0; i < fullStars; i++) {
+  //     stars.push(
+  //       <svg
+  //         key={i}
+  //         className="h-7 w-7 fill-current text-yellow-500"
+  //         viewBox="0 0 20 20"
+  //       >
+  //         <path d="M10 1l2.74 5.89 6.43.94-4.67 4.58 1.11 6.41-5.61-3.13-5.61 3.13 1.11-6.41L.83 7.83l6.43-.94L10 1z" />
+  //       </svg>
+  //     );
+  //   }
+
+  //   if (remainder >= 0.25) {
+  //     stars.push(
+  //       <svg
+  //         key="partial"
+  //         className="h-7 w-7 fill-current text-yellow-500"
+  //         viewBox="0 0 20 20"
+  //       >
+  //         {/* Clip path to define the filled portion based on remainder */}
+  //         <clipPath id="clip-path">
+  //           <rect x="0" y="0" width={Math.floor(remainder * 100) + "%"} height="100%" fill="lightgray" />
+  //         </clipPath>
+  //         <path
+  //           d="M10 1l2.74 5.89 6.43.94-4.67 4.58 1.11 6.41-5.61-3.13-5.61 3.13 1.11-6.41L.83 7.83l6.43-.94L10 1z"
+  //           clipRule="evenodd"
+  //           clipPath="url(#clip-path)"
+  //         />
+  //       </svg>
+  //     );
+  //   }
+
+  //   return <div className="flex">{stars}</div>;
+  // };
+  const StarRating = (rating: number) => {
     const stars = [];
+    const fullStars = Math.floor(rating);
+    const hasHalfStar = rating % 1 !== 0;
 
     // Add full stars
     for (let i = 0; i < fullStars; i++) {
-      stars.push(
-        <svg
-          key={i}
-          className="h-5 w-5 fill-current text-yellow-500"
-          viewBox="0 0 20 20"
-        >
-          <path d="M10 1l2.74 5.89 6.43.94-4.67 4.58 1.11 6.41-5.61-3.13-5.61 3.13 1.11-6.41L.83 7.83l6.43-.94L10 1z" />
-        </svg>
-      );
+        stars.push(<span key={i}>★</span>);
     }
 
-    if (remainder >= 0.25) {
-      stars.push(
-        <svg
-          key="partial"
-          className="h-5 w-5 fill-current text-yellow-500"
-          viewBox="0 0 20 20"
-        >
-          {/* Clip path to define the filled portion based on remainder */}
-          <clipPath id="clip-path">
-            <rect x="0" y="0" width={Math.floor(remainder * 100) + "%"} height="100%" fill="lightgray" />
-          </clipPath>
-          <path
-            d="M10 1l2.74 5.89 6.43.94-4.67 4.58 1.11 6.41-5.61-3.13-5.61 3.13 1.11-6.41L.83 7.83l6.43-.94L10 1z"
-            clipRule="evenodd"
-            clipPath="url(#clip-path)"
-          />
-        </svg>
-      );
+    // Add half star if applicable
+    if (hasHalfStar) {
+        stars.push(<span key="half">½</span>);
     }
 
-    return <div className="flex">{stars}</div>;
-  };
+    return <div className="flex text-[30px] tracking-widest">{stars}</div>;
+};
 
+ 
+  const handleAddRating = (rating: number, reviewId: number) => {
+    // get the current rating from local storage
+    // const currentRating = getRatingFromLocalStorage(reviewId);
+    setRating(rating);
+    // console.log(`Adding rating ${rating} for review ID ${reviewId}`);
+};
 
   const toggleComments = () => {
     setShowComments(!showComments);
@@ -278,16 +309,14 @@ const Recipe: React.FC<{ ratingsUpData: RatingsupDataType, commentsUpData: Comme
         </div>
 
          {/* Ratings Box */}
-         <div className="bg-blue-200 hover:bg-lime-400 mt-4 rounded-md">
+         <div className="bg-lime-200 hover:bg-lime-400 mt-4 rounded-md">
           <div className="flex items-center">
-            <p className="text-lg text-indigo-500 font-bold mb-1 mx-3.5">Rating:</p>
-            <StarRating rating={recipeData.ratings} />
-            <span className="ml-2">
-              {Math.round(recipeData.ratings * 4) / 4} {/* Round to the nearest 0.25 */}
-            </span>
+            <p className="text-lg text-indigo-500 font-bold mb-2 mx-3.5">Rating:</p>
+            <p className="text-lg text-yellow-500 mx-3.5">{StarRating(rating)}</p>
+            <p className="text-[30px] text-yellow-500">{rating}</p>
           </div>
           {/* Add a form to submit a rating */}
-          <form onSubmit={addRating} className="flex-1 flex items-center">
+          {/* <form onSubmit={addRating} className="flex-1 flex items-center">
 
             <input
               type="text"
@@ -299,7 +328,7 @@ const Recipe: React.FC<{ ratingsUpData: RatingsupDataType, commentsUpData: Comme
               placeholder="Enter rating(1-5)..."
             />
             <button type="submit"><p className="text-lg text-red-700 font-bold mb-2">Submit</p></button>
-          </form>
+          </form> */}
         </div>
 
         {/* SUMMARY */}
@@ -354,7 +383,14 @@ const Recipe: React.FC<{ ratingsUpData: RatingsupDataType, commentsUpData: Comme
                     </ul>
                 </div>
             )}
-
+        {/* Add Rating */}
+        <div className="flex justify- center mt-10">
+                <Rating
+                    maxStars={5}
+                    reviewId={recipeData.id}
+                    onAddRating={handleAddRating}
+                />
+            </div>
        
         {/* ADD COMMENT FORM */}
         <div className="bg-lime-200 hover:bg-lime-400  mt-8 rounded-md">
