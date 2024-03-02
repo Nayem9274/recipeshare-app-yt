@@ -140,8 +140,6 @@ const Recipe: React.FC<{ ratingsUpData: RatingsupDataType, commentsUpData: Comme
       return;
     }
 
-
-
     event.preventDefault(); // Moved the event.preventDefault() call to the beginning
     console.log(ratingsData);
 
@@ -193,53 +191,8 @@ const Recipe: React.FC<{ ratingsUpData: RatingsupDataType, commentsUpData: Comme
   if (!recipeData) {
     return <div>Loading...</div>; // You might want to add a loading state
   }
-  // State for managing the new comment
-  // const [newComment, setNewComment] = useState('');//////must add
 
-  // Function to transform numerical ratings to stars
-  // StarRating component
-  // const StarRating = ({ rating }: { rating: number }) => {
-
-  //   const fullStars = Math.floor(rating);
-  //   const remainder = rating - fullStars;
-
-  //   const stars = [];
-
-  //   // Add full stars
-  //   for (let i = 0; i < fullStars; i++) {
-  //     stars.push(
-  //       <svg
-  //         key={i}
-  //         className="h-7 w-7 fill-current text-yellow-500"
-  //         viewBox="0 0 20 20"
-  //       >
-  //         <path d="M10 1l2.74 5.89 6.43.94-4.67 4.58 1.11 6.41-5.61-3.13-5.61 3.13 1.11-6.41L.83 7.83l6.43-.94L10 1z" />
-  //       </svg>
-  //     );
-  //   }
-
-  //   if (remainder >= 0.25) {
-  //     stars.push(
-  //       <svg
-  //         key="partial"
-  //         className="h-7 w-7 fill-current text-yellow-500"
-  //         viewBox="0 0 20 20"
-  //       >
-  //         {/* Clip path to define the filled portion based on remainder */}
-  //         <clipPath id="clip-path">
-  //           <rect x="0" y="0" width={Math.floor(remainder * 100) + "%"} height="100%" fill="lightgray" />
-  //         </clipPath>
-  //         <path
-  //           d="M10 1l2.74 5.89 6.43.94-4.67 4.58 1.11 6.41-5.61-3.13-5.61 3.13 1.11-6.41L.83 7.83l6.43-.94L10 1z"
-  //           clipRule="evenodd"
-  //           clipPath="url(#clip-path)"
-  //         />
-  //       </svg>
-  //     );
-  //   }
-
-  //   return <div className="flex">{stars}</div>;
-  // };
+  
   const StarRating = (rating: number) => {
     const stars = [];
     const fullStars = Math.floor(rating);
@@ -275,7 +228,7 @@ const Recipe: React.FC<{ ratingsUpData: RatingsupDataType, commentsUpData: Comme
         className="bg-image"
         style={{ backgroundImage: `url("/recipe_bg.jpg")` }}
       ></div>
-      <div className="p-4 lg:px-20 xl:px-40">
+      <div className="p-4 lg:px-20 xl:px-40 rounded-md">
         {/* IMAGE AND TITLE */}
         {recipeData.image && (
           <div className="relative w-full h-1/3 md:h-1/2 lg:w-1/2 bg-white rounded-t-md">
@@ -289,14 +242,14 @@ const Recipe: React.FC<{ ratingsUpData: RatingsupDataType, commentsUpData: Comme
             />
           </div>
         )}
-        <div className="bg-lime-200 hover:bg-lime-400 flex justify-between items-center mt-4 rounded-md">
+        <div className="bg-lime-100 hover:bg-lime-400 flex justify-between items-center mt-4 rounded-md">
           <h1 className="text-3xl font-bold uppercase xl:text-5xl mt-1 mb-1 ml-4">
             {recipeData.title}
           </h1>
         </div>
         {/* USER INFO */}
 
-        <div className="bg-lime-200 hover:bg-lime-400  mt-4 rounded-md">
+        <div className="bg-lime-100 hover:bg-lime-400  mt-4 rounded-md">
           <p className="ml-4 text-xl">By {recipeData.user.name}</p>
           <p className="ml-4 text-lg">
             Cooking Time {recipeData.cooking_time} minutes
@@ -304,7 +257,7 @@ const Recipe: React.FC<{ ratingsUpData: RatingsupDataType, commentsUpData: Comme
         </div>
 
         {/* TAGS */}
-        <div className="bg-lime-200 hover:bg-lime-400 mt-4 rounded-md">
+        <div className="bg-lime-100 hover:bg-lime-400 mt-4 rounded-md">
           <p className="text-lg text-indigo-500 font-bold mb-1 ml-4">Tags:</p>
           <p className="text-lg text-red-500 ml-4">
             {recipeData.tags.join(", ")}
@@ -320,7 +273,7 @@ const Recipe: React.FC<{ ratingsUpData: RatingsupDataType, commentsUpData: Comme
         </div>
 
         {/* Ratings Box */}
-        <div className="bg-lime-200 hover:bg-lime-400 mt-4 rounded-md">
+        <div className="bg-lime-100 hover:bg-lime-400 mt-4 rounded-md">
           <div className="flex items-center">
             <p className="text-lg text-indigo-500 font-bold mb-2 mx-3.5">Rating:</p>
             <p className="text-lg text-yellow-500 mx-3.5">{StarRating(rating)}</p>
@@ -343,13 +296,13 @@ const Recipe: React.FC<{ ratingsUpData: RatingsupDataType, commentsUpData: Comme
         </div>
 
         {/* SUMMARY */}
-        <div className="mt-8 p-4 rounded-md bg-lime-200 hover:bg-lime-400">
+        <div className="mt-8 p-4 rounded-md bg-lime-100 hover:bg-lime-400">
           <h2 className="text-2xl font-bold mb-2">Description</h2>
           <p className="font-serif text-lg italic">{recipeData.description}</p>
         </div>
 
         {/* INGREDIENTS */}
-        <div className="bg-lime-200 hover:bg-lime-400 mt-8 rounded-md">
+        <div className="bg-lime-100 hover:bg-lime-400 mt-8 rounded-md">
           <h2 className="text-2xl font-bold mb-2 mt-2 ml-4">Ingredients</h2>
           <ul className="list-disc pl-4 mb-2 mt-2 ml-4">
             {recipeData.ingredients.map((ingredientGroup, index) => (
@@ -362,7 +315,7 @@ const Recipe: React.FC<{ ratingsUpData: RatingsupDataType, commentsUpData: Comme
 
         {/* INSTRUCTIONS */}
 
-        <div className="text-[100px] text-center text-white">Instructions</div>
+        <div className="text-[50px] text-center text-white">Instructions</div>
 
         <RecipeDisplay
           instructions={recipeData.steps.map((step) => step.step)}
@@ -404,16 +357,16 @@ const Recipe: React.FC<{ ratingsUpData: RatingsupDataType, commentsUpData: Comme
         </div>
 
         {/* ADD COMMENT FORM */}
-        <div className="bg-lime-200 hover:bg-lime-400  mt-8 rounded-md">
+        <div className="bg-lime-100 hover:bg-lime-400  mt-8 rounded-md">
           <h2 className="text-2xl font-bold mb-4 ml-4">Add a Comment</h2>
         </div>
         <div className="mt-2">
           <textarea
-            className="w-full p-6 border rounded-md"
+            className="w-full p-6 border rounded-md "
             placeholder="Type your comment here..."
             value={text}
             onChange={(e) => { setText(e.target.value); CommentsupData("text", e.target.value); }}
-            style={{ backgroundColor: "lightblue" }}
+            style={{ backgroundColor: "white" }}
           />
           <button
             className="mt-2 px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"

@@ -22,7 +22,7 @@ const RecipeDisplay: React.FC<{ instructions: string[]; images: string[] }> = ({
   };
 
   return (
-    <div className="relative flex justify-center bg-lime-200 p-8">
+    <div className="relative flex justify-center bg-lime-100  hover:bg-lime-400 p-8 rounded-md">
       {/* <div className="w-1/2 p-4">
         <img
           src={image}
@@ -36,11 +36,11 @@ const RecipeDisplay: React.FC<{ instructions: string[]; images: string[] }> = ({
           <img
             src={images[currentStep]}
             alt={`Step ${currentStep + 1}`}
-            className="w-full mb-4"
+            className="w-full mb-4 rounded-md"
           />
         ) : (
           <Image
-          className="mb-4 py-2"
+          className="mb-4 py-2 rounded-md"
           src={def}
           alt="Logo"
           width={650}
@@ -50,19 +50,19 @@ const RecipeDisplay: React.FC<{ instructions: string[]; images: string[] }> = ({
         )}
       </div>
 
-      <div className="w-1/2 p-4 text-white font-serif">
+      <div className="w-1/2 p-4 text-black font-serif">
         {instructions.map((step, index) => (
           <p
             key={index}
             className={`transition-all duration-300 ${currentStep === index
-                ? "font-bold text-3xl bg-red-200 rounded-lg p-4 mb-4"
-                : "font-medium text-sm text-lime-200"
+                ? "font-bold text-3xl bg-red-100 rounded-lg p-4 mb-4"
+                : "font-medium text-sm text-lime-100"
               }`}
           >
             {step}
           </p>
         ))}
-        <div className="absolute bottom-4 right-4">
+        <div className="absolute bottom-4 right-4 mb-2">
           <button
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-4"
             onClick={handlePreviousStep}
