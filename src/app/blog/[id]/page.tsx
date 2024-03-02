@@ -45,6 +45,7 @@ interface ApiBlogResponse {
 
 const Blog: React.FC<{ ratingsUpData: RatingsupDataType, commentsUpData: CommentsupDataType }> = ({ ratingsUpData, commentsUpData }) => {
     const [blogData, setBlogData] = useState<ApiBlogResponse | null>(null);
+    const [showComments, setShowComments] = useState(false); // Track whether to show comments
     const { id: blogId } = useParams(); // Destructure the id property
     console.log(blogId); // Output: '12'
     //const router = useRouter();
@@ -209,6 +210,15 @@ const Blog: React.FC<{ ratingsUpData: RatingsupDataType, commentsUpData: Comment
         // console.log(`Adding rating ${rating} for review ID ${reviewId}`);
     };
 
+    // Function to handle the click event of the "Show Comments" button
+    const handleShowComments = () => {
+        setShowComments(true); // Set showComments to true when button is clicked
+    };
+    const toggleComments = () => {
+        setShowComments(!showComments);
+    };
+
+
     return (
         <div className="p-4 lg:px-20 xl:px-40">
             {/* IMAGE AND TITLE */}
@@ -279,23 +289,33 @@ const Blog: React.FC<{ ratingsUpData: RatingsupDataType, commentsUpData: Comment
                     </div>
                 ))}
             </div>
-
-            {/* COMMENTS */}
-            <div className="mt-8">
-                <h2 className="text-2xl font-bold mb-4">Comments</h2>
-                <ul>
-                    {blogData.comments.map((comment) => (
-                        <li key={comment.id} className="mb-2">
-                            <p>{comment.text}</p>
-                            <p className="text-gray-500">
-                                By User {comment.user.name} on on {new Date(comment.date).toLocaleDateString()}
-                            </p>
-                        </li>
-                    ))}
-                </ul>
+            {/* Add Comment Button */}
+            <div className="mt-4">
+                <button
+                    className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"
+                    onClick={toggleComments}
+                >
+                    {showComments ? "Close Comments" : "Show Comments"}
+                </button>
             </div>
+            {/* COMMENTS */}
+            {showComments && (
+                <div className="mt-8 bg-gray-100 p-4 rounded-md">
+                    <h2 className="text-3xl font-bold text-blue-500 mb-2">Comments</h2>
+                    <ul>
+                        {blogData.comments.map((comment) => (
+                            <li key={comment.id} className="text-lg mb-2">
+                                <p>{comment.text}</p>
+                                <p className="text-gray-500">
+                                    By User {comment.user.name} on {new Date(comment.date).toLocaleDateString()}
+                                </p>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            )}
 
-            <div>
+            <div className="flex justify- center mt-10">
                 <Rating
                     maxStars={5}
                     reviewId={blogData.id}
@@ -311,6 +331,7 @@ const Blog: React.FC<{ ratingsUpData: RatingsupDataType, commentsUpData: Comment
                     placeholder="Type your comment here..."
                     value={text}
                     onChange={(e) => { setText(e.target.value); CommentsupData("text", e.target.value); }}
+                    style={{ backgroundColor: "lightblue" }}
                 //onChange={(e) => setNewComment(e.target.value)}
                 />
                 {/* Add Rating Button */}

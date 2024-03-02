@@ -42,6 +42,7 @@ interface ApiRecipeResponse {
 }
 const Recipe: React.FC<{ ratingsUpData: RatingsupDataType, commentsUpData: CommentsupDataType }> = ({ ratingsUpData, commentsUpData }) => {
   const [recipeData, setRecipeData] = useState<ApiRecipeResponse | null>(null);
+  const [showComments, setShowComments] = useState(false); // Track whether to show comments
   const { id: recipeId } = useParams(); // Destructure the id property
   console.log(recipeId); // Output: '12'
   //const router = useRouter();
@@ -229,6 +230,11 @@ const Recipe: React.FC<{ ratingsUpData: RatingsupDataType, commentsUpData: Comme
 
     return <div className="flex">{stars}</div>;
   };
+
+
+  const toggleComments = () => {
+    setShowComments(!showComments);
+};
   return (
     <div className="bg-container">
       <div
@@ -323,18 +329,32 @@ const Recipe: React.FC<{ ratingsUpData: RatingsupDataType, commentsUpData: Comme
           image="https://firebasestorage.googleapis.com/v0/b/recipeshare-a2186.appspot.com/o/images%2Fpexels-dhiraj-jain-12737656.jpg?alt=media&token=2a0e445d-ac7a-47fa-9f79-a870326f0a83"
         />
 
-     {/* COMMENTS */}
-     <div className="bg-blue-200 hover:bg-lime-400 mt-4 rounded-md">
-          <h2 className="text-2xl font-bold mb-4">Comments</h2>
-          <ul>
-            {recipeData.comments.map((comment) => (
-              <li key={comment.id} className="mb-2">
-                <p>{comment.text}</p>
-                <p className="text-gray-500">By User {comment.user.name} on {new Date(comment.date).toLocaleDateString()}</p>
-              </li>
-            ))}
-          </ul>
-        </div>
+    {/* Add Comment Button */}
+    <div className="mt-4">
+                <button
+                    className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"
+                    onClick={toggleComments}
+                >
+                    {showComments ? "Close Comments" : "Show Comments"}
+                </button>
+            </div>
+            {/* COMMENTS */}
+            {showComments && (
+                <div className="mt-8 bg-gray-100 p-4 rounded-md">
+                    <h2 className="text-3xl font-bold text-blue-500 mb-2">Comments</h2>
+                    <ul>
+                        {recipeData.comments.map((comment) => (
+                            <li key={comment.id} className="text-lg mb-2">
+                                <p>{comment.text}</p>
+                                <p className="text-gray-500">
+                                    By User {comment.user.name} on {new Date(comment.date).toLocaleDateString()}
+                                </p>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            )}
+
        
         {/* ADD COMMENT FORM */}
         <div className="bg-lime-200 hover:bg-lime-400  mt-8 rounded-md">
@@ -342,10 +362,11 @@ const Recipe: React.FC<{ ratingsUpData: RatingsupDataType, commentsUpData: Comme
         </div>
         <div className="mt-2">
           <textarea
-            className="w-full p-2 border rounded-md"
+            className="w-full p-6 border rounded-md"
             placeholder="Type your comment here..."
             value={text}
             onChange={(e) => { setText(e.target.value); CommentsupData("text", e.target.value); }}
+            style={{ backgroundColor: "lightblue" }}
           />
           <button
             className="mt-2 px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"
