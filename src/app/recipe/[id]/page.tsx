@@ -1,8 +1,8 @@
-
-'use client'
-import React, { useState, useEffect } from 'react';
-import Image from 'next/image';
-import { useParams } from 'next/navigation';
+"use client";
+import React, { useState, useEffect } from "react";
+import Image from "next/image";
+import { useParams } from "next/navigation";
+import RecipeDisplay from "@/components/RecipeDetails";
 
 interface ApiRecipeResponse {
   id: number;
@@ -13,9 +13,8 @@ interface ApiRecipeResponse {
     amount: number;
     unit: string;
     ingredient: string;
-
   }[];
-  image: string;      // Optional image field
+  image: string; // Optional image field
   publication_date: string;
   last_modification_date: string;
   tags: string[];
@@ -34,57 +33,53 @@ interface ApiRecipeResponse {
     id: number;
     text: string;
     date: string;
-    user: number;  // Assuming user is a user ID
+    user: number; // Assuming user is a user ID
   }[];
 }
 
 const Recipe = () => {
-
   const [recipeData, setRecipeData] = useState<ApiRecipeResponse | null>(null);
   const { id: recipeId } = useParams(); // Destructure the id property
   console.log(recipeId); // Output: '12'
   //const router = useRouter();
   //const { recipeId } = router.query;
 
-
   useEffect(() => {
-
     const fetchData = async () => {
-
       console.log(recipeId);
       try {
-        const response = await fetch('https://recipeshare-tjm7.onrender.com/api/recipe/get/', {
-          method: 'POST',
-          headers: {
-            //Authorization: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJhcjEzNzM3NUBnbWFpbC5jb20iLCJleHAiOjE3MDYzMjY4MTMsImlhdCI6MTcwNjMyMzIxM30.xLX9HeailgdxCvDqcRsUGvctctH6rDnWpPpiDmTLbUs',
-          },
-          body: JSON.stringify({ 'recipe_id': recipeId?.toString() || '' }),
-        });
+        const response = await fetch(
+          "https://recipeshare-tjm7.onrender.com/api/recipe/get/",
+          {
+            method: "POST",
+            headers: {
+              //Authorization: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJhcjEzNzM3NUBnbWFpbC5jb20iLCJleHAiOjE3MDYzMjY4MTMsImlhdCI6MTcwNjMyMzIxM30.xLX9HeailgdxCvDqcRsUGvctctH6rDnWpPpiDmTLbUs',
+            },
+            body: JSON.stringify({ recipe_id: recipeId?.toString() || "" }),
+          }
+        );
         const data: ApiRecipeResponse = await response.json();
         console.log(data);
         setRecipeData(data);
       } catch (error) {
-        console.error('Error fetching recipe data:', error);
+        console.error("Error fetching recipe data:", error);
       }
     };
 
     fetchData();
   }, []); // The empty dependency array ensures that the effect runs once when the component mounts
 
-
-
   if (!recipeData) {
     return <div>Loading...</div>; // You might want to add a loading state
   }
   // State for managing the new comment
   // const [newComment, setNewComment] = useState('');//////must add
-  const newComment = '';
-
+  const newComment = "";
 
   // Function to handle adding a new comment
   const handleAddComment = () => {
     // Implement your logic for adding a new comment here
-    console.log('Adding comment:', newComment);
+    console.log("Adding comment:", newComment);
     // Clear the comment input
     //setNewComment('');//////must add
   };
@@ -109,9 +104,11 @@ const Recipe = () => {
     return <div className="flex">{stars}</div>;
   };
   return (
-    
     <div className="bg-container">
-      <div className="bg-image" style={{ backgroundImage: `url("/recipe_bg.jpg")`}}></div>
+      <div
+        className="bg-image"
+        style={{ backgroundImage: `url("/recipe_bg.jpg")` }}
+      ></div>
       <div className="p-4 lg:px-20 xl:px-40">
         {/* IMAGE AND TITLE */}
         {recipeData.image && (
@@ -127,19 +124,25 @@ const Recipe = () => {
           </div>
         )}
         <div className="bg-lime-200 hover:bg-lime-400 flex justify-between items-center mt-4 rounded-md">
-          <h1 className="text-3xl font-bold uppercase xl:text-5xl mt-1 mb-1 ml-4">{recipeData.title}</h1>
+          <h1 className="text-3xl font-bold uppercase xl:text-5xl mt-1 mb-1 ml-4">
+            {recipeData.title}
+          </h1>
         </div>
         {/* USER INFO */}
 
         <div className="bg-lime-200 hover:bg-lime-400  mt-4 rounded-md">
-          <p className='ml-4 text-xl'>By {recipeData.user.name}</p>
-          <p className='ml-4 text-lg'>Cooking Time {recipeData.cooking_time} minutes</p>
+          <p className="ml-4 text-xl">By {recipeData.user.name}</p>
+          <p className="ml-4 text-lg">
+            Cooking Time {recipeData.cooking_time} minutes
+          </p>
         </div>
 
         {/* TAGS */}
         <div className="bg-lime-200 hover:bg-lime-400 mt-4 rounded-md">
           <p className="text-lg text-indigo-500 font-bold mb-2 ml-4">Tags:</p>
-          <p className="text-lg text-red-500 ml-4">{recipeData.tags.join(', ')}</p>
+          <p className="text-lg text-red-500 ml-4">
+            {recipeData.tags.join(", ")}
+          </p>
         </div>
 
         {/* SUMMARY */}
@@ -160,39 +163,20 @@ const Recipe = () => {
           </ul>
         </div>
 
-
         {/* INSTRUCTIONS */}
-  <div className="bg-lime-200 hover:bg-lime-400  mt-8 rounded-md">
-    <h2 className="text-2xl font-bold mb-2 ml-4 mt-2">Instructions</h2>
-    <ol className="list-decimal pl-4 ml-4 mt-2 mb-2">
-      {recipeData.steps.map((step, index) => (
-        <li key={index} className="mb-4">
-          {/* Display the step text */}
-          <span className="block">{`${step.step}`}</span>
-          {/* Display the step image below the step text if present */}
-          {step.image && (
-            <div className="w-16 h-16 mx-6 mt-2">
-              <Image
-                src={step.image}
-                alt={`Step ${index + 1}`}
-                className="object-cover"
-                layout="responsive"
-                width={100}
-                height={100}
-              />
-            </div>
-          )}
-        </li>
-      ))}
-    </ol>
-  </div>
 
+        <div className="text-[100px] text-center text-white">Instructions</div>
+
+        <RecipeDisplay
+          instructions={recipeData.steps.map((step) => step.step)}
+          image="https://firebasestorage.googleapis.com/v0/b/recipeshare-a2186.appspot.com/o/images%2Fpexels-dhiraj-jain-12737656.jpg?alt=media&token=2a0e445d-ac7a-47fa-9f79-a870326f0a83"
+        />
 
         {/* ADD COMMENT FORM */}
         <div className="bg-lime-200 hover:bg-lime-400  mt-8 rounded-md">
           <h2 className="text-2xl font-bold mb-4 ml-4">Add a Comment</h2>
         </div>
-        <div className='mt-2'>
+        <div className="mt-2">
           <textarea
             className="w-full p-2 border rounded-md"
             placeholder="Type your comment here..."
@@ -208,9 +192,6 @@ const Recipe = () => {
       </div>
     </div>
   );
-
-
-
 };
 
 export default Recipe;
