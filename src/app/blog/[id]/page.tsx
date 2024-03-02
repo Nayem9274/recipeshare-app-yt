@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { useParams } from "next/navigation";
+import { RatingsupDataType, CommentsupDataType } from "@/Types";
 import Rating from "@/components/Ratings";
 import { RatingsupDataType, CommentsupDataType } from "@/Types";
 
@@ -43,6 +44,59 @@ interface ApiBlogResponse {
     }[];
 }
 
+const Blog: React.FC<{
+  ratingsUpData: RatingsupDataType;
+  commentsUpData: CommentsupDataType;
+}> = ({ ratingsUpData, commentsUpData }) => {
+  const [blogData, setBlogData] = useState<ApiBlogResponse | null>(null);
+  const { id: blogId } = useParams(); // Destructure the id property
+  console.log(blogId); // Output: '12'
+  //const router = useRouter();
+  //const { blogId } = router.query;
+  const [cookie, setCookie] = React.useState<string | undefined>("");
+  const [blog_id, setId] = useState<string>("");
+  const [ratings, setRatings] = useState<string>("");
+  const [text, setText] = useState<string>("");
+  const [date, setDate] = useState<string>("");
+  const [ratingsData, setRatingsData] = React.useState<Record<string, any>>({
+    blog_id: "",
+    jwt: cookie,
+    ratings: "",
+  });
+  const [commentsData, setCommentsData] = React.useState<Record<string, any>>({
+    blog_id: "",
+    jwt: cookie,
+    text: "",
+    user: "",
+  });
+
+  const CommentsupData: CommentsupDataType = (key: string, value: any) => {
+    setCommentsData((prevState) => ({
+      ...prevState,
+      [key]: value,
+    }));
+    // console.log(recipeData);
+  };
+  const RatingsupData: RatingsupDataType = (key: string, value: any) => {
+    setRatingsData((prevState) => ({
+      ...prevState,
+      [key]: value,
+    }));
+    // console.log(recipeData);
+  };
+
+  const getCookie = () => {
+    const cookieValue = document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("jwt="))
+      ?.split("=")[1];
+    console.log(cookieValue);
+
+    RatingsupData("jwt", cookieValue);
+    CommentsupData("jwt", cookieValue);
+    console.log(ratingsData);
+    setCookie(cookieValue);
+  };
 const Blog: React.FC<{ ratingsUpData: RatingsupDataType, commentsUpData: CommentsupDataType }> = ({ ratingsUpData, commentsUpData }) => {
     const [blogData, setBlogData] = useState<ApiBlogResponse | null>(null);
     const { id: blogId } = useParams(); // Destructure the id property
