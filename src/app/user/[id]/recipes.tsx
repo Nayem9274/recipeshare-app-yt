@@ -3,8 +3,6 @@ import Image from 'next/image';
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { DateTime } from 'next-auth/providers/kakao';
-import { set } from 'firebase/database';
-import { CustomButton } from '@/index';
 
 interface Recipe {
   id: number;
@@ -18,34 +16,19 @@ interface Recipe {
   };
 }
 
-const RecipeList: React.FC<{ onClose: () => void ; userName: string}> = ({ onClose, userName }) => {
+const RecipeList: React.FC<{ onClose: () => void ; id: number}> = ({ onClose, id }) => {
   const [recipes, setRecipes] = useState<Recipe[]>([]); // Initialize with an empty array
-  const [cookie, setCookie] = useState<string | undefined>('');
   const [isEmpty, setIsEmpty] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const fetchCookie = () => {
-    const cookieValue = document.cookie.split('; ')
-      .find((row) => row.startsWith('jwt='))?.split('=')[1];
-
-    // Use the setCookie callback to ensure that the state is updated before using it
-    setCookie((prevCookie) => {
-      if (prevCookie !== cookieValue) {
-        return cookieValue;
-      }
-      return prevCookie;
-    });
-  };
-
-
   const fetchRecipes =  async() => {
-    if(cookie != ''){
+    
       const dataBody = {
-        'jwt': cookie
+        'user_id': id
       }
       setIsLoading(true);
       try {
-        const response = await fetch('https://recipeshare-tjm7.onrender.com/api/user/recipe/get/all/', {
+        const response = await fetch('https://recipeshare-tjm7.onrender.com/api/user/recipe/get/id/', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -73,27 +56,23 @@ const RecipeList: React.FC<{ onClose: () => void ; userName: string}> = ({ onClo
       } catch (error) {
         console.error('Error fetching user details:', error);
       }
-    }
+    
   };
 
   useEffect(() => {
-    const fetchData = async () => {
-      fetchCookie();
-      console.log('cookie: '+ cookie);  
+    const fetchData = async () => { 
       await fetchRecipes();
       console.log(recipes.length);
     };
 
     fetchData();
-  }, [cookie]);
+  }, []);
 
   return (
     <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center overflow-y-auto">
      <div className="bg-white p-8 rounded-md max-w-screen-md w-full h-full overflow-y-auto">
-        <button className="absolute top-2 right-2 text-white bg-red-500 hover:bg-red-600 w-10 h-10 rounded-md" 
-        onClick={() => {
-          window.location.href ='/profile';
-        }}
+        <button className="absolute top-2 right-2" 
+        onClick={onClose}
         >
         Close
         </button>
@@ -103,33 +82,29 @@ const RecipeList: React.FC<{ onClose: () => void ; userName: string}> = ({ onClo
       {recipes.length === 0 ? (<h3 className="text-lg font-semibold cursor-pointer">No recipes found</h3>
         ):(
           recipes.map((recipe) => (
-            <div key={recipe.id} className="card mb-4 px-4 py-3 flex ">
-              <div className="card-img-top">
-                <Link href={`/recipe/${recipe.id}`}>
+          <div key={recipe.id} className="mb-4 px-56">
+            <div>
+              <Link href={`/recipe/${recipe.id}`}>
                   <Image
                     src={recipe.image}
                     alt={recipe.title}
-                    className="cursor-pointer hover:opacity-75"
+                    className="object-cover cursor-pointer"
                     layout="fixed"
                     height="200"
                     width="200"
                   />
-                </Link>
-              </div>
-              <div className="card-body">
-                <Link href={`/recipe/${recipe.id}`}>
-                  <h5 className="card-title ml-2 text-lg font-semibold cursor-pointer">{recipe.title}</h5>
-                </Link>
-                <div className="d-flex justify-content-between align-items-center mb-2">
-                  <p className="card-text ml-2 text-gray-500">{`Published on ${new Date(recipe.last_edited).toLocaleDateString()}`}</p>
-                  <CustomButton 
-                    otherStyles="btn btn-sm btn-outline-danger text-red-500 hover:bg-red-200 w-20 h-10 rounded-full ml-2" 
-                    onClick={() => {window.location.href = `/editrecipe/${recipe.id}`;}}
-                    title="Edit"
-                    type="button"
-                  />
-                </div>
-              </div>
+              </Link>
+            </div>
+            <div>
+              <Link href={`/recipe/${recipe.id}`}>
+                <h3 className="text-lg font-semibold cursor-pointer">{recipe.title}</h3>
+              </Link>
+            </div>
+            
+            <div className="text-sm text-gray-500">{`Published on ${new Date(
+              recipe.last_edited
+              ).toLocaleDateString()}`}
+            </div>
           </div>
         ))
       )}

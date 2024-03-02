@@ -1,12 +1,49 @@
 "use client";
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 
-import { TestForm } from '@/index';
+import  TestForm  from './testForm';
 import CustomButton  from '@/components/CustomButton';
+import { useParams } from "next/navigation";
+
+
+interface ApiRecipeResponse {
+    id: number;
+    title: string;
+    description: string;
+    calories: string;
+    meal_type:string;
+    servings: string;
+    cooking_time: string;
+    ingredients: {
+      amount: number;
+      unit: string;
+      ingredient: string;
+    }[];
+    image: string; // Optional image field
+    video: string; // Optional video field
+    publication_date: string;
+    last_modification_date: string;
+    tags: string[];
+    ratings: number;
+    user: {
+      name: string;
+      id:number;
+      // Add other user-related fields based on your User model
+    };
+    steps: {
+      // Assuming image is an array of strings based on your JSON structure
+      order: number;
+      step: string;
+      image: string;
+    }[];
+    
+    
+  }
 
 const UploadRecipe = () => {
   // for sending the data to the backend
   const [recipeData, setRecipeData] = React.useState<Record<string, any>>({
+    id:Number,
     title: "",
     cooking_time:Number,
     difficulty_level:"easy",
@@ -21,6 +58,9 @@ const UploadRecipe = () => {
     servings: Number,
     user:""
   });
+
+  const [recipeDetails, setRecipeDetails] = useState<ApiRecipeResponse | null>(null);
+  const { id: recipeId } = useParams(); // Destructure the id property
   
   type UpdateRecipeDataType = (key: string, value: any) => void;
   
@@ -35,19 +75,69 @@ const UploadRecipe = () => {
   };
 
   /************Cookie Part***********/
-  useEffect(() => {
-    if(cookie === '')
-      getCookie();
-  }, []); // Optional dependency array
-  
-  const getCookie = () => {
-    const cookieValue = document.cookie
-      .split('; ')
+  const fetchCookie = () => {
+    const cookieValue = document.cookie.split('; ')
       .find((row) => row.startsWith('jwt='))?.split('=')[1];
-    
-    updateRecipeData('jwt', cookieValue);
-    setCookie(cookieValue);
+
+    // Use the setCookie callback to ensure that the state is updated before using it
+    setCookie((prevCookie) => {
+      if (prevCookie !== cookieValue) {
+        return cookieValue;
+      }
+      return prevCookie;
+    });
   };
+
+  const fetchRecipeDetails = async () => {
+    if(cookie != ''){
+      const dataBody = {
+        'recipe_id': recipeId,
+        'jwt': cookie
+      }
+      console.log(dataBody)
+      try {
+        const response = await fetch('https://recipeshare-tjm7.onrender.com/api/recipe/get/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(dataBody)
+        });
+        const data: ApiRecipeResponse = await response.json();
+        setRecipeDetails(data);
+      } catch (error) {
+        console.error('Error fetching recipe details', error);
+      }
+    }
+  };
+
+  const updateRecipeDetails = () => {
+    // from recipe details update recipedata
+    updateRecipeData('id', recipeDetails?.id);
+    updateRecipeData('title', recipeDetails?.title);
+    updateRecipeData('description', recipeDetails?.description);
+    updateRecipeData('meal_type', recipeDetails?.meal_type);
+    updateRecipeData('servings', recipeDetails?.servings);
+    updateRecipeData('cooking_time', recipeDetails?.cooking_time);
+    updateRecipeData('ingredients', recipeDetails?.ingredients);
+    updateRecipeData('image', recipeDetails?.image);
+    updateRecipeData('video', recipeDetails?.video);
+    updateRecipeData('tags', recipeDetails?.tags);
+    updateRecipeData('steps', recipeDetails?.steps);
+  }
+
+  useEffect(() => {
+    const fetchData = async () => {
+      await fetchCookie();
+      updateRecipeData('jwt', cookie);
+      fetchRecipeDetails();
+      updateRecipeDetails();
+      console.log(recipeData);
+    };
+
+    fetchData();
+  }, [cookie]);
+
   
   // activated when publish button clicked
   const handlePublish = async () => {
@@ -117,7 +207,7 @@ const UploadRecipe = () => {
 
       {/* New div for the form */}
       <div className="">
-        <TestForm updateRecipeData={updateRecipeData}/>
+        <TestForm updateRecipeData={updateRecipeData} recipedetails={recipeDetails}/>
       </div>
 
       

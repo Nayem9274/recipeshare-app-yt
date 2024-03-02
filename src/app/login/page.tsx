@@ -44,7 +44,7 @@ const DemoLogin = () => {
         document.cookie = `jwt=${cookie}`; // Set the cookie in the browser
         console.log(document.cookie);
         alert("Login Successful");
-        window.location.href = "/";
+        window.location.href = "/profile";
       }
       // alert if response is unsuccessful
       else {

@@ -17,38 +17,22 @@ interface Blog {
   };
 }
 
-const BlogList: React.FC<{ onClose: () => void }> = ({ onClose }) => {
+const BlogList: React.FC<{ onClose: () => void;id:number }> = ({ onClose, id }) => {
   const [blogs, setBlogs] = useState<Blog[]>([]);
-  const [cookie, setCookie] = useState<string | undefined>('');
   const [isLoading, setIsLoading] = useState(false);
   const [isEmpty, setIsEmpty] = useState(false);
 
-  const fetchCookie = () => {
-    const cookieValue = document.cookie.split('; ')
-      .find((row) => row.startsWith('jwt='))?.split('=')[1];
-
-    // Use the setCookie callback to ensure that the state is updated before using it
-    setCookie((prevCookie) => {
-      if (prevCookie !== cookieValue) {
-        return cookieValue;
-      }
-      return prevCookie;
-    });
-  };
-
+  
   const fetchBlogs = async () => {
-    if (cookie != '') {
-      const dataBody = {
-        'jwt': cookie
-      }
+    
       setIsLoading(true);
       try {
-        const response = await fetch('https://recipeshare-tjm7.onrender.com/api/user/blog/get/all/', {
+        const response = await fetch('https://recipeshare-tjm7.onrender.com/api/user/blog/get/id/', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify(dataBody)
+          body: JSON.stringify({"user_id":id})
         });
 
         const data = await response.json();
@@ -72,17 +56,15 @@ const BlogList: React.FC<{ onClose: () => void }> = ({ onClose }) => {
       } catch (error) {
         console.error('Error fetching user details:', error);
       }
-    }
+    
   };
 
   useEffect(() => {
     const fetchData = async () => {
-      fetchCookie();
-      console.log('cookie: '+ cookie);  
       await fetchBlogs();
     };
     fetchData();
-  }, [cookie]);
+  }, []);
 
   
   return (

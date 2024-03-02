@@ -1,20 +1,53 @@
 import React, { useState } from "react";
 import { useRef } from "react";
-import { CustomButton, Dropdown, Ingredients, Steps } from "..";
+import { CustomButton,Dropdown } from "@/index";
 import { UpdateRecipeDataType, updateState,updateMsg,updatePercentage, updateLink } from "@/Types";
-import {Uploadfiles} from "../Uploadfiles";
-import Overlay from "./Overlay";
+import { Uploadfiles } from "@/Uploadfiles";
+import Overlay from "@/components/Overlay";
+import Ingredients from './ingredients';
+import Steps from './steps';
 
 
-const TestForm: React.FC<{ updateRecipeData: UpdateRecipeDataType}> = ({updateRecipeData}) => {
+interface ApiRecipeResponse {
+    id: number;
+    title: string;
+    description: string;
+    calories: string;
+    meal_type:string;
+    servings: string;
+    cooking_time: string;
+    ingredients: {
+      amount: number;
+      unit: string;
+      ingredient: string;
+    }[];
+    image: string; // Optional image field
+    video: string; // Optional video field
+    publication_date: string;
+    last_modification_date: string;
+    tags: string[];
+    ratings: number;
+    user: {
+      name: string;
+      id:number;
+      // Add other user-related fields based on your User model
+    };
+    steps: {
+      // Assuming image is an array of strings based on your JSON structure
+      order: number;
+      step: string;
+      image: string;
+    }[]; 
+  }
+const TestForm: React.FC<{ updateRecipeData: UpdateRecipeDataType; recipedetails:ApiRecipeResponse|null}> = ({updateRecipeData}, recipedetails) => {
   const fileInputRef = useRef(null);
   
   // states for the form
-  const [difficulty, setDifficulty] = React.useState('easy');
-  const [meal_type, setMealType] = React.useState('breakfast');
+  const [difficulty, setDifficulty] = React.useState(recipedetails.difficulty_level);
+  const [meal_type, setMealType] = React.useState(recipedetails.meal_type);
   const [newTag, setNewTag] = React.useState<string>(''); 
-  const [tags, setTags] = React.useState<string[]>([]); // TODO - update to the correct type
-  const [title, setTitle] = React.useState<string>('');
+  const [tags, setTags] = React.useState<string[]>(recipedetails.tags); // TODO - update to the correct type
+  const [title, setTitle] = React.useState<string>(recipedetails.title);
   const [msg, setMsg] = useState<string>('Uploading...');
   const [percentage, setPercentage] = useState<number>(0);
 
@@ -141,6 +174,7 @@ const TestForm: React.FC<{ updateRecipeData: UpdateRecipeDataType}> = ({updateRe
               <input
                 type="text"
                 name="Title"
+                value={title}
                 className="text-center h-16 text-2xl font-bold bg-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 block w-full mt-1 border-gray-300 rounded-md shadow-sm"
                 placeholder="My best-ever pea soup"
                 onChange={(e) => {
@@ -155,6 +189,7 @@ const TestForm: React.FC<{ updateRecipeData: UpdateRecipeDataType}> = ({updateRe
               <span className="text-gray-700 text-xl font-bold">Description</span>
               <textarea
                 name="description"
+                value={recipedetails.description}
                 className="h-20 text-slate-800 bg-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 block w-full mt-1 border-gray-300 rounded-md shadow-sm text-center"
                 placeholder={`Share us more about your recipe.Who inspired you to make this dish ? What makes it more special to you? Your favourite way to eat it ?`}
                 onChange={(e) => {
@@ -192,6 +227,7 @@ const TestForm: React.FC<{ updateRecipeData: UpdateRecipeDataType}> = ({updateRe
                   <input
                   name="cooktime_minutes"
                   type="number"
+                  value={recipedetails.cooking_time}
                   className="h-12 text-center w-15 bg-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 block mt-1 border-gray-300 rounded-md shadow-sm"
                   placeholder="minutes"
                   onChange={(e) => {
@@ -207,6 +243,7 @@ const TestForm: React.FC<{ updateRecipeData: UpdateRecipeDataType}> = ({updateRe
                   <input
                   name="Servings"
                   type="number"
+                  value={recipedetails.servings}
                   className="h-12 text-center w-15 bg-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 block mt-1 border-gray-300 rounded-md shadow-sm"
                   placeholder="# of people"
                   onChange={(e) => {
@@ -223,7 +260,7 @@ const TestForm: React.FC<{ updateRecipeData: UpdateRecipeDataType}> = ({updateRe
               {/* Add the ingredients section */}
               <div className="py-3 text-2xl font-bold text-opacity-100 text-black">Ingredients</div>
 
-              {<Ingredients updateRecipeData={updateRecipeData}/>}
+              {<Ingredients updateRecipeData={updateRecipeData} recipedetails={recipedetails}/>}
 
               <div className="py-4"></div>
               {/* Add a gray colored break space in the form*/}
@@ -232,7 +269,7 @@ const TestForm: React.FC<{ updateRecipeData: UpdateRecipeDataType}> = ({updateRe
               {/* Add the Steps section */}
               <div className="py-3 text-2xl font-bold text-opacity-100 text-black">Steps</div>
 
-              {<Steps updateRecipeData={updateRecipeData}/>}
+              {<Steps updateRecipeData={updateRecipeData} recipedetails={recipedetails}/>}
 
               <div className="py-4"></div>
               {/* Add a gray colored break space in the form*/}
@@ -252,6 +289,7 @@ const TestForm: React.FC<{ updateRecipeData: UpdateRecipeDataType}> = ({updateRe
                       accept="video/*"
                       ref={fileInputRef}
                       placeholder='select video'
+                      value={recipedetails.video}
                       onChange={(event) => {
                         const file = event.target.files && event.target.files[0];
                         if (file) {
@@ -285,6 +323,7 @@ const TestForm: React.FC<{ updateRecipeData: UpdateRecipeDataType}> = ({updateRe
                       accept="image/*"
                       ref={fileInputRef}
                       placeholder='select image'
+                      value={recipedetails.image}
                       onChange={(event) => {
                         const file = event.target.files && event.target.files[0];
                         if (file) {
@@ -333,7 +372,7 @@ const TestForm: React.FC<{ updateRecipeData: UpdateRecipeDataType}> = ({updateRe
 
                 {/* Display the tags */}
                 <div className="mt-4">
-                  {tags.map((tag, index) => (
+                  { tags && tags.map((tag, index) => (
                     <div key={index} className="inline-flex items-center bg-gray-200 rounded-md p-2 m-1">
                       <span className="mr-2">{tag}</span>
                       <CustomButton

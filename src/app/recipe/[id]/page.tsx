@@ -26,6 +26,7 @@ interface ApiRecipeResponse {
   ratings: number;
   user: {
     name: string;
+    id:number;
     // Add other user-related fields based on your User model
   };
   steps: {
@@ -39,6 +40,7 @@ interface ApiRecipeResponse {
     text: string;
     date: string;
     user: {
+      id: number;
       name: string;
       // Add other user-related fields based on your User model
     };
@@ -49,8 +51,6 @@ const Recipe: React.FC<{ ratingsUpData: RatingsupDataType, commentsUpData: Comme
   const [showComments, setShowComments] = useState(false); // Track whether to show comments
   const { id: recipeId } = useParams(); // Destructure the id property
   console.log(recipeId); // Output: '12'
-  //const router = useRouter();
-  //const { recipeId } = router.query;
   const [cookie, setCookie] = React.useState<string | undefined>('');
   const [rating, setRating] = useState<number>(0);
   const [recipe_id, setId] = useState<string>('');
@@ -211,6 +211,10 @@ const Recipe: React.FC<{ ratingsUpData: RatingsupDataType, commentsUpData: Comme
     return <div className="flex text-[30px] tracking-widest">{stars}</div>;
   };
 
+  const goToUser = (id: number) => () => {
+    window.location.href = `/user/${id}`;
+  }
+
 
   const handleAddRating = (rating: number, reviewId: number) => {
     // get the current rating from local storage
@@ -250,7 +254,7 @@ const Recipe: React.FC<{ ratingsUpData: RatingsupDataType, commentsUpData: Comme
         {/* USER INFO */}
 
         <div className="bg-lime-100 hover:bg-lime-400  mt-4 rounded-md">
-          <p className="ml-4 text-xl">By {recipeData.user.name}</p>
+          <button className="text-blue-500 font-bold hover:underline ml-4" onClick={goToUser(recipeData.user.id)}>By {recipeData.user.name}</button>
           <p className="ml-4 text-lg">
             Cooking Time {recipeData.cooking_time} minutes
           </p>
@@ -340,7 +344,8 @@ const Recipe: React.FC<{ ratingsUpData: RatingsupDataType, commentsUpData: Comme
                 <li key={comment.id} className="text-lg mb-2">
                   <p>{comment.text}</p>
                   <p className="text-gray-500">
-                    By User {comment.user.name} on {new Date(comment.date).toLocaleDateString()}
+                    <button onClick={goToUser(comment.user.id)} className="text-blue-500 font-bold hover:underline">By {comment.user.name} </button>
+                     {/* User {comment.user.name}*/} on {new Date(comment.date).toLocaleDateString()} 
                   </p>
                 </li>
               ))}
