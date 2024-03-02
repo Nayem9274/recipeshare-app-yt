@@ -355,7 +355,7 @@ const Recipe: React.FC<{ ratingsUpData: RatingsupDataType, commentsUpData: Comme
 
         <RecipeDisplay
           instructions={recipeData.steps.map((step) => step.step)}
-          image="https://firebasestorage.googleapis.com/v0/b/recipeshare-a2186.appspot.com/o/images%2Fpexels-dhiraj-jain-12737656.jpg?alt=media&token=2a0e445d-ac7a-47fa-9f79-a870326f0a83"
+          images={recipeData.steps.map((step) => step.image)}
         />
 
     {/* Add Comment Button */}

@@ -1,10 +1,11 @@
 "use client";
-
+import Image from "next/image";
 import React, { useState } from "react";
+import def from "./../../public/blog_bg.jpg";
 
-const RecipeDisplay: React.FC<{ instructions: string[]; image: string }> = ({
+const RecipeDisplay: React.FC<{ instructions: string[]; images: string[] }> = ({
   instructions,
-  image,
+  images,
 }) => {
   const [currentStep, setCurrentStep] = useState(0);
 
@@ -21,23 +22,42 @@ const RecipeDisplay: React.FC<{ instructions: string[]; image: string }> = ({
   };
 
   return (
-    <div className="relative flex justify-center bg-slate-800 p-8">
-      <div className="w-1/2 p-4">
+    <div className="relative flex justify-center bg-lime-200 p-8">
+      {/* <div className="w-1/2 p-4">
         <img
           src={image}
           alt={`Step ${currentStep + 1}`}
           className="w-full mb-4"
         />
+      </div> */}
+
+      <div className="w-1/2 p-4">
+        {images[currentStep] ? (
+          <img
+            src={images[currentStep]}
+            alt={`Step ${currentStep + 1}`}
+            className="w-full mb-4"
+          />
+        ) : (
+          <Image
+          className="mb-4 py-2"
+          src={def}
+          alt="Logo"
+          width={650}
+          height={600}
+          priority
+        />
+        )}
       </div>
+
       <div className="w-1/2 p-4 text-white font-serif">
         {instructions.map((step, index) => (
           <p
             key={index}
-            className={`transition-all duration-300 ${
-              currentStep === index
-                ? "font-bold text-3xl bg-gray-900 rounded-lg p-4 mb-4"
-                : "font-medium text-lg"
-            }`}
+            className={`transition-all duration-300 ${currentStep === index
+                ? "font-bold text-3xl bg-red-200 rounded-lg p-4 mb-4"
+                : "font-medium text-sm text-lime-200"
+              }`}
           >
             {step}
           </p>
