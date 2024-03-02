@@ -8,6 +8,7 @@ import searchlogo from "./../../public/search.svg";
 import Link from "next/link";
 import profilelogo from "./../../public/person.svg";
 import accountlogo from "./../../public/account.svg";
+import explorelogo from "../../public/add_photo.png"
 
 import { useState } from "react";
 
@@ -108,6 +109,20 @@ const LeftBar = () => {
           </button>
         </Link>
 
+        <Link href="/search">
+          <button className="rounded-full p-1 w-[150px] hover:bg-[#ece7e7] flex items-center ml-10 hover:text-gray-700 focus:outline-none">
+            <Image src={searchlogo} alt="Search" height={40} />
+            <span className="pl-2 text-lg font-medium">Search Recipes</span>
+          </button>
+        </Link>
+        
+        <Link href="/searchBlog">
+          <button className="rounded-full p-1 w-[150px] hover:bg-[#ece7e7] flex items-center ml-10 hover:text-gray-700 focus:outline-none">
+            <Image src={searchlogo} alt="Search" height={40} />
+            <span className="pl-2 text-lg font-medium">Search Blogs</span>
+          </button>
+        </Link>
+
         {/* <button className="rounded-full p-1 w-[150px] hover:bg-[#ece7e7] flex items-center hover:text-gray-700 focus:outline-none">
           <Image
             src={notificationlogo}
@@ -117,10 +132,11 @@ const LeftBar = () => {
           />
           <span className="pl-2 text-lg font-medium">Notifications</span>
         </button> */}
+       
 
         <Link href="/explore">
           <button className="rounded-full p-1 w-[150px] hover:bg-[#ece7e7] flex items-center ml-10 hover:text-gray-700 focus:outline-none">
-            <Image src={searchlogo} alt="Search" height={40} />
+            <Image src={explorelogo} alt="Search" height={40} />
             <span className="pl-2 text-lg font-medium">Explore</span>
           </button>
         </Link>

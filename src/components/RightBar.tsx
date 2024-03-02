@@ -8,10 +8,7 @@ import { SearchButton, SearchBlogButton } from "./SearchButton";
 const RightBar = () => {
   return (
     <div className="flex flex-col items-center mt-8">
-      <div className="flex gap-10">
-        <SearchButton />
-        <SearchBlogButton />
-      </div>
+      <Search/>
       <div className="container mx-auto ">
         <ImageSlider />
       </div>
