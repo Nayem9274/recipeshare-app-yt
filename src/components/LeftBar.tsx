@@ -52,6 +52,7 @@ const LeftBar = () => {
           }
         );
         const data = await userData.json();
+        console.log(data);
         if (!data.error) {
           setIsLoggedIn(true);
           const tempData = {

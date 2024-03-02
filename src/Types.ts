@@ -13,4 +13,8 @@ export interface RecipeType {
     link: string;
   }
 export type SignupDataType =(key: string, value: any) => void;
+export type SearchupDataType =(key: string, value: any) => void;
+export type RequestupDataType =(key: string, value: any) => void;
+export type RatingsupDataType =(key: string, value: any) => void;
+export type CommentsupDataType =(key: string, value: any) => void;
 

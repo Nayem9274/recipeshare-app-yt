@@ -50,11 +50,13 @@ const page = () => {
     
           if (encodedRecipes) {
             const parsedRecipes = JSON.parse(decodeURIComponent(encodedRecipes));
+            console.log(parsedRecipes);
             setRecipes(parsedRecipes);            
           } else {
             // Handle missing recipes parameter
             console.log('No recipes found in URL parameter')
           }
+          console.log(recipes);
         }
       }, []);
 
