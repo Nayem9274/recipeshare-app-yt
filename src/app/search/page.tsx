@@ -28,6 +28,10 @@ const SearchPage: React.FC<{ signUpData: SearchupDataType }> = ({ signUpData }) 
         SearchupData("cuisineType", cuisineType);
         SearchupData("ingredients", ingredients);
         SearchupData("keywords", keywords);
+        const request={
+            query:name+','+mealType+','+cuisineType+','+ingredients+','+keywords,
+
+        };
 
         // 
         try {
@@ -36,7 +40,7 @@ const SearchPage: React.FC<{ signUpData: SearchupDataType }> = ({ signUpData }) 
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(searchData),
+                body: JSON.stringify(request),
             });
 
             console.log(searchData);

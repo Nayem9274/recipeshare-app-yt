@@ -5,30 +5,38 @@ import { useRouter } from 'next/router';
 import  CustomButton  from '../../../components/CustomButton';
 
 
-interface RecipeFromPhotoProps {
+interface RecipeFromSearch {
     id:number,
     title: string,
     image:string,
-    ingredients: string[],
+    ingredients: {
+      amount: number;
+      unit: string;
+      ingredient: string;
+  
+    }[];
     link:string,
     online:boolean
 }
 
 const SearchResult = () => {
-  const [recipes, setRecipes] = useState<RecipeFromPhotoProps[]>([]);
+  const [recipes, setRecipes] = useState<RecipeFromSearch[]>([]);
   
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const urlParams = new URLSearchParams(window.location.search);
       const encodedRecipes = urlParams.get('recipes');
+      console.log(encodedRecipes);
 
       if (encodedRecipes) {
         const parsedRecipes = JSON.parse(decodeURIComponent(encodedRecipes));
+        console.log(parsedRecipes);
         setRecipes(parsedRecipes);
       } else {
         console.error('No recipes found in URL parameter');
       }
+      console.log(recipes);
     }
   }, []);
 
@@ -58,7 +66,7 @@ const SearchResult = () => {
                   <ul className="ingredient-list text-orange-700 list-disc space-y-1">
                     {recipe.ingredients.map((ingredient, index) => (
                       <li key={`${ingredient}-${index}`} className="ingredient-item">
-                        {ingredient}
+                       {`${ingredient.amount} ${ingredient.unit} of ${ingredient.ingredient}`}
                       </li>
                     ))}
                   </ul>
