@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { useParams } from "next/navigation";
-import Rating from "@/components/Ratings";
+import { RatingsupDataType, CommentsupDataType } from "@/Types";
 
 interface ApiBlogResponse {
   id: number;
@@ -35,25 +35,75 @@ interface ApiBlogResponse {
     id: number;
     text: string;
     date: string;
-    user: number; // Assuming user is a user ID
+    user: {
+      name: string;
+    };
   }[];
 }
 
-const Blog = () => {
+const Blog: React.FC<{
+  ratingsUpData: RatingsupDataType;
+  commentsUpData: CommentsupDataType;
+}> = ({ ratingsUpData, commentsUpData }) => {
   const [blogData, setBlogData] = useState<ApiBlogResponse | null>(null);
   const { id: blogId } = useParams(); // Destructure the id property
   console.log(blogId); // Output: '12'
   //const router = useRouter();
   //const { blogId } = router.query;
-  const [rating, setRating] = useState<number>(0);
+  const [cookie, setCookie] = React.useState<string | undefined>("");
+  const [blog_id, setId] = useState<string>("");
+  const [ratings, setRatings] = useState<string>("");
+  const [text, setText] = useState<string>("");
+  const [date, setDate] = useState<string>("");
+  const [ratingsData, setRatingsData] = React.useState<Record<string, any>>({
+    blog_id: "",
+    jwt: cookie,
+    ratings: "",
+  });
+  const [commentsData, setCommentsData] = React.useState<Record<string, any>>({
+    blog_id: "",
+    jwt: cookie,
+    text: "",
+    user: "",
+  });
+
+  const CommentsupData: CommentsupDataType = (key: string, value: any) => {
+    setCommentsData((prevState) => ({
+      ...prevState,
+      [key]: value,
+    }));
+    // console.log(recipeData);
+  };
+  const RatingsupData: RatingsupDataType = (key: string, value: any) => {
+    setRatingsData((prevState) => ({
+      ...prevState,
+      [key]: value,
+    }));
+    // console.log(recipeData);
+  };
+
+  const getCookie = () => {
+    const cookieValue = document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("jwt="))
+      ?.split("=")[1];
+    console.log(cookieValue);
+
+    RatingsupData("jwt", cookieValue);
+    CommentsupData("jwt", cookieValue);
+    console.log(ratingsData);
+    setCookie(cookieValue);
+  };
 
   useEffect(() => {
+    getCookie();
+
     const fetchData = async () => {
-      // fetch the rating from localstorage
-      const storedRating = localStorage.getItem(`rating_${blogId}`);
-      if (storedRating) {
-        setRating(parseInt(storedRating));
-      }
+      /************Add the cookie to the body ************** */
+      // RatingsupData('jwt', cookie);
+      RatingsupData("blog_id", blogId);
+      CommentsupData("blog_id", blogId);
+
       console.log(blogId);
       try {
         const response = await fetch(
@@ -75,64 +125,115 @@ const Blog = () => {
     };
 
     fetchData();
-  }, []); // The empty dependency array ensures that the effect runs once when the component mounts
+  }, []); // The dependency array now includes 'cookie'
+
+  const addRating = async (event: React.FormEvent<HTMLFormElement>) => {
+    if (!cookie) {
+      alert("Cookie not found. Please log in again.");
+      return;
+    }
+
+    event.preventDefault(); // Moved the event.preventDefault() call to the beginning
+    console.log(ratingsData);
+
+    try {
+      const response = await fetch(
+        "https://recipeshare-tjm7.onrender.com/api/blog/addrating/",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(ratingsData),
+        }
+      );
+      const data = await response.json();
+      console.log(data);
+      // Update the blog data with the new average rating
+    } catch (error) {
+      console.error("Error adding rating:", error);
+    }
+  };
+
+  // Function to handle adding a new comment
+  const handleAddComment = async () => {
+    if (!cookie) {
+      alert("Cookie not found. Please log in again.");
+      return;
+    }
+    console.log(commentsData);
+    try {
+      const response = await fetch(
+        "https://recipeshare-tjm7.onrender.com/api/blog/comment/add/",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(commentsData),
+        }
+      );
+      const data = await response.json();
+      console.log(data);
+
+      // Update the blog data with the new comment
+    } catch (error) {
+      console.error("Error adding comment:", error);
+    }
+  };
 
   if (!blogData) {
     return <div>Loading...</div>; // You might want to add a loading state
   }
-  // State for managing the new comment
-  // const [newComment, setNewComment] = useState('');//////must add
-  const newComment = "";
-
-  // Function to handle adding a new comment
-  const handleAddComment = () => {
-    // Implement your logic for adding a new comment here
-    console.log("Adding comment:", newComment);
-    // Clear the comment input
-    //setNewComment('');//////must add
-  };
 
   // Function to transform numerical ratings to stars
   // StarRating component
-  const StarRating = (rating: number) => {
-    const stars = [];
+
+  const StarRating = ({ rating }: { rating: number }) => {
     const fullStars = Math.floor(rating);
-    const hasHalfStar = rating % 1 !== 0;
+    const remainder = rating - fullStars;
 
-    // Add full stars
+    const stars = [];
+
     for (let i = 0; i < fullStars; i++) {
-      stars.push(<span key={i}>★</span>);
+      stars.push(
+        <svg
+          key={i}
+          className="h-5 w-5 fill-current text-yellow-500"
+          viewBox="0 0 20 20"
+        >
+          <path d="M10 1l2.74 5.89 6.43.94-4.67 4.58 1.11 6.41-5.61-3.13-5.61 3.13 1.11-6.41L.83 7.83l6.43-.94L10 1z" />
+        </svg>
+      );
     }
 
-    // Add half star if applicable
-    if (hasHalfStar) {
-      stars.push(<span key="half">½</span>);
+    if (remainder >= 0.25) {
+      stars.push(
+        <svg
+          key="partial"
+          className="h-5 w-5 fill-current text-yellow-500"
+          viewBox="0 0 20 20"
+        >
+          {/* Clip path to define the filled portion based on remainder */}
+          <clipPath id="clip-path">
+            <rect
+              x="0"
+              y="0"
+              width={Math.floor(remainder * 100) + "%"}
+              height="100%"
+              fill="lightgray"
+            />
+          </clipPath>
+          <path
+            d="M10 1l2.74 5.89 6.43.94-4.67 4.58 1.11 6.41-5.61-3.13-5.61 3.13 1.11-6.41L.83 7.83l6.43-.94L10 1z"
+            clipRule="evenodd"
+            clipPath="url(#clip-path)"
+          />
+        </svg>
+      );
     }
 
-    return <div className="flex text-[30px] tracking-widest">{stars}</div>;
-  };
-
-  // Function to convert stars to numerical ratings
-  const RatingToStars = (stars: string) => {
-    const fullStars = stars.split("★").length - 1;
-    const hasHalfStar = stars.includes("½");
-    const rating = fullStars + (hasHalfStar ? 0.5 : 0);
-    return rating;
-  };
-
-  const getRatingFromLocalStorage = (reviewId: number): number | null => {
-    const storedRating = localStorage.getItem(`rating_${reviewId}`);
-    if (storedRating) {
-      return parseInt(storedRating);
-    }
-    return null;
-  };
-
-  const handleAddRating = (rating: number, reviewId: number) => {
-    // get the current rating from local storage
-    // const currentRating = getRatingFromLocalStorage(reviewId);
-    setRating(rating);
-    // console.log(`Adding rating ${rating} for review ID ${reviewId}`);
+    return <div className="flex">{stars}</div>;
   };
 
   return (
@@ -170,10 +271,34 @@ const Blog = () => {
         </div>
         {/* Ratings Box */}
         <div className="flex-1">
-          <p className="text-lg text-indigo-500 font-bold mb-2">Rating:</p>
-          {/* Use function to numerical to star */}
-          <p className="text-lg text-yellow-500">{StarRating(rating)}</p>
-          <p className="text-[30px] text-yellow-500">{rating}</p>
+          <div className="flex items-center">
+            <p className="text-lg text-indigo-500 font-bold mb-1 mx-3.5">
+              Rating:
+            </p>
+            <StarRating rating={blogData.ratings} />
+            <span className="ml-2">
+              {Math.round(blogData.ratings * 4) / 4}{" "}
+              {/* Round to the nearest 0.25 */}
+            </span>
+          </div>
+          {/* Add a form to submit a rating */}
+          <form onSubmit={addRating} className="flex-1 flex items-center">
+            <input
+              type="text"
+              id="ratings"
+              value={ratings}
+              onChange={(e) => {
+                setRatings(e.target.value);
+                RatingsupData("ratings", e.target.value);
+              }}
+              className="w-full border rounded-md px-3 py-2 mt-1"
+              style={{ padding: "10px" }}
+              placeholder="Enter rating(1-5)..."
+            />
+            <button type="submit">
+              <p className="text-lg text-green-700 font-bold mb-2">Submit</p>
+            </button>
+          </form>
         </div>
       </div>
       {/* SUMMARY */}
@@ -214,19 +339,12 @@ const Blog = () => {
             <li key={comment.id} className="mb-2">
               <p>{comment.text}</p>
               <p className="text-gray-500">
-                By User {comment.user} on {comment.date}
+                By User {comment.user.name} on{" "}
+                {new Date(comment.date).toLocaleDateString()}
               </p>
             </li>
           ))}
         </ul>
-      </div>
-
-      <div>
-        <Rating
-          maxStars={5}
-          reviewId={blogData.id}
-          onAddRating={handleAddRating}
-        />
       </div>
 
       {/* ADD COMMENT FORM */}
@@ -235,15 +353,12 @@ const Blog = () => {
         <textarea
           className="w-full p-2 border rounded-md"
           placeholder="Type your comment here..."
-          value={newComment}
-          //onChange={(e) => setNewComment(e.target.value)}
+          value={text}
+          onChange={(e) => {
+            setText(e.target.value);
+            CommentsupData("text", e.target.value);
+          }}
         />
-        {/* Add Rating Button */}
-        {/* <div className="mt-2">
-                    <p className="text-lg font-bold">Add Rating:</p>
-                    <StarRating rating={RatingToStars(blogData.ratings)} />
-                </div> */}
-
         <button
           className="mt-2 px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"
           onClick={handleAddComment}
