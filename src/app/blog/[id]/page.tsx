@@ -55,12 +55,12 @@ const Blog: React.FC<{ ratingsUpData: RatingsupDataType, commentsUpData: Comment
     const [date, setDate] = useState<string>('');
     const [ratingsData, setRatingsData] = React.useState<Record<string, any>>({
         blog_id: "",
-        jwt: "",
+        jwt: cookie,
         ratings: "",
     });
     const [commentsData, setCommentsData] = React.useState<Record<string, any>>({
         blog_id: "",
-        jwt: "",
+        jwt: cookie,
         text: "",
         user: ""
     });

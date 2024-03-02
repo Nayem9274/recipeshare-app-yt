@@ -62,12 +62,12 @@ const Recipe: React.FC<{ ratingsUpData: RatingsupDataType, commentsUpData: Comme
   const [date, setDate] = useState<string>('');
   const [ratingsData, setRatingsData] = React.useState<Record<string, any>>({
     recipe_id: "",
-    jwt: "",
+    jwt: cookie,
     ratings: "",
   });
   const [commentsData, setCommentsData] = React.useState<Record<string, any>>({
     recipe_id: "",
-    jwt: "",
+    jwt: cookie,
     text: "",
     user: ""
   });
