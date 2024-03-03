@@ -22,7 +22,7 @@ const Search = () => {
     <div className="relative w-full max-w-md mb-[30px]">
       <input
         type="text"
-        placeholder="Search..."
+        placeholder=""
         value={searchTerm}
         onChange={handleChange}
         onFocus={handleFocus}

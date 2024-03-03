@@ -17,6 +17,7 @@ interface ApiBlogResponse {
     ratings: number;
     user: {
         name: string;
+        id:number;
         // Add other user-related fields based on your User model
     };
     steps: {
@@ -38,6 +39,7 @@ interface ApiBlogResponse {
         date: string;
         user: {
             name: string;
+            id:number;
             // Add other user-related fields based on your User model
         };
     }[];
@@ -218,6 +220,10 @@ const Blog: React.FC<{ ratingsUpData: RatingsupDataType, commentsUpData: Comment
         setShowComments(!showComments);
     };
 
+    const goToUser = (id: number) => () => {
+        window.location.href = `/user/${id}`;
+      }
+    
 
     return (
         <div className="p-4 lg:px-20 xl:px-40">
@@ -307,7 +313,8 @@ const Blog: React.FC<{ ratingsUpData: RatingsupDataType, commentsUpData: Comment
                             <li key={comment.id} className="text-lg mb-2">
                                 <p>{comment.text}</p>
                                 <p className="text-gray-500">
-                                    By User {comment.user.name} on {new Date(comment.date).toLocaleDateString()}
+                                <button onClick={goToUser(comment.user.id)} className="text-blue-500 font-bold hover:underline">By {comment.user.name} </button>
+                     {/* User {comment.user.name}*/} on {new Date(comment.date).toLocaleDateString()}
                                 </p>
                             </li>
                         ))}
