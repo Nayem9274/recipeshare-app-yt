@@ -2,7 +2,7 @@
 import React, {useEffect,useState} from 'react';
 import { RequestupDataType } from "@/Types";
 
-const UploadRequest: React.FC<{ requestUpData: RequestupDataType }> = ({ requestUpData }) => {
+const UploadRequestPage: React.FC<{ requestUpData: RequestupDataType }> = ({ requestUpData }) => {
 
     const [requestData, setRequestData] = React.useState<Record<string, any>>({
         title: "",
@@ -145,4 +145,4 @@ const UploadRequest: React.FC<{ requestUpData: RequestupDataType }> = ({ request
     );
 };
 
-export default UploadRequest;
+export default UploadRequestPage;
