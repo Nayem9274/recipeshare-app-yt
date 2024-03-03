@@ -88,7 +88,7 @@ const BlogList: React.FC<{ onClose: () => void }> = ({ onClose }) => {
   return (
     <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center overflow-y-auto">
       <div className="bg-white p-8 rounded-md max-w-screen-md w-full h-full overflow-y-auto">
-        <button className="absolute top-2 right-2" onClick={onClose}>
+        <button className="absolute top-2 right-2 text-white bg-red-500 hover:bg-red-600 w-10 h-10 rounded-md" onClick={onClose}>
           Close
         </button>
         <h2 className="text-2xl font-bold mb-4">Blogs</h2>

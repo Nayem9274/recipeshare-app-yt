@@ -22,7 +22,7 @@ const RecipeDisplay: React.FC<{ instructions: string[]; images: string[] }> = ({
   };
 
   return (
-    <div className="relative flex justify-center bg-lime-100  hover:bg-lime-400 p-8 rounded-md">
+    <div className="relative flex justify-center bg-lime-100  hover:bg-lime-120 p-8 rounded-md">
       {/* <div className="w-1/2 p-4">
         <img
           src={image}
