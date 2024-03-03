@@ -125,7 +125,7 @@ const AdminPage = () => {
 
     const handleUserViewClick =(userId:number) =>{
         console.log(`Blog with ID ${userId} clicked`);
-        const redirectUrl = `view/user/${userId}`;
+        const redirectUrl = `user/${userId}`;
         // Redirect to the recipe details page
         window.location.href= redirectUrl;
     }
