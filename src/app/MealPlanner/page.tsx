@@ -4,8 +4,9 @@ import React from 'react'
 import Calculator from './calorieCalculator';
 import MealPlan from './mealplan';
 import { set } from 'firebase/database';
+import { useState } from "react";
 
-const page = () => {
+const Page = () => {
     const [calorie, setCalorie] = React.useState(0);
     const [showCalculator, setCalculator] = React.useState(false);
     const [showMealPlan, setMealPlan] = React.useState(false);
@@ -87,4 +88,4 @@ const page = () => {
 
 
 
-export default page
+export default Page
