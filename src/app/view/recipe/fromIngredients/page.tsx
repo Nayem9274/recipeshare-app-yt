@@ -34,7 +34,7 @@ const Disclaimer = () => {
 
 
 
-const page = () => {
+const Page = () => {
     const [recipes, setRecipes] = useState<RecipeFromPhotoProps[]>([]);
 
     useEffect(() => {
@@ -121,4 +121,4 @@ const page = () => {
     );
 }
 
-export default page
+export default Page
