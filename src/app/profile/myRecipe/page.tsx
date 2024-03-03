@@ -87,6 +87,39 @@ const RecipeList: React.FC<{ onClose: () => void ; userName: string}> = ({ onClo
     fetchData();
   }, [cookie]);
 
+  const handleOnEdit = async(id: number) => {
+    setIsLoading(true); // Start loading
+
+        const dataBody = {
+            'recipe_id': id
+        }
+        console.log(dataBody);
+
+        try {
+            //
+            const response = await fetch('https://recipeshare-tjm7.onrender.com/api/recipe/get/',{
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify(dataBody)
+            });
+            const data = await response.json();
+            console.log(typeof data);
+            console.log(data);
+            setIsLoading(false); // Stop loading after response
+
+            // Encode the recipes as a JSON string in the URL parameter
+            const encodedRecipes = encodeURIComponent(JSON.stringify(data));
+            const redirectUrl = `/editrecipe/${id}?recipes=${encodedRecipes}`;
+            window.location.href = redirectUrl;
+
+        } catch (error) {
+            console.error('Error fetching user details:', error);
+            setIsLoading(false); // Stop loading on error
+        }   
+    }
+
   return (
     <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center overflow-y-auto">
      <div className="bg-white p-8 rounded-md max-w-screen-md w-full h-full overflow-y-auto">
@@ -124,7 +157,7 @@ const RecipeList: React.FC<{ onClose: () => void ; userName: string}> = ({ onClo
                   <p className="card-text ml-2 text-gray-500">{`Published on ${new Date(recipe.last_edited).toLocaleDateString()}`}</p>
                   <CustomButton 
                     otherStyles="btn btn-sm btn-outline-danger text-red-500 hover:bg-red-200 w-20 h-10 rounded-full ml-2" 
-                    onClick={() => {window.location.href = `/editrecipe/${recipe.id}`;}}
+                    onClick={() => {handleOnEdit(recipe.id)}}
                     title="Edit"
                     type="button"
                   />
